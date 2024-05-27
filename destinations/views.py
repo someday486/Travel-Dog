@@ -7,10 +7,31 @@ import requests
 # Create your views here.
 
 def index(request):
-    return render(request, 'destinations/location.html')
+    if request.method == 'GET':
+        return render(request, 'destinations/location.html')
+    elif request.method == 'POST':
+        url = "https://openapi.naver.com/v1/search/local.json"
+        nheaders = {
+            "X-Naver-Client-Id": "hhVJcqZEHfZM1cReFTCe",
+            "X-Naver-Client-Secret": "l8jT5OgBQ8",
+        }
+        location = request.POST['location']
+        param = {
+            "query": location,
+        }
+
+        res = requests.get(url, headers=nheaders, params=param)
+
+        data = res.json()
+        print(data)
+        content = {
+            'data': data['items']
+        }
+
+        return render(request, 'destinations/location.html', content)
+
 
 def searchLocation(request):
-
     url = "https://openapi.naver.com/v1/search/local.json"  # API받아오기
     nheaders = {
         "X-Naver-Client-Id": "hhVJcqZEHfZM1cReFTCe",  #클라이언트 아이디/시크릿

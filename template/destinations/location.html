@@ -16,89 +16,21 @@
         }
     </style>
 
-
 </head>
 <body>
-    <h1>맛집 검색</h1>
-    <input type="text" id="search-input" placeholder="검색어를 입력하세요">
-    <button id="search-button">검색</button><br>
-    <div id="map"></div>
-    <div id="search-results"></div>
+    </form method="post">{% csrf_token %}
+    <input type='text' value='검색어를 입력하세요' name='location'>
+    <button type="submit" onclick="searchLocation()">검색</button>
+    </form>
+    {% if data %}
+        <ul>
+            {% for item in data %}
+                <li>{{ item.title }}: {{ item.address }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>검색 결과가 없습니다.</p>
+    {% endif %}
 
-    <script>
-        var mapOptions = {
-            center: new naver.maps.LatLng(37.3595704, 127.105399),
-            zoom: 10
-        };
-
-        var map = new naver.maps.Map('map', mapOptions);
-
-        document.getElementById('search-button').addEventListener('click', function() {
-            var query = document.getElementById('search-input').value;
-            if (query) {
-                searchPlaces(query);
-            }
-        });
-
-        function searchPlaces(query) {
-            var clientId = 'z0aqdob57h'; // 네이버 클라이언트 ID
-            var clientSecret = 'SCUB97kcxo3CXutLVk37VlagbyqXdISonils5Wmx'; // 네이버 클라이언트 시크릿
-            var apiUrl = `https://openapi.naver.com/v1/search/local.json?query=${encodeURIComponent(query)}&display=10&start=1&sort=random`;
-
-            fetch(apiUrl, {
-                headers: {
-                    'X-Naver-Client-Id': clientId,
-                    'X-Naver-Client-Secret': clientSecret
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                var places = data.items.map(item => ({
-                    name: item.title.replace(/<[^>]*>?/g, ''), // HTML 태그 제거
-                    address: item.address,
-                    mapx: parseFloat(item.mapx),
-                    mapy: parseFloat(item.mapy)
-                }));
-
-                // EPSG:3857 좌표를 WGS84 좌표로 변환
-                places = places.map(place => {
-                    var point = new naver.maps.Point(place.mapx, place.mapy);
-                    var latlng = naver.maps.TransCoord.fromTM128ToLatLng(point);
-                    return {
-                        ...place,
-                        lat: latlng.lat(),
-                        lng: latlng.lng()
-                    };
-                });
-
-                displayResults(places);
-                addMarkers(places);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        }
-
-        function displayResults(places) {
-            var resultsDiv = document.getElementById('search-results');
-            resultsDiv.innerHTML = ''; // 이전 결과 삭제
-
-            places.forEach(place => {
-                var placeDiv = document.createElement('div');
-                placeDiv.innerHTML = `<strong>${place.name}</strong><br>${place.address}<br>위도: ${place.lat}, 경도: ${place.lng}`;
-                resultsDiv.appendChild(placeDiv);
-            });
-        }
-
-        function addMarkers(places) {
-            places.forEach(place => {
-                var marker = new naver.maps.Marker({
-                    position: new naver.maps.LatLng(place.lat, place.lng),
-                    map: map,
-                    title: place.name
-                });
-            });
-        }
-    </script>
 </body>
 </html>
