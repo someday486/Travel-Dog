@@ -29,5 +29,5 @@ urlpatterns = [
     path("account/register/", views.createAccount, name="create"),
     path('account/myinfo/', views.myinfo, name='myinfo'),
     path('account/myinfoDel/', views.myinfoDel, name='delete'),
-    path('destinations/location/', views.location, name='location'),
+    path('destinations/', include('destinations.urls'), name='destinations'),
 ]
