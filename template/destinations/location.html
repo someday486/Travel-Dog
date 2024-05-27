@@ -18,14 +18,16 @@
 
 </head>
 <body>
-    </form method="post">{% csrf_token %}
-    <input type='text' value='검색어를 입력하세요' name='location'>
-    <button type="submit" onclick="searchLocation()">검색</button>
+    <form method="post">
+        {% csrf_token %}
+        <input type='text' value='검색어를 입력하세요' name='location'>
+        <button type="submit">검색</button>
     </form>
+
     {% if data %}
         <ul>
-            {% for item in data %}
-                <li>{{ item.title }}: {{ item.address }}</li>
+            {% for i in data %}
+                <li>{{ i }}</li><br>
             {% endfor %}
         </ul>
     {% else %}
