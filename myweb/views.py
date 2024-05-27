@@ -6,7 +6,7 @@ from django.contrib.auth.hashers import check_password
 from django.urls import reverse
 
 def index(request):
-    return render(request, 'index.html');
+    return render(request, 'test1.html');
 
 def createAccount(request):
     if request.method == 'GET':
@@ -115,3 +115,6 @@ def page_not_found(request, exception):
 
 def custom_500(request):
     return render(request, 'error/500.html', status=500)
+
+def location(request):
+    return render(request, 'destinations/location.html')
