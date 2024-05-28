@@ -1,50 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>지역 선택</title>
-    <style>
-        .button-container {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        .city-button {
-            margin: 5px;
-            padding: 10px 20px;
-            background-color: #f0f0f0;
-            border: 1px solid #ccc;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s, color 0.3s;
-        }
-        .city-button.selected {
-            background-color: #007bff;
-            color: white;
-            border: 1px solid #007bff;
-        }
-    </style>
-</head>
-<body>
-    <h3 class="text-center">step.1 도시 선택</h3>
-    <div class="button-container">
-        <button class="city-button" onclick="selectCity(this)">경주</button>
-        <button class="city-button" onclick="selectCity(this)">부산</button>
-        <button class="city-button" onclick="selectCity(this)">여수</button>
-        <button class="city-button" onclick="selectCity(this)">인천</button>
-        <button class="city-button" onclick="selectCity(this)">전주</button>
-        <button class="city-button" onclick="selectCity(this)">제주</button>
-    </div>
-
-    <script>
-        function selectCity(button) {
-            // 모든 버튼의 선택된 스타일 제거
-            var buttons = document.getElementsByClassName('city-button');
-            for (var i = 0; i < buttons.length; i++) {
-                buttons[i].classList.remove('selected');
-            }
-            // 클릭된 버튼에 선택된 스타일 추가
-            button.classList.add('selected');
-        }
-    </script>
-</body>
-</html>
+<h3 class="text-center">step.1 도시 선택</h3>
+<div class="button-container">
+    {% for values in regions %}
+    <button type="button" class="city-button" onclick="selectCity(this, '{{ values.id }}')">{{ values.name }}</button>
+    {% endfor %}
+</div>
