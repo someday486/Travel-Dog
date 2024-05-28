@@ -80,13 +80,15 @@
                     {% if data %}            
                         {% for i in data %}
                             <tr>
-                                <td>
+                                <td>                         
                                     <li><button class="btn btn-primary btn-lg mx-2" onclick="loca('{{ i.mapy }}', '{{ i.mapx }}', '{{ i.title }}')">{{ i.title }}</button>
-                                    <a href="destinations/addtrip.html"><button = class="btn btn-danger btn-lg mx-2">+추가</button></a></li><br>
-                                    주소: {{ i.roadAddress }}<br>
-                                    링크: {{ i.link }}<br>
-                                    위도: <script> document.write((parseFloat("{{ i.mapy }}") / 1e7).toFixed(7));</script><br>
-                                    경도: <script> document.write((parseFloat("{{ i.mapx }}") / 1e7).toFixed(7));</script><br>
+                                    <form method="post" action="/destinations/{{ i.title }}/{{ i.roadAddress }}/">
+                                    {% csrf_token %}
+                                        <button type='submit' class="btn btn-danger btn-lg mx-2" onclick="location.href='{{ i.title }}/{{ i.roadAddress }}/'">+추가</button></li><br>
+                                            주소: {{ i.roadAddress }}<br>
+                                            링크: {{ i.link }}<br>
+                                            분류: {{ i.category }}<br>  
+                                    </form>                       
                                 </td>
                                 {% comment %} {{ i }} {% endcomment %}
                             </tr>

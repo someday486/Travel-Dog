@@ -3,6 +3,7 @@ import json
 import requests
 # from bs4 import BeautifulSoup
 import requests
+from trips.models import Trip, Destination
 
 # Create your views here.
 
@@ -46,6 +47,12 @@ def searchElse(request):
     }
     return render(request, content)
 
-def addtrip(request):
-    return render(request, "destinations/addtrip.html")
+def addtrip(request,title,roadAdress):
+    if request.method == 'POST':
+        destination = Destination()       
+        destination.name = title
+        destination.address = roadAdress
+        destination.save()
+        return render(request, "trips/index.html")
+
     

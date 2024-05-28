@@ -6,6 +6,6 @@ from . import views
 
 urlpatterns = [
     path("", views.location),
-    path("destinations/addtrip.html",views.addtrip)
+    re_path(r"([0-9a-zA-Zㄱ-힣 %()_.-]+)/([0-9a-zA-Zㄱ-힣 %()_.-]+)/$", views.addtrip),
     
 ]
