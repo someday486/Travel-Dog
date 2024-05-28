@@ -14,13 +14,13 @@
     <table border="0">
         <tr>
             <td><button class="btn btn-primary rounded-pill px-3" 
-                type="button">Trip 둘러보기</button></td>
+                type="button" onclick="location.href='/review/index/'">Trip 둘러보기</button></td>
             <td><button class="btn btn-warning rounded-pill px-3" type="button" 
-                onclick="location.href='/review/detail/{{userId}}'">My Trip</button></td>
+                onclick="location.href='/review/detail/{{userId}}/'">My Trip</button></td>
         </tr>
         <tr>
             <td><input type="text" name="topic"><button type="submit">검색</button></td>
-            <td><button type="button" onclick="location.href='/review/index/'">이전으로</button></td>
+            <!-- <td><button type="button" onclick="location.href='/review/index/'">이전으로</button></td> -->
         </tr>  
     </table>
     <hr>
@@ -30,14 +30,17 @@
             <th>제목</th>
             <th>작성자</th>
             <th>내용</th>
+            <th>조회수</th>
         </tr>
-        {% for b in border %}
         <tr>
-        <td><a href="/review/detail/{{b.id}}/">{{ b.제목 }}</a></td>
-        <td>{{ b.작성자 }}</td>
-        <td>{{ b.내용 }}</td>
-        {% endfor %}
-        </tr>
+            {% for b in border %}
+            <tr>
+                <td>{{ b.제목 }}</td>
+                <td>{{ b.trip.user.username }}</td>
+                <td>{{ b.내용 }}</td>
+                <td>{{ b.조회수 }}</td>
+            </tr>
+            {% endfor %}
     </table>
 </form>
 </body>

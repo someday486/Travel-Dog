@@ -3,10 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>My Triplus</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'review/css/style.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-    <h3>{{userId}}의 {{borderId}}번째 detail</h3>
-    여기는 해당 user의 모든 리뷰를 볼 수 있다
+<div class="container mt-5">
+    <h3 class="text-center mb-4">{{ userId }}님의 Triplus</h3>
+    {% if borders %}
+    <!-- 본인 게시물이 하나라도 있을 때 -->
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover text-center">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">작성자</th>
+                    <th scope="col">여행지</th>
+                    <th scope="col">출발 날짜</th>
+                    <th scope="col">도착 날짜</th>
+                    <th scope="col">작성일</th>
+                    <th scope="col">제목</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for border in borders %}
+                <tr>
+                    <td>{{ border.trip.user.username }}</td>
+                    <td>{{ border.trip.region.name }}</td>
+                    <td>{{ border.trip.start_date }}</td>
+                    <td>{{ border.trip.end_date }}</td>
+                    <td>{{ border.작성일 }}</td>
+                    <td><button type="button" onclick="location.href='/review/tripDetail/{{user}}/{{border.id}}/'">{{ border.제목 }}</a></td>  
+                    <!--제목을 클릭하면 해당 게시물로 이동-->
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p class="text-center">게시물이 없습니다.</p>
+    {% endif %}
+</div>
 </body>
 </html>
