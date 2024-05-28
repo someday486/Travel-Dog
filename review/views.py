@@ -13,33 +13,29 @@ def index(request):
     if query:
         border=Border.objects.filter(내용__icontains=f'#{query}')
     else:
-        border=Border.objects.all()
+        trips=Trip.objects.all()  # 해시태그로 검색한거 아니면 일정 다 가져오기
 
     content={
-        'border':border,
+        'trips':trips,
         'userId':userId,
         'topic':query,
     }
     return render(request,'review/index.html',content);
 
-def detail(request,userId): # 사용자의 전체 게시물 확인
-    user=request.user.id  #현재 로그인한 사용자
-    # 그중에서 해당 userId를 가진 게시물만 filter 하기
-    borders = Border.objects.filter(trip__user=user)  # 로그인한 사용자와 trip의 user와 같은 게시물만 필터링 (게시물들)
-    border=borders.first()
-    userId=border.trip.user
+def detail(request,tripId): # 해당 사용자의 전체 게시물 확인
+    userId=request.user.username
+    trips=Trip.objects.filter(user=tripId)
     content={
-        'borders':borders,
+        'trips':trips,
         'userId':userId,
-        'user':user,
     }
-
     return render(request,'review/detail.html',content)
 
-def tripDetail(request,userId,borderId):
-    now=datetime.now()
-    border=get_object_or_404(Border,id=borderId) #borderId가 동일한 게시글 불러오기 
+def tripDetail(request,tripId):
+    trip=get_object_or_404(Trip,id=tripId) #borderId가 동일한 게시글 불러오기 
+    tripdetails=TripDetail.objects.filter(trip=trip)
     content = {
-        'border': border,
+        'trip':trip,
+        'tripdetails':tripdetails,
     }
     return render(request, 'review/tripDetail.html', content)

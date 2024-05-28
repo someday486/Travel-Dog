@@ -1,13 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    {{border.제목}} 게시물 페이지입니다.
-    <!--trip 불러와서 Day 별로 내용 기재 가능-->
-    
-</body>
-</html>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{{ border.제목 }} 게시물 페이지</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    </head>
+    <body>
+    <div class="container mt-5">
+        <h3 class="text-center mb-4">{{ trip }} 게시물 페이지입니다.</h3>
+        <hr>
+        <table class="table table-bordered table-hover text-center">
+            <thead class="thead-dark">
+                <tr>
+                    <th>여행기록</th>
+                    <th>Day</th>
+                    <th>장소</th>
+                    <th>지출비용</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{tripdetails}}
+                {% for tripdetail in tripdetails %}
+                <tr>
+                    <td>{{ tripdetail.trip }}</td>
+                    <td>{{ tripdetail.day }}</td>
+                    <td>{{ tripdetail.destination.name }}</td>
+                    <td>{{ tripdetail.expense }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    </body>
+    </html>
