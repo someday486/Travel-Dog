@@ -11,12 +11,14 @@
 </head>
 <body>
     <script>
-
         var map;
+        var lat = 37.3595704; // 기본 위도 값
+        var long = 127.105399; // 기본 경도 값
+
         function newMap(lat, long) {
             var mapOptions = {
                 center: new naver.maps.LatLng(lat, long),
-                zoom: 10
+                zoom: 30
             };
             map = new naver.maps.Map('map', mapOptions);
         }
@@ -28,8 +30,8 @@
                 lat = 37.3595704;
                 long = 127.105399;
             } else {                
-                lat = float(y);
-                long = float(x);   
+                lat = parseFloat(y) / 1e7;
+                long = parseFloat(x) / 1e7;   
             }
             newMap(lat, long);
         }
@@ -41,11 +43,7 @@
             <td colspan="2">
                 <div id="map" style="width:80%;height:400px;margin:auto;"></div>
                 <script>
-                    var mapOptions = {
-                    center: new naver.maps.LatLng(0, 0),
-                    zoom: 10
-                };
-                map = new naver.maps.Map('map', mapOptions);
+                    newMap(lat, long)
                 </script>
             </td>
         </tr>
@@ -60,30 +58,29 @@
                     <button type="submit" class="btn btn-outline-primary">검색</button>
                 </form>
             </td>
-        </tr>                  
+        </tr> 
+                         
         {% if data %}            
             {% for i in data %}
-            <tr>
-                <td>
-                <li><button onclick="loca({{ y }},{{ x }})">{{ i.title }}</button></li><br>
-                주소: {{ i.roadAddress }}<br>
-                링크: {{ i.link }}<br>
-                위도: <script>y = document.write((parseFloat("{{ i.mapy }}") / 1e7).toFixed(7));</script><br>
-                경도: <script>x = document.write((parseFloat("{{ i.mapx }}") / 1e7).toFixed(7));</script><br>
-                </td>
-                {% comment %} {{ i }} {% endcomment %}
-            </tr>
+                <tr>
+                    <td>
+                    <li><button class="btn btn-primary btn-lg mx-2" onclick="loca({{ i.mapy }},{{ i.mapx }})">{{ i.title }}</button>
+                    <button class="btn btn-outline-danger btn-lg mx-2">+추가</button></li><br>
+                    주소: {{ i.roadAddress }}<br>
+                    링크: {{ i.link }}<br>
+                    위도: <script> y = document.write((parseFloat("{{ i.mapy }}") / 1e7).toFixed(7));</script><br>
+                    경도: <script> x = document.write((parseFloat("{{ i.mapx }}") / 1e7).toFixed(7));</script><br>
+                    </td>
+                    {% comment %} {{ i }} {% endcomment %}
+                </tr>
             {% endfor %}
         {% else %}
-            <p>검색 결과가 없습니다.</p>
+            <tr>
+            <td>검색 결과가 없습니다.</td>
+            </tr>
         {% endif %}
 
     </table>
     </div>
-    
-    <script>
-
-    </script>
-
 </body>
 </html>

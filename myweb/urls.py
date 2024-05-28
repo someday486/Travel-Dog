@@ -24,8 +24,8 @@ from . import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", views.index),
-    path('trips/', include('trips.urls')),
-    path('review/',include('review.urls')),
+    # path('trips/', include('trips.urls')),
+    # path('review/',include('review.urls')),
     path('destinations/', include('destinations.urls'), name='destinations'),
     path("account/login/", views.login, name='login'),
     path("account/logout/", views.logout, name='logout'),
