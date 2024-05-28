@@ -6,7 +6,7 @@ import requests
 
 # Create your views here.
 
-def index(request):
+def location(request):
     if request.method == 'GET':
         return render(request, 'destinations/location.html')
     elif request.method == 'POST':
@@ -18,15 +18,14 @@ def index(request):
         location = request.POST['location']
         param = {
             "query": location,
-            "display" : 10,
-            "start": 6,
+            "display" : 100,
+            "start": 1,
             "sort": 'random',
         }
 
         res = requests.get(url, headers=nheaders, params=param)
 
         data = res.json()
-        print(data)
         content = {
             'data': data['items']
         }
@@ -46,4 +45,7 @@ def searchElse(request):
         'data' : data
     }
     return render(request, content)
+
+def addtrip(request):
+    return render(request, "destinations/addtrip.html")
     
