@@ -6,6 +6,6 @@ def index(request):
     alluser = User.objects.all();
     print(alluser)
     content = {
-        'phonebook':alluser
+        'alluser':alluser
     }
     return render(request, 'trips/index.html', content);

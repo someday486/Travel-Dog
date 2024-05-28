@@ -1,6 +1,7 @@
 {% extends 'index.html' %}
 {% block title %}Document{% endblock %}
 {% block content %}
-<h3 class="text-center">일정 만들기</h3>
-
+    <h3 class="text-center">여행 일정 만들기</h3><br><br>
+    {% include 'trips/schedule/region.html' %}<br><br>
+    {% include 'trips/schedule/start_end_date.html' %}
 {% endblock %}
