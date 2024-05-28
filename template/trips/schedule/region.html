@@ -1,6 +1,0 @@
-<h3 class="text-center">step.1 도시 선택</h3>
-<div class="button-container">
-    {% for values in regions %}
-    <button type="button" class="city-button" onclick="selectCity(this, '{{ values.id }}')">{{ values.name }}</button>
-    {% endfor %}
-</div>
