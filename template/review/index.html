@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'review/css/style.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <h3>리뷰 index 페이지입니다.</h3>
+<form method="get">
+    <table border="0">
+        <tr>
+            <td><button class="btn btn-primary rounded-pill px-3" 
+                type="button">Trip 둘러보기</button></td>
+            <td><button class="btn btn-warning rounded-pill px-3" type="button" 
+                onclick="location.href='/review/detail/{{userId}}'">My Trip</button></td>
+        </tr>
+        <tr>
+            <td><input type="text" name="topic"><button type="submit">검색</button></td>
+            <td><button type="button" onclick="location.href='/review/index/'">이전으로</button></td>
+        </tr>  
+    </table>
+    <hr>
+    <!--여기서 전체 스토리 확인 가능, 클릭시 상세페이지로 이동가능 (상페id필요)-->
+    <table border="1">
+        <tr>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>내용</th>
+        </tr>
+        {% for b in border %}
+        <tr>
+        <td><a href="/review/detail/{{b.id}}/">{{ b.제목 }}</a></td>
+        <td>{{ b.작성자 }}</td>
+        <td>{{ b.내용 }}</td>
+        {% endfor %}
+        </tr>
+    </table>
+</form>
+</body>
+</html>
