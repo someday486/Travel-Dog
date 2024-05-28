@@ -15,4 +15,4 @@ class Expense(models.Model):
     trip_id = models.CharField(max_length=50)  # Assuming trip_id is a string identifier for the trip
 
     def __str__(self):
-        return f"{self.입력} - {self.총금액} - {self.카테고리} - {self.일정날짜}"
+        return f"{self.description} - {self.amount} - {self.category} - {self.date}"
