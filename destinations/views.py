@@ -4,6 +4,7 @@ import requests
 # from bs4 import BeautifulSoup
 import requests
 from trips.models import Trip, Destination
+import re
 
 # Create your views here.
 
@@ -27,6 +28,10 @@ def location(request):
         res = requests.get(url, headers=nheaders, params=param)
 
         data = res.json()
+        for item in data['items']:
+            if 'title' in item:
+                item['title'] = re.sub('<[^<]+?>', '', item['title'])
+        
         content = {
             'data': data['items']
         }

@@ -70,9 +70,9 @@
                 <table class="table table-bordered border-primary text-center" style='width:100%;'>
                     <tr>
                         <td>
-                            <form method="post" class="d-flex justify-content-center mb-3">
+                            <form method="post" class="d-flex justify-content-center">
                                 {% csrf_token %}
-                                <input type='text' placeholder='검색어를 입력하세요' name='location' class="form-control me-2" style="width: 60%;">
+                                <input type='text' placeholder='검색어를 입력하세요' name='location' class="form-control me-2 w-75" style="width: 60%;">
                                 <button type="submit" class="btn btn-outline-primary">검색</button>
                             </form>
                         </td>
@@ -82,9 +82,8 @@
                             <tr>
                                 <td>                         
                                     <li><button class="btn btn-primary btn-lg mx-2" onclick="loca('{{ i.mapy }}', '{{ i.mapx }}', '{{ i.title }}')">{{ i.title }}</button>
-                                    <form method="post" action="/destinations/{{ i.title }}/{{ i.roadAddress }}/">
-                                    {% csrf_token %}
-                                        <button type='submit' class="btn btn-danger btn-lg mx-2" onclick="location.href='{{ i.title }}/{{ i.roadAddress }}/'">+추가</button></li><br>
+                                    <form method="post" action="/destinations/{{ i.title }}/{{ i.roadAddress }}/"> {% csrf_token %}                                    
+                                        <button type='submit' class="btn btn-outline-danger btn-lg mx-2" onclick="location.href='{{ i.title }}/{{ i.roadAddress }}/'">+추가</button></li><br>
                                             주소: {{ i.roadAddress }}<br>
                                             링크: {{ i.link }}<br>
                                             분류: {{ i.category }}<br>  
