@@ -1,6 +1,7 @@
 from django.shortcuts import render,get_object_or_404
 from review.models import Review, Border
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 
 
 # Create your views here.
@@ -22,7 +23,7 @@ def index(request):
     return render(request,'review/index.html',content);
 
 @login_required
-def detail(request,userId,borderId):
+def detail(request,userId):
     border=get_object_or_404(Border,id=userId)
     content={
         'border':border,
