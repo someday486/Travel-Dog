@@ -11,11 +11,11 @@ def index(request):
 
         region = Region.objects.get(id=region_id)
         Trip.objects.create(user=request.user, region=region, start_date=start_date, end_date=end_date)
-        return redirect('next_page')  # 다음 페이지로 이동
+        return redirect('/')  # 다음 페이지로 이동
 
     regions = Region.objects.all()
     return render(request, 'trips/index.html', {'regions': regions})
 
 @login_required
 def next_page(request):
-    return render(request, 'destinations/location.html')  # 다음 페이지 템플릿으로 이동
+    return render(request, '/')  # 다음 페이지 템플릿으로 이동
