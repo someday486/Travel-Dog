@@ -26,6 +26,8 @@ urlpatterns = [
     path("", views.index),
     path('expense/', include('expense.urls')),
     path('trips/', include('trips.urls')),
+    path('review/',include('review.urls')),
+    path('destinations/', include('destinations.urls'), name='destinations'),
     path("account/login/", views.login, name='login'),
     path("account/logout/", views.logout, name='logout'),
     path("account/register/", views.createAccount, name="create"),
