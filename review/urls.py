@@ -3,5 +3,6 @@ from django.urls import path, include, re_path
 from . import views
 
 urlpatterns = [
-    re_path('index/$',views.index),
+    path('index/',views.index),
+    path('detail/<int:userId>/<int:borderId>',views.detail),
 ]
