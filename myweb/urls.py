@@ -24,10 +24,12 @@ from . import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", views.index),
+    path('trips/', include('trips.urls')),
+    path('review/',include('review.urls')),
+    path('destinations/', include('destinations.urls'), name='destinations'),
     path("account/login/", views.login, name='login'),
     path("account/logout/", views.logout, name='logout'),
     path("account/register/", views.createAccount, name="create"),
     path('account/myinfo/', views.myinfo, name='myinfo'),
     path('account/myinfoDel/', views.myinfoDel, name='delete'),
-    path('destinations/', include('destinations.urls'), name='destinations'),
 ]
