@@ -16,7 +16,7 @@ def index(request):
         trips=Trip.objects.all()  # 해시태그로 검색한거 아니면 일정 다 가져오기
 
     content={
-        'trips':trips,
+        'border':border,
         'userId':userId,
         'topic':query,
     }
