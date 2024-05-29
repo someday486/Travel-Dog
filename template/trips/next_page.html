@@ -1,0 +1,75 @@
+{% extends 'index.html' %}
+{% block title %}여행 일정 만들기-디테일{% endblock %}
+{% block content %}
+
+<div class="container" style="margin-top: 0px;">
+    <div class="text-center ml-4">
+        <h3>{{ head }}</h3>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <table class="table table-bordered border-primary text-center">
+            <tr>
+                <th colspan="2">Add-Trip</th>
+            </tr>
+            <tr>
+                <th>Day</th>
+                <td><input type="number" class="form-control" id="quantity" name="quantity" min="1" max={{ day }} step="1"></td>
+            </tr>
+            <tr>
+                <th>Destination</th>
+                <td>
+                    <select class="form-select">
+                    <option selected>내 장소에서 선택하기</option>
+                    {% for i in destination %}
+                    <option value="{{ i.id }}">{{ i.name }}</option>
+                    {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>Expense</th>
+                <td><input type="text" class="form-control"></td>
+            </tr>
+
+
+            <tr>
+                <td colspan="2">
+                    <input type="button" class="btn btn-outline-primary" 
+                        style="width:120px" value="add" 
+                            onclick="document.location.href='/'">
+                    <input type="reset" class="btn btn-outline-danger" 
+                        style="width:120px" value="reset">
+                </td>
+            </tr>
+            </table>
+        </div>
+
+        <div class="col">
+            <table class="table table-bordered border-primary text-center" style="width:100%;">
+                <tr>
+                    <th>Trip-Detail</th>
+                </tr> 
+
+                {% for day in trip_dates %}
+                <tr>
+                    <td>{{ day }}</td>
+                </tr>
+                <tr>
+                    <td>
+                        <ul class="list-group">
+                        
+                            <a href="#" class="list-group-item list-group-item-action">추가한 일정</a>                            
+                            <button type="button" class="btn btn-outline-primary" onclick="location.href='/destinations/{{trip_id}}'">장소추가</button>
+                        </ul>
+                    </td>
+                </tr>
+                {% endfor %}                
+            </table>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
