@@ -81,13 +81,16 @@
                         {% for i in data %}
                             <tr>
                                 <td>                         
-                                    <li><button class="btn btn-primary btn-lg mx-2" onclick="loca('{{ i.mapy }}', '{{ i.mapx }}', '{{ i.title }}')">{{ i.title }}</button>
-                                    <form method="post" action="/destinations/{{ i.title }}/{{ i.roadAddress }}/"> {% csrf_token %}                                    
-                                        <button type='submit' class="btn btn-outline-danger btn-lg mx-2" onclick="location.href='{{ i.title }}/{{ i.roadAddress }}/'">+추가</button></li><br>
-                                            주소: {{ i.roadAddress }}<br>
-                                            링크: {{ i.link }}<br>
-                                            분류: {{ i.category }}<br>  
-                                    </form>                       
+                                    <li>
+                                        <button class="btn btn-primary btn-lg mx-2" onclick="loca('{{ i.mapy }}', '{{ i.mapx }}', '{{ i.title }}')">{{ i.title }}</button>
+                                        <form method="post" action="/destinations/{{ i.title }}/{{ i.roadAddress }}/"> {% csrf_token %}                                    
+                                            <button type='submit' class="btn btn-outline-danger btn-lg mx-2" onclick="location.href='{{ i.title }}/{{ i.roadAddress }}/'">+추가</button><br>
+                                        </form> 
+                                        주소: {{ i.roadAddress }}<br>
+                                        링크: <a href='{{ i.link }}'>{{ i.link }}</a><br>
+                                        분류: {{ i.category }}<br>  
+                                    
+                                    </li>                      
                                 </td>
                                 {% comment %} {{ i }} {% endcomment %}
                             </tr>

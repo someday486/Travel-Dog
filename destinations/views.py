@@ -30,7 +30,7 @@ def location(request):
         data = res.json()
         for item in data['items']:
             if 'title' in item:
-                item['title'] = re.sub('<[^<]+?>', '', item['title'])
+                item['title'] = re.sub('<[^<]+?>|&amp;', '', item['title'])
         
         content = {
             'data': data['items']
