@@ -6,7 +6,7 @@ from django.contrib.auth.hashers import check_password
 from django.urls import reverse
 
 def index(request):
-    return render(request, 'test1.html');
+    return render(request, 'index.html');
 
 def createAccount(request):
     if request.method == 'GET':

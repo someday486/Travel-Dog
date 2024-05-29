@@ -1,6 +1,7 @@
-from django.shortcuts import render,get_object_or_404
-from review.models import Review, Border
-from django.contrib.auth.decorators import login_required
+from django.shortcuts import render,get_object_or_404,redirect
+from review.models import Border
+from trips.models import TripDetail, Trip, Region, Destination
+from datetime import datetime
 
 
 # Create your views here.
@@ -12,7 +13,7 @@ def index(request):
     if query:
         border=Border.objects.filter(내용__icontains=f'#{query}')
     else:
-        border=Border.objects.all()
+        trips=Trip.objects.all()  # 해시태그로 검색한거 아니면 일정 다 가져오기
 
     content={
         'border':border,
@@ -21,10 +22,20 @@ def index(request):
     }
     return render(request,'review/index.html',content);
 
-@login_required
-def detail(request,userId,borderId):
-    border=get_object_or_404(Border,id=userId)
+def detail(request,tripId): # 해당 사용자의 전체 게시물 확인
+    userId=request.user.username
+    trips=Trip.objects.filter(user=tripId)
     content={
-        'border':border,
+        'trips':trips,
+        'userId':userId,
     }
-    return render(request,'review/detail.html',content);
+    return render(request,'review/detail.html',content)
+
+def tripDetail(request,tripId):
+    trip=get_object_or_404(Trip,id=tripId) #borderId가 동일한 게시글 불러오기 
+    tripdetails=TripDetail.objects.filter(trip=trip)
+    content = {
+        'trip':trip,
+        'tripdetails':tripdetails,
+    }
+    return render(request, 'review/tripDetail.html', content)

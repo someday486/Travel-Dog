@@ -1,0 +1,13 @@
+{% extends 'index.html' %}
+{% block title %}여행 가계부 만들기{% endblock %}
+{% block content %}
+<ul>
+    {% for x in trip_list %}
+    <li>
+        <button><a href="{% url 'EP:E' x.id %}">{{ x.region.name }} ({{ x.start_date }} to {{ x.end_date }})</a></button>
+    </li>
+    {% empty %}
+        <li>여행 목록이 없습니다.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

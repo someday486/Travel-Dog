@@ -1,3 +1,4 @@
+<!--
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,31 +15,117 @@
     <table border="0">
         <tr>
             <td><button class="btn btn-primary rounded-pill px-3" 
-                type="button">Trip 둘러보기</button></td>
+                type="button" onclick="location.href='/review/index/'">Trip 둘러보기</button></td>
             <td><button class="btn btn-warning rounded-pill px-3" type="button" 
-                onclick="location.href='/review/detail/{{userId}}'">My Trip</button></td>
+                onclick="location.href='/review/detail/{{userId}}/'">My Trip</button></td>
         </tr>
         <tr>
             <td><input type="text" name="topic"><button type="submit">검색</button></td>
-            <td><button type="button" onclick="location.href='/review/index/'">이전으로</button></td>
         </tr>  
     </table>
     <hr>
-    <!--여기서 전체 스토리 확인 가능, 클릭시 상세페이지로 이동가능 (상페id필요)-->
+    여기서 전체 스토리 확인 가능, 클릭시 상세페이지로 이동가능 (상페id필요)
     <table border="1">
         <tr>
-            <th>제목</th>
             <th>작성자</th>
-            <th>내용</th>
+            <th>지역</th>
+            <th>시작일</th>
+            <th>종료일</th>
         </tr>
-        {% for b in border %}
         <tr>
-        <td><a href="/review/detail/{{b.id}}/">{{ b.제목 }}</a></td>
-        <td>{{ b.작성자 }}</td>
-        <td>{{ b.내용 }}</td>
-        {% endfor %}
-        </tr>
+            {% for trip in trips %}
+            <tr>
+                <td>{{ trip.user }}</td>
+                <td>{{ trip.region }}</td>
+                <td>{{ trip.start_date }}</td>
+                <td>{{ trip.end_date }}</td>
+            </tr>
+            {% endfor %}
     </table>
 </form>
+</body>
+</html>
+-->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'review/css/style.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .card-img-top {
+            height: 180px;
+            object-fit: cover;
+        }
+        .search-input {
+            width: 200%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h3 class="text-center mb-4">리뷰 index 페이지입니다.</h3>
+        <form method="get">
+            <div class="row mb-3 justify-content-center">
+                <div class="col-auto">
+                    <button class="btn btn-primary rounded-pill px-3" type="button" style="width: 200px; color: rgb(204, 255, 255);"
+                    onclick="location.href='/review/index/'">Trip 둘러보기</button>
+                </div>
+                <div class="col-auto">
+                    <button class="btn btn-warning rounded-pill px-3" type="button" style="width: 200px;"
+                    onclick="location.href='/review/detail/{{userId}}/'">My Trip</button>
+                </div>
+            </div>
+            <div class="row mb-3 justify-content-center">
+                <div class="col-auto">
+                    <div class="input-group">
+                        <input type="text" name="topic" class="form-control search-input" placeholder="Search...">
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-secondary" style="width: 100px;">검색</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </form>
+        <!-- Card Layout for Trips -->
+        {% if trips %}
+        <div class="album py-5 bg-light">
+            <div class="container">
+                <div class="row">
+                    {% for trip in trips %}
+                    <div class="col-md-4">
+                        <div class="card mb-4 shadow-sm">
+                            <img src="{{ trip.image_url }}" class="card-img-top" alt="{{ trip.region }}">
+                            <div class="card-body">
+                                <p class="card-text"><strong>작성자:</strong> {{ trip.user }}</p>
+                                <p class="card-text"><strong>지역:</strong> {{ trip.region }}</p>
+                                <p class="card-text"><strong>시작일:</strong> {{ trip.start_date }}</p>
+                                <p class="card-text"><strong>종료일:</strong> {{ trip.end_date }}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="location.href='/review/tripDetail/{{trip.id}}/'">View</button>
+                                    </div>
+                                    <small class="text-muted">{{ trip.duration }} days</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <p class="text-center">게시물이 없습니다.</p>
+        {% endif %}
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

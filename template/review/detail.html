@@ -3,10 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>My Triplus</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'review/css/style.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .card-img-top {
+            height: 180px;
+            object-fit: cover;
+        }
+    </style>
 </head>
 <body>
-    <h3>{{userId}}의 {{borderId}}번째 detail</h3>
-    여기는 해당 user의 모든 리뷰를 볼 수 있다
+<div class="container mt-5">
+    <h3 class="text-center mb-4">{{ userId }}님의 Triplus</h3>
+    {% if trips %}
+    <!-- 본인 게시물이 하나라도 있을 때 -->
+    <div class="album py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                {% for trip in trips %}
+                <div class="col-md-4">
+                    <div class="card mb-4 shadow-sm">
+                        <img src="{{ trip.image_url }}" class="card-img-top" alt="{{ trip.region }}">
+                        <div class="card-body">
+                            <p class="card-text"><strong>여행지:</strong> {{ trip.region }}</p>
+                            <p class="card-text"><strong>작성자:</strong> {{ trip.user }}</p>
+                            <p class="card-text"><strong>시작일:</strong> {{ trip.start_date }}</p>
+                            <p class="card-text"><strong>종료일:</strong> {{ trip.end_date }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="location.href='/review/tripDetail/{{trip.id}}/'">View</button>
+                                </div>
+                                <small class="text-muted">{{ trip.duration }} days</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <p class="text-center">게시물이 없습니다.</p>
+    {% endif %}
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
+
+
+<!--
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Triplus</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'review/css/style.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h3 class="text-center mb-4">{{ userId }}님의 Triplus</h3>
+    {% if trips %}
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover text-center">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">작성자</th>
+                    <th scope="col">여행지</th>
+                    <th scope="col">시작일</th>
+                    <th scope="col">종료일</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for trip in trips %}
+                <tr>
+                    <td>{{ trip.user }}</td>
+                    <td><button type="button" 
+                        onclick="location.href='/review/tripDetail/{{trip.id}}/'">{{ trip.region }}</button></td>
+                    <td>{{ trip.start_date }}</td>
+                    <td>{{ trip.end_date }}</td>
+                    제목을 클릭하면 해당 게시물로 이동
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p class="text-center">게시물이 없습니다.</p>
+    {% endif %}
+</div>
+</body>
+</html>
+-->
