@@ -5,6 +5,7 @@ from django.conf.urls.static import static
 from . import views
 
 urlpatterns = [
-    path("", views.index),
+    path("", views.location),
+    re_path(r"([0-9a-zA-Zㄱ-힣 %()_.-]+)/([0-9a-zA-Zㄱ-힣 %()_.-]+)/$", views.addtrip),
     
 ]
