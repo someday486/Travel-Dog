@@ -1,36 +1,125 @@
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{{ border.제목 }} 게시물 페이지</title>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    </head>
-    <body>
-    <div class="container mt-5">
-        <h3 class="text-center mb-4">{{ trip }} 게시물 페이지입니다.</h3>
-        <hr>
-        <table class="table table-bordered table-hover text-center">
-            <thead class="thead-dark">
-                <tr>
-                    <th>여행기록</th>
-                    <th>Day</th>
-                    <th>장소</th>
-                    <th>지출비용</th>
-                </tr>
-            </thead>
-            <tbody>
-                {{tripdetails}}
-                {% for tripdetail in tripdetails %}
-                <tr>
-                    <td>{{ tripdetail.trip }}</td>
-                    <td>{{ tripdetail.day }}</td>
-                    <td>{{ tripdetail.destination.name }}</td>
-                    <td>{{ tripdetail.expense }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ border.제목 }} 게시물 페이지</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .image-card {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .image-card img {
+            width: 100px;
+            height: auto;
+            display: block;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-5">
+    <h3 class="text-center mb-4">{{ trip }} 게시물 페이지입니다.</h3>
+    <hr>
+    <table class="table table-bordered table-hover text-center">
+        <thead class="thead-dark">
+            <tr>
+                <th>여행기록</th>
+                <th>Day</th>
+                <th>장소</th>
+                <th>지출비용</th>
+                <th>이미지 업로드</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for tripdetail in tripdetails %}
+            <tr>
+                <td>{{ tripdetail.trip }}</td>
+                <td>{{ tripdetail.day }}</td>
+                <td>{{ tripdetail.destination.name }}</td>
+                <td>{{ tripdetail.expense }}</td>
+                <td><input type="file" class="fileInput" data-day="{{ tripdetail.day }}" 
+                    multiple tripdetailId="{{tripdetail.id}}"></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<hr>
+<div>
+    <h3>사진 모아보기</h3>
+    <div id="previewContainer" class="d-flex flex-wrap">
+        <!-- 여기에 이미지 카드가 추가됩니다 -->
+        {% for key, values in fileList.items %}
+            {% for k, value in values.items %}
+                {% for v in value %}
+                    <div class="image-card">
+                        <a href='/review/add/{{ k }}'><img src="/media/{{ trip.id }}/{{ key }}/{{ v }}"></a>
+                    </div>
+                    {% endfor %}
+            {% endfor %}
+        {% endfor %}
     </div>
-    </body>
-    </html>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const fileInputs = document.querySelectorAll(".fileInput");
+
+    fileInputs.forEach((fileInput) => {
+        fileInput.addEventListener('change', function(e) {
+            const day = fileInput.getAttribute('data-day');
+            const tripDetailId= fileInput.getAttribute('tripdetailId');  // 업로드되는 이미지의 tripdetail ID 변수에 할당
+            const tripId = "{{ trip.id }}";  // 현재 여행 ID를 가져옵니다.
+            Array.from(e.target.files).forEach(file => {
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        const imgElement = document.createElement('img');
+                        imgElement.src = event.target.result;
+
+                        const card = document.createElement('div');
+                        card.className = 'image-card';
+
+                        const dayText = document.createElement('p');
+                        dayText.innerText = `Day ${day}`;
+
+                        const link = document.createElement('a');
+                        link.setAttribute('href', `/review/add/${tripDetailId}/`);
+                        link.appendChild(imgElement);
+
+                        card.appendChild(dayText);
+                        card.appendChild(link);
+
+                        const previewContainer = document.getElementById('previewContainer');
+                        previewContainer.appendChild(card);
+                    };
+                    reader.readAsDataURL(file);
+
+                    // 파일을 서버로 업로드
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    formData.append('trip_id', tripId);
+                    formData.append('day', day);
+
+                    fetch('/review/upload/', {
+                        method: 'POST',
+                        body: formData
+                    }).then(response => response.json())
+                      .then(data => {
+                          console.log(data);
+                      }).catch(error => {
+                          console.error('Error:', error);
+                      });
+                }
+            });
+        });
+    });
+});
+</script>
+</body>
+</html>
