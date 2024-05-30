@@ -1,0 +1,91 @@
+{% extends 'index.html' %}
+{% block title %}여행 일정 만들기-디테일{% endblock %}
+{% block content %}
+
+<div class="container" style="margin-top: 0px;">
+    <div class="text-center ml-4">
+        <h3>{{ head }}</h3>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <form method='post'> {% csrf_token %}
+                <table class="table table-bordered border-primary text-center">
+                <thead class="table-primary border-primary">
+                <tr>
+                    <th colspan="2">Add-Trip</th>
+                </tr>
+                </thead>
+                <tr>
+                    <th>Day</th>
+                    <td><input type="number" class="form-control" id="quantity" 
+                    name="day" min="1" max={{ day }} step="1"></td>
+                </tr>
+                <tr>
+                    <th>Destination</th>
+                    <td>
+                        <select class="form-select" name='d_id'>
+                        <option selected>내 장소에서 선택하기</option>
+                        {% for i in destination %}
+                        <option value="{{ i.id }}">{{ i.name }}</option>
+                        {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Expense</th>
+                    <td><input type="text" class="form-control" name='expense'></td>
+                </tr>
+                <tr>
+                    <th>context</th>
+                    <td><input type="text" class="form-control" name='context'></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <input type="submit" class="btn btn-outline-primary" 
+                            style="width:120px" value="add"
+                                onclick="document.location.href='/'">
+                        <input type="reset" class="btn btn-outline-danger" 
+                            style="width:120px" value="reset">
+                    </td>
+                </tr>
+                </table>
+            </form> 
+            <button type="button" class="btn btn-outline-primary" style="width:250px"
+            onclick="location.href='/destinations/{{trip_id}}'">장소추가</button>           
+        </div>
+
+
+
+        <div class="col">
+            <table class="table table-bordered border-primary text-center table-hover" style="width:100%;">
+                <thead class="table-primary border-primary">
+                <tr>
+                    <th>Trip-Detail</th>
+                </tr> 
+                </thead>
+                <tbody>
+                {% for day in trip_dates %}                
+                    <tr class="table-primary border-primary">
+                        <td>{{ day }} DAY</td>
+                    </tr>
+                    {% for i in tripdetail %}  
+                        {% if i.day == day %}    
+                        <tr>
+                            <td>
+                                <ul class="list-group">                        
+                                    <a>{{ i.destination }}</a>                    
+                                </ul>
+                            </td>       
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}  
+                </tbody>              
+            </table>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
