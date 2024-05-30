@@ -21,18 +21,35 @@
     }
 </style>
 {{trip_info.region}} - ({{trip_info.start_date}} to {{trip_info.end_date}})
+<form method="post" enctype="multipart/form-data"> {% csrf_token %}
 <table>
     <tr>
         <th>일자</th>
         <th>장소</th>
         <th>금액</th>
+        <th>비고</th>
+        <th>영수증</th>
     </tr>
     {% for x in trip_detail %}
     <tr>
         <td>{{ x.day }}</td>
         <td>{{ x.destination.name }}</td>
         <td>{{ x.expense|floatformat:0 }}원</td>
+        <td><input type="text" name="memo"></td>
+        <td><input type='file' name='files' multiple></td>
     </tr>
     {% endfor %}
 </table>
+총 결산 : {{total_expense|floatformat:0}}원<br>
+<button type="submit" class="btn btn-success btn-lg"
+style="width:150px;">
+저장</button>
+<button type="reset" class="btn btn-danger btn-lg" 
+style="width:150px;">
+다시시작</button>
+<button type="button" class="btn btn-danger btn-lg" 
+style="width:150px;" 
+onclick="location.href=/expense/">
+이전 페이지</button>
+</form>
 {% endblock %}

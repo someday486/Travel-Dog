@@ -22,12 +22,16 @@ class Trip(models.Model):
 
     def __str__(self):
        return f'{self.user.username} - {self.region.name} ({self.start_date} to {self.end_date})'
+    def duration(self):
+        return (self.end_date - self.start_date).days
+
 
 class TripDetail(models.Model):
     trip = models.ForeignKey(Trip, on_delete=models.CASCADE)
     day = models.IntegerField()
     destination = models.ForeignKey(Destination, on_delete=models.CASCADE)
     expense = models.DecimalField(max_digits=10, decimal_places=2,null=False)
+    context = models.TextField(null=True)
 
     def __str__(self):
-        return f'{self.trip} - Day {self.day}: {self.destination.name}'
+        return f'{self.trip} - Day {self.day}: {self.destination.name}, {self.expense}'
