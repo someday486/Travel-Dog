@@ -34,21 +34,28 @@ def next_page(request,trip_id):
         head = str(trip)[index+1:].strip()
 
         # 날짜 리스트
-        trip_dates = []
-        for i in range(delta.days + 1):
+        # trip_dates = []
+        # for i in range(delta.days + 1):
+        #     day = start_date + datetime.timedelta(days=i)
+        #     trip_dates.append(day)
+        # day = len(trip_dates)
+
+
+        trip_dates = {}
+        for i in range(1,delta.days + 2):
             day = start_date + datetime.timedelta(days=i)
-            trip_dates.append(day)
+            trip_dates[i] = day
         day = len(trip_dates)
 
 
         content = {
             'trip': trip,
             'tripdetail': tripdetail,
-            'destination':destination,
+            'destination': destination,
             'day': day, #스피너 end값
-            'trip_dates': trip_dates,
-            'trip_id':trip_id,
-            'head': head,
+            'trip_dates': trip_dates, #Trip-Detail 표의 날짜
+            'trip_id': trip_id,
+            'head': head, #상위제목
         }
         return render(request, 'trips/next_page.html',content)  # 다음 페이지로 이동
     
@@ -58,6 +65,7 @@ def next_page(request,trip_id):
         tripdetail.day = request.POST['day']
         tripdetail.destination = Destination.objects.get(id=request.POST.get('d_id'))
         tripdetail.expense = request.POST['expense']
+        tripdetail.context = request.POST['context']
         tripdetail.save()
 
         return redirect('trips:next_page', trip_id)
