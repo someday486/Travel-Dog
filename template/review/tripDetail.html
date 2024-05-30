@@ -49,10 +49,11 @@
         <div class="card-body">
             <h4 class="card-title">DAY  -  {{ tripdetail.day }}</h4>
             <p class="card-text">{{ tripdetail.destination.name }}</p>
+            <p class="card-context">{{ tripdetail.context }}</p>
             <!-- border 내용이 나올 곳 -->
-            {% for border in borderList %}
+            <!-- {% for border in borderList %}
                 {{border.내용}}
-            {% endfor %}
+            {% endfor %} -->
             <a href="javascript:void(0)" class="btn btn-primary">This Trip</a>
         </div>
     </div>
