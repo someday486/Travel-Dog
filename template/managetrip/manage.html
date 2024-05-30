@@ -1,0 +1,40 @@
+{% extends 'index.html' %}
+{% block title %}여행 일정 관리{% endblock %}
+{% block content %}
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+    th, td {
+        border: 1px solid black;
+        padding: 8px; 
+        text-align: left; 
+    }
+    th {
+        background-color: #f2f2f2; 
+    }
+    button {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+</style>
+<form method="post" enctype="multipart/form-data"> {% csrf_token %}
+{{trip_info.region}} - ({{trip_info.start_date}} to {{trip_info.end_date}})
+<table>
+    <tr>
+        <th>일자</th>
+        <th>장소</th>
+        <th>금액</th>
+    </tr>
+    {% for x in trip_detail %}
+    <tr>
+        <td>{{ x.day }}</td>
+        <td>{{ x.destination.name }}</td>
+        <td>{{ x.expense|floatformat:0 }}원</td>
+    </tr>
+    {% endfor %}
+</table>
+</form>
+{% endblock %}
