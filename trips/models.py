@@ -32,6 +32,7 @@ class TripDetail(models.Model):
     destination = models.ForeignKey(Destination, on_delete=models.CASCADE)
     expense = models.DecimalField(max_digits=10, decimal_places=2,null=False)
     context = models.TextField(null=True)
+    hashtag = models.TextField()   #해시태그 저장/ 초기화시 아무 데이터도 안 넣을 수 있다.
 
     def __str__(self):
         return f'{self.trip} - Day {self.day}: {self.destination.name}, {self.expense}'

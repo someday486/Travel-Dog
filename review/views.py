@@ -1,32 +1,41 @@
-import os
-from django.shortcuts import render,get_object_or_404,redirect
+import re
+from django.shortcuts import render, get_object_or_404, redirect
 from review.models import Border
-from trips.models import TripDetail, Trip, Region, Destination
+from trips.models import TripDetail, Trip
 from datetime import datetime
-from PIL import Image
 from django.conf import settings
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
 
 
 # Create your views here.
 
+def extract_hashtags(text):
+    if text:
+    # tripdetail 객체에서 해시태그 내용만 골라낸다
+        return re.findall(r'#\w+', text)
+    else:
+        return [];
 
 def index(request):
     userId=request.user.id
     query=request.GET.get('topic','')
-    print(query)
     if query:
-        borders=Border.objects.filter(내용__icontains=f'#{query}')
+        tripdetails=TripDetail.objects.filter(context__icontains=f'#{query}')
         content={
-            'borders':borders,
+            'tripdetails':tripdetails,
             'userId':userId,
             'topic':query,
         }
     else:
         trips=Trip.objects.all()  # 해시태그로 검색한거 아니면 일정 다 가져오기
         detailList=findTripDetails(trips);
+        # hashtags = {}   # 해시태그 내용만 저장하는 딕셔너리
+        # for trip, details in detailList.items():
+        #     hashtags[trip] = [extract_hashtags(detail.context) for detail in details]
+        
+        # for idx, (trip, tags) in enumerate(hashtags.items()):
+        #     print(f"Trip: {trip}, Hashtags: {tags}")
         content={
             'trips':trips,
             'userId':userId,
