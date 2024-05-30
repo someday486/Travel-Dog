@@ -6,7 +6,7 @@ from PIL import Image
 
 class Border(models.Model):
     trip_detail = models.ForeignKey(TripDetail, on_delete=models.CASCADE)
-    제목 = models.CharField(max_length=255, blank=False, null=False)
+    # 제목 = models.CharField(max_length=255, blank=False, null=False)
     내용 = models.TextField(null=True)
     작성일 = models.DateTimeField(null=False)
     조회수 = models.IntegerField(null=False, default=0)
@@ -14,4 +14,4 @@ class Border(models.Model):
     이미지 = models.ImageField(upload_to='images/', null=True, blank=True)
 
     def __str__(self):
-        return f'{self.제목} ({self.trip_detail})'
+        return f'({self.trip_detail})'

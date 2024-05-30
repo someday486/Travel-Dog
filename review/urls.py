@@ -6,8 +6,8 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('index/',views.index),
-    path('detail/<int:tripId>/',views.detail),
+    path('detail/<int:userId>/',views.detail),
     path('tripDetail/<int:tripId>/',views.tripDetail),
     path('upload/', views.upload_file, name='upload_file'),
-    # path('add/<int:tripdetailId>/',views.add),
+    path('add/<int:borderId>/',views.add),
 ] 

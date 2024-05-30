@@ -1,31 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ border.제목 }} 게시물 페이지</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+{% extends 'index.html' %}
+{% block title %}여행 일정 만들기{% endblock %}
+{% block content %}
+<div style="margin-top: 0;">
     <style>
-        .image-card {
-            display: inline-block;
-            margin: 10px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            text-align: center;
+        #previewContainer {
+            padding: 50px;
         }
-        .image-card img {
-            width: 100px;
-            height: auto;
-            display: block;
-            margin-bottom: 5px;
+
+        .trip-card-title {
+            padding-top: 60px;
         }
     </style>
-</head>
-<body>
-<div class="container mt-5">
-    <h3 class="text-center mb-4">{{ trip }} 게시물 페이지입니다.</h3>
-    <hr>
+    <h5 class="text-center mb-4">{{ trip }}의 여행기</h3>
+    <!-- <hr> -->
     <table class="table table-bordered table-hover text-center">
         <thead class="thead-dark">
             <tr>
@@ -47,14 +34,29 @@
                     multiple tripdetailId="{{tripdetail.id}}"></td>
             </tr>
             {% endfor %}
-        </tbody>
+            </tbody>
     </table>
-</div>
+</div><br>
 <hr>
-<div>
-    <h3>사진 모아보기</h3>
-    <div id="previewContainer" class="d-flex flex-wrap">
-        <!-- 여기에 이미지 카드가 추가됩니다 -->
+<h3 style="top: 50px;" class="trip-card-title">Trip Cards</h3>
+<div id="cardContainer" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px;">
+    {% for tripdetail in tripdetails %}
+    <div class="card" style="width: 20rem; margin: 20px; height: auto;">
+        <img class="card-img-top" src="img_avatar3.png" alt="image" style="width:100%">
+        <div class="card-body">
+            <h4 class="card-title">DAY  -  {{ tripdetail.day }}</h4>
+            <p class="card-text">{{ tripdetail.destination.name }}</p>
+            <!-- border 내용이 나올 곳 -->
+            <a href="javascript:void(0)" class="btn btn-primary">This Trip</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+
+
+<div id="previewContainer" class="card" style="width:20rem;margin:20px 0 24px 0"> 
+        <!-- 이미지 카드를 선택하면 해당 게시글로 이동동 -->
         {% for key, values in fileList.items %}
             {% for k, value in values.items %}
                 {% for v in value %}
@@ -64,7 +66,6 @@
                     {% endfor %}
             {% endfor %}
         {% endfor %}
-    </div>
 </div>
 <script>
 document.addEventListener("DOMContentLoaded", function() {
@@ -110,16 +111,15 @@ document.addEventListener("DOMContentLoaded", function() {
                         method: 'POST',
                         body: formData
                     }).then(response => response.json())
-                      .then(data => {
-                          console.log(data);
-                      }).catch(error => {
-                          console.error('Error:', error);
-                      });
+                    .then(data => {
+                        console.log(data);
+                    }).catch(error => {
+                        console.error('Error:', error);
+                    });
                 }
             });
         });
     });
 });
 </script>
-</body>
-</html>
+{% endblock %}

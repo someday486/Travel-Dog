@@ -31,26 +31,45 @@ def index(request):
         }
     return render(request,'review/index.html',content);
 
-def detail(request,tripId): # 해당 사용자의 전체 게시물 확인
-    userId=request.user.username
-    trips=Trip.objects.filter(user=tripId)
+def detail(request,userId): # 해당 사용자의 전체 게시물 확인
+    userName=request.user.username
+    trips=Trip.objects.filter(user=userId)
     content={
         'trips':trips,
-        'userId':userId,
+        'userName':userName,
     }
     return render(request,'review/detail.html',content)
 
 def tripDetail(request,tripId):
     trip=get_object_or_404(Trip,id=tripId) #tripId 가 동일한 글 불러오기
-    tripdetails=TripDetail.objects.filter(trip=trip)
-    fileList= fileFind(trip)
-    print(fileList)
+    # borders=Border.objects.all()  # 게시판 전체 객체 가져오기 (없어도 에러발생하지 않음)
+    tripdetails=TripDetail.objects.filter(trip=trip) # 현재 trip과 같은 객체를 가진 tripdetail들을 가져옴
+    borders = Border.objects.filter(trip_detail__in=tripdetails) # 해당 trip의 border 객체만 필터링
+
+    if not borders.exists():
+        return render(request,'review/add.html',{
+            'message': '여행일지가 없는 Trip입니다. add페이지로 이동할게요',
+            'tripdetails':tripdetails,
+        }); 
+
+    borderList=findBorder(tripdetails, borders);
+    fileList= fileFind(trip);
+
     content = {
-        'trip':trip,
-        'tripdetails':tripdetails,
-        'fileList':fileList,
-     }
-    return render(request, 'review/tripDetail.html', content)
+        'trip': trip,
+        'tripdetails': tripdetails,
+        'fileList': fileList,
+        'borderList': borderList,
+    }
+    return render(request,'review/tripDetail.html',content);
+
+
+def add(request, borderId):
+    border=Border.objects.get(id=borderId)
+    content={
+        'border':border,
+    }
+    return render(request,'review/add.html',content);
 
 
 @csrf_exempt
@@ -96,5 +115,10 @@ def fileFind(trip):
 
     return fileList;
 
-# def add(request,tripdetailId):
-    # tripdetailId  
+def findBorder(tripdetails, borders): # 디테일id에 맞는 border id찾기
+    border=[]
+    for t in tripdetails:
+        for b in borders:
+            if t == b.trip_detail:
+                border.append(t)
+    return border;   # 디테일에서 입력한 border 리스트 전달
