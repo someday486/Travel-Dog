@@ -16,6 +16,7 @@ from django.utils.decorators import method_decorator
 def index(request):
     userId=request.user.id
     query=request.GET.get('topic','')
+    print(query)
     if query:
         borders=Border.objects.filter(내용__icontains=f'#{query}')
         content={
