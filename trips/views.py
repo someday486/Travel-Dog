@@ -23,6 +23,7 @@ def index(request):
 def next_page(request,trip_id):
     if request.method == 'GET':
         trip = Trip.objects.get(id=trip_id)
+        tripdetail = TripDetail.objects.filter(trip=trip)
         destination = Destination.objects.all()
 
         # 날짜 범위
@@ -39,19 +40,24 @@ def next_page(request,trip_id):
             trip_dates.append(day)
         day = len(trip_dates)
 
-        # 트립디테일
-        td = TripDetail.objects.filter(trip=trip)
 
         content = {
             'trip': trip,
+            'tripdetail': tripdetail,
             'destination':destination,
             'day': day, #스피너 end값
             'trip_dates': trip_dates,
             'trip_id':trip_id,
-            'td':td,  
             'head': head,
         }
         return render(request, 'trips/next_page.html',content)  # 다음 페이지로 이동
     
     elif request.method == 'POST':
-        pass
+        tripdetail = TripDetail()
+        tripdetail.trip = Trip.objects.get(id=trip_id)
+        tripdetail.day = request.POST['day']
+        tripdetail.destination = Destination.objects.get(id=request.POST.get('d_id'))
+        tripdetail.expense = request.POST['expense']
+        tripdetail.save()
+
+        return redirect('trips:next_page', trip_id)

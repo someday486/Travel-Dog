@@ -11,10 +11,12 @@
 {% block title %}내장소{% endblock %}
 {% block content %}
 
-    <table class="table table-bordered border-primary text-center" style='width:100%;'>
+    <table class="table table-bordered border-primary text-center table-hover" style='width:100%;'>
+        <thead class="table-primary border-primary">
         <tr>
             <th>장소명</th>
         </tr>
+        </thead>
         
         {% for i in destination %}
             <tr>
