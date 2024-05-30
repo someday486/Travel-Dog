@@ -30,4 +30,4 @@ class TripDetail(models.Model):
     expense = models.DecimalField(max_digits=10, decimal_places=2,null=False)
 
     def __str__(self):
-        return f'{self.trip} - Day {self.day}: {self.destination.name}'
+        return f'{self.trip} - Day {self.day}: {self.destination.name}, {self.expense}'

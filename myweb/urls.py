@@ -24,6 +24,7 @@ from . import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", views.index),
+    path('expense/', include('expense.urls')),
     path('trips/', include('trips.urls')),
     path('review/',include('review.urls')),
     path('destinations/', include('destinations.urls'), name='destinations'),
@@ -32,4 +33,5 @@ urlpatterns = [
     path("account/register/", views.createAccount, name="create"),
     path('account/myinfo/', views.myinfo, name='myinfo'),
     path('account/myinfoDel/', views.myinfoDel, name='delete'),
-]
+] 
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
