@@ -67,6 +67,6 @@ def next_page(request,trip_id):
         tripdetail.expense = request.POST['expense']
         tripdetail.context = request.POST['context']
         tripdetail.save()
-        print()
+
 
         return redirect('trips:next_page', trip_id)
