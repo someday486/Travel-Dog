@@ -37,6 +37,10 @@
                     <td><input type="text" class="form-control" name='expense'></td>
                 </tr>
                 <tr>
+                    <th>context</th>
+                    <td><input type="text" class="form-control" name='context'></td>
+                </tr>
+                <tr>
                     <td colspan="2">
                         <input type="submit" class="btn btn-outline-primary" 
                             style="width:120px" value="add"
@@ -63,17 +67,18 @@
                 <tbody>
                 {% for day in trip_dates %}                
                     <tr class="table-primary border-primary">
-                        <td>{{ day }}</td>
+                        <td>{{ day }} DAY</td>
                     </tr>
-                    {% for i in tripdetail %}
-                
-                    <tr>
-                        <td>
-                            <ul class="list-group">                        
-                                <a>{{ i.destination }}</a>                    
-                            </ul>
-                        </td>       
-                    </tr>
+                    {% for i in tripdetail %}  
+                        {% if i.day == day %}    
+                        <tr>
+                            <td>
+                                <ul class="list-group">                        
+                                    <a>{{ i.destination }}</a>                    
+                                </ul>
+                            </td>       
+                        </tr>
+                        {% endif %}
                     {% endfor %}
                 {% endfor %}  
                 </tbody>              

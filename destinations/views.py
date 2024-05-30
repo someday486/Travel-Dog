@@ -54,18 +54,26 @@ def addtrip(request,trip_id,title,roadAdress):
 
         return redirect('trips:next_page')
 
-def addmyplace(request,trip_id,title,roadAdress):
-    if request.user.is_active:
-        destination = Destination()
-        destination.name = title
-        destination.address = roadAdress
-        destination.save()
+def addmyplace(request,trip_id,title,roadAddress):
+    if request.user.is_active: 
         
-        msg = "<script>;"
-        msg += "alert('내장소에 추가 되었습니다.');"
-        msg += "location.href='http://localhost:8000/destinations/myplace';"
-        msg += "</script>;"
-        return HttpResponse(msg)
+        if Destination.objects.filter(address=roadAddress):
+            msg = "<script>;"
+            msg += "alert('이미 저장되어 있는 장소입니다.');"
+            msg += f"location.href='http://localhost:8000/destinations/{ trip_id }';"
+            msg += "</script>;"
+            return HttpResponse(msg)
+        else:
+            destination = Destination()
+            destination.name = title
+            destination.address = roadAddress
+            destination.save()
+            
+            msg = "<script>;"
+            msg += "alert('내장소에 추가 되었습니다.');"
+            msg += f"location.href='http://localhost:8000/trips/next_page/{ trip_id }';"
+            msg += "</script>;"
+            return HttpResponse(msg)
     else:
         msg = "<script>;"
         msg += "alert('로그인이 되어 있지 않습니다. 로그인 페이지로 넘어갑니다.');"
