@@ -24,6 +24,7 @@
             </tr>
         </thead>
         <tbody>
+            <!-- 전체 일정이 테이블로 보인다 -->
             {% for tripdetail in tripdetails %}
             <tr>
                 <td>{{ tripdetail.trip }}</td>
@@ -38,6 +39,8 @@
     </table>
 </div><br>
 <hr>
+<!-- ----------------------------------------------------------------------------- -->
+<!-- 카드형 여행일지 - 클릭하면 해당 detail 객체로 이동 -->
 <h3 style="top: 50px;" class="trip-card-title">Trip Cards</h3>
 <div id="cardContainer" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px;">
     {% for tripdetail in tripdetails %}
@@ -47,6 +50,9 @@
             <h4 class="card-title">DAY  -  {{ tripdetail.day }}</h4>
             <p class="card-text">{{ tripdetail.destination.name }}</p>
             <!-- border 내용이 나올 곳 -->
+            {% for border in borderList %}
+                {{border.내용}}
+            {% endfor %}
             <a href="javascript:void(0)" class="btn btn-primary">This Trip</a>
         </div>
     </div>
