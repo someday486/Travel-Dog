@@ -25,26 +25,47 @@ def index(request):
         }
     else:
         trips=Trip.objects.all()  # 해시태그로 검색한거 아니면 일정 다 가져오기
+        detailList=findTripDetails(trips);
         content={
             'trips':trips,
             'userId':userId,
+            'detailList':detailList,
         }
     return render(request,'review/index.html',content);
 
-def detail(request,userId): # 해당 사용자의 전체 게시물 확인
+def detail(request,userId): # tripdetailId를 넘겨줘야 한다.
     userName=request.user.username
     trips=Trip.objects.filter(user=userId)
+    # 해당 trips에 맞는 tripdetail id를 찾기
+    detailList=findTripDetails(trips);
+    for trip,details in detailList.items():
+        borderList={}
+        for detail in details:
+            border=Border.objects.get(trip_detail=detail) # detail 객체와 동일한 border를 끌어온다
+    # detailList={}
+    # for t in trips:
+    #     tripdetails=TripDetail.objects.filter(trip=t)
+    #     detailList[f'{t}']=tripdetails   # trip에 대한 detail 객체들 저장
+    # print(detailList);
     content={
         'trips':trips,
         'userName':userName,
+        'detailList':detailList,
     }
     return render(request,'review/detail.html',content)
+
+def findTripDetails(trips):
+    detailList={}
+    for t in trips:
+        tripdetails=TripDetail.objects.filter(trip=t)
+        detailList[f'{t}']=tripdetails   # trip에 대한 detail 객체들 저장
+    return detailList;  # {trip1:tripdetail1 tripdetail2, trip2:....}
 
 def tripDetail(request,tripId):
     trip=get_object_or_404(Trip,id=tripId) #tripId 가 동일한 글 불러오기
     # borders=Border.objects.all()  # 게시판 전체 객체 가져오기 (없어도 에러발생하지 않음)
     tripdetails=TripDetail.objects.filter(trip=trip) # 현재 trip과 같은 객체를 가진 tripdetail들을 가져옴
-    borders = Border.objects.filter(trip_detail__in=tripdetails) # 해당 trip의 border 객체만 필터링
+    borders = Border.objects.all() 
 
     if not borders.exists():
         return render(request,'review/add.html',{
@@ -53,15 +74,23 @@ def tripDetail(request,tripId):
         }); 
 
     borderList=findBorder(tripdetails, borders);
-    fileList= fileFind(trip);
-
-    content = {
-        'trip': trip,
-        'tripdetails': tripdetails,
-        'fileList': fileList,
-        'borderList': borderList,
-    }
-    return render(request,'review/tripDetail.html',content);
+    print(borderList)
+    try:
+        fileList= fileFind(trip);
+        content = {
+            'trip': trip,
+            'tripdetails': tripdetails,
+            'fileList': fileList,
+            'borderList': borderList,
+        }
+        return render(request,'review/tripDetail.html',content);
+    except:
+        content = {
+            'trip': trip,
+            'tripdetails': tripdetails,
+            'borderList': borderList,
+        }
+        return render(request,'review/tripDetail.html',content);
 
 
 def add(request, borderId):
@@ -116,9 +145,9 @@ def fileFind(trip):
     return fileList;
 
 def findBorder(tripdetails, borders): # 디테일id에 맞는 border id찾기
-    border=[]
+    borderList=[]
     for t in tripdetails:
         for b in borders:
             if t == b.trip_detail:
-                border.append(t)
-    return border;   # 디테일에서 입력한 border 리스트 전달
+                borderList.append(b)
+    return borderList;   # 디테일에서 입력한 border 리스트 전달
