@@ -1,4 +1,4 @@
-import re
+import os, re
 from django.shortcuts import render, get_object_or_404, redirect
 from review.models import Border
 from trips.models import TripDetail, Trip
@@ -8,14 +8,13 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 
+
 # Create your views here.
 
 def extract_hashtags(text):
     if text:
     # tripdetail 객체에서 해시태그 내용만 골라낸다
-        return re.findall(r'#\w+', text)
-    else:
-        return [];
+        return re.findall(r'#\w+', text);
 
 def index(request):
     userId=request.user.id
@@ -30,12 +29,6 @@ def index(request):
     else:
         trips=Trip.objects.all()  # 해시태그로 검색한거 아니면 일정 다 가져오기
         detailList=findTripDetails(trips);
-        # hashtags = {}   # 해시태그 내용만 저장하는 딕셔너리
-        # for trip, details in detailList.items():
-        #     hashtags[trip] = [extract_hashtags(detail.context) for detail in details]
-        
-        # for idx, (trip, tags) in enumerate(hashtags.items()):
-        #     print(f"Trip: {trip}, Hashtags: {tags}")
         content={
             'trips':trips,
             'userId':userId,
@@ -52,11 +45,6 @@ def detail(request,userId): # tripdetailId를 넘겨줘야 한다.
         borderList={}
         for detail in details:
             border=Border.objects.get(trip_detail=detail) # detail 객체와 동일한 border를 끌어온다
-    # detailList={}
-    # for t in trips:
-    #     tripdetails=TripDetail.objects.filter(trip=t)
-    #     detailList[f'{t}']=tripdetails   # trip에 대한 detail 객체들 저장
-    # print(detailList);
     content={
         'trips':trips,
         'userName':userName,
@@ -71,17 +59,20 @@ def findTripDetails(trips):
         detailList[f'{t}']=tripdetails   # trip에 대한 detail 객체들 저장
     return detailList;  # {trip1:tripdetail1 tripdetail2, trip2:....}
 
-def tripDetail(request,tripId):
-    trip=get_object_or_404(Trip,id=tripId) #tripId 가 동일한 글 불러오기
-    # borders=Border.objects.all()  # 게시판 전체 객체 가져오기 (없어도 에러발생하지 않음)
-    tripdetails=TripDetail.objects.filter(trip=trip) # 현재 trip과 같은 객체를 가진 tripdetail들을 가져옴
-    borders = Border.objects.all() 
+def findBorder(tripdetails, borders): # 디테일id에 맞는 border id찾기
+    borderList=[]
+    for t in tripdetails:
+        for b in borders:
+            if t == b.trip_detail:
+                borderList.append(b)
+    return borderList;   # 디테일에서 입력한 border 리스트 전달
 
-    if not borders.exists():
-        return render(request,'review/add.html',{
-            'message': '여행일지가 없는 Trip입니다. add페이지로 이동할게요',
-            'tripdetails':tripdetails,
-        }); 
+def tripDetail(request,tripId):
+    userId=request.user.id
+    trip=get_object_or_404(Trip,id=tripId) #tripId 가 동일한 글 불러오기
+    tripdetails=TripDetail.objects.filter(trip=trip) # 현재 trip과 같은 객체를 가진 tripdetail들을 가져옴
+
+    borders = Border.objects.filter(trip_detail__in=tripdetails) 
 
     borderList=findBorder(tripdetails, borders);
     print(borderList)
@@ -94,21 +85,14 @@ def tripDetail(request,tripId):
             'borderList': borderList,
         }
         return render(request,'review/tripDetail.html',content);
-    except:
+    except Exception as e:
+        print(e)
         content = {
             'trip': trip,
             'tripdetails': tripdetails,
             'borderList': borderList,
         }
-        return render(request,'review/tripDetail.html',content);
-
-
-def add(request, borderId):
-    border=Border.objects.get(id=borderId)
-    content={
-        'border':border,
-    }
-    return render(request,'review/add.html',content);
+        return render(request, 'review/tripDetail.html', content)
 
 
 @csrf_exempt
@@ -134,8 +118,43 @@ def upload_file(request):
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=400)
 
-# def add(request,tripDetailId):
-#     return render(request,'review/border.html',content);
+
+def add(request, tripdetailId):
+    tripdetail = get_object_or_404(TripDetail, id=tripdetailId)
+    now = datetime.now()
+    tripId=tripdetail.trip.id
+    
+    if request.method == "POST":
+        # POST 요청으로부터 데이터를 가져옵니다.
+        title = request.POST.get('title')
+        # hashtag = request.POST.get('hashtag')
+        form_context = request.POST.get('form_context')
+        image = request.FILES.get('image')  # 파일은 FILES에서 가져옵니다.
+
+        #수정된 tripdetail 객체 업데이트
+        tripdetail.context=form_context
+        tripdetail.save()
+
+        # Border 객체를 생성하여 저장합니다.
+        border = Border(
+            trip_detail=tripdetail,
+            제목=title,
+            작성일=now,
+            이미지=image,
+            # hashtag=hashtag
+        )
+        border.save()
+
+
+        # 저장 후 리디렉션합니다.
+        return redirect(f'/review/tripDetail/{tripId}/')  # 다시 tripdetail 페이지로 이동
+
+    content = {
+        'tripdetail': tripdetail,
+        'now': now,
+    }
+    return render(request, 'review/add.html', content)
+
 
 def fileFind(trip):
     file_path = os.path.join(settings.MEDIA_ROOT, str(trip.id));
@@ -154,10 +173,4 @@ def fileFind(trip):
 
     return fileList;
 
-def findBorder(tripdetails, borders): # 디테일id에 맞는 border id찾기
-    borderList=[]
-    for t in tripdetails:
-        for b in borders:
-            if t == b.trip_detail:
-                borderList.append(b)
-    return borderList;   # 디테일에서 입력한 border 리스트 전달
+

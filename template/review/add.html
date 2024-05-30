@@ -1,11 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    add 페이지입니다.
-</body>
-</html>
+{% extends 'index.html' %}
+{% block title %}여행 일정 만들기{% endblock %}
+{% block content %}
+<main class="container my-5">
+    <div class="text-center my-4">
+        <h3>Day-{{ tripdetail.day }} 의 기록을 남겨요</h3>
+    </div>
+    <form method="post" enctype="multipart/form-data"> 
+        {% csrf_token %}
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">제목</th>
+                        <th scope="col">장소</th>
+                        <th scope="col">지출비용</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="text" name="title" class="form-control"></td>
+                        <td>{{ tripdetail.destination.name }}</td>
+                        <td>{{ tripdetail.expense }}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th scope="col" colspan="2">내용</th>
+                        <th scope="col">작성일</th>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><textarea name="form_context" class="form-control" 
+                            rows="10" style="resize:none;"></textarea>
+                        </td>
+                        <td>{{ now }}</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div class="text-center mt-3">
+            <input type="file" name="image" class="btn btn-secondary">
+        </div>
+        <div class="text-center mt-3">
+            <button type="submit" class="btn btn-primary custom-button" >넘어가기</button>
+        </div>
+    </form>
+</main>
+{% endblock %}

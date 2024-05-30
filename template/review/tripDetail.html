@@ -16,7 +16,6 @@
     <table class="table table-bordered table-hover text-center">
         <thead class="thead-dark">
             <tr>
-                <th>여행기록</th>
                 <th>Day</th>
                 <th>장소</th>
                 <th>지출비용</th>
@@ -25,9 +24,9 @@
         </thead>
         <tbody>
             <!-- 전체 일정이 테이블로 보인다 -->
+            {{tripdetails}}
             {% for tripdetail in tripdetails %}
             <tr>
-                <td>{{ tripdetail.trip }}</td>
                 <td>{{ tripdetail.day }}</td>
                 <td>{{ tripdetail.destination.name }}</td>
                 <td>{{ tripdetail.expense }}</td>
@@ -54,7 +53,8 @@
             <!-- {% for border in borderList %}
                 {{border.내용}}
             {% endfor %} -->
-            <a href="javascript:void(0)" class="btn btn-primary">This Trip</a>
+            <a href="javascript:void(0)" class="btn btn-primary" onclick="window.location.href='/review/add/{{tripdetail.id}}/'">This Trip</a>
+            <!-- this trip 버튼을 누르면 border add로 연결 -->
         </div>
     </div>
     {% endfor %}
@@ -72,7 +72,8 @@
                     </div>
                     {% endfor %}
             {% endfor %}
-        {% endfor %}
+        {% endfor %}  
+    <!-- tripdetail이 없는 경우 -->
 </div>
 <script>
 document.addEventListener("DOMContentLoaded", function() {
