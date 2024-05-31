@@ -34,3 +34,6 @@ urlpatterns = [
     path('account/myinfo/', views.myinfo, name='myinfo'),
     path('account/myinfoDel/', views.myinfoDel, name='delete'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
