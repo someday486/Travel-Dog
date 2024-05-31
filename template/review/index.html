@@ -32,6 +32,7 @@
             <div class="container">
                 <div class="row">
                     {% for trip in trips %}
+
                     <div class="col-md-4">
                         <div class="card mb-4 shadow-sm">
                             <img src="{{ trip.image_url }}" class="card-img-top" alt="{{ trip.region }}">
@@ -40,6 +41,9 @@
                                 <p class="card-text"><strong>지역:</strong> {{ trip.region }}</p>
                                 <p class="card-text"><strong>시작일:</strong> {{ trip.start_date }}</p>
                                 <p class="card-text"><strong>종료일:</strong> {{ trip.end_date }}</p>
+                                
+                                
+                                
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-sm btn-outline-secondary" 

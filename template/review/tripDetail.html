@@ -11,7 +11,8 @@
             padding-top: 60px;
         }
     </style>
-    <h5 class="text-center mb-4">{{ trip.user }}의 "{{trip.region}}" 여행기</h5>
+    <h5 class="text-center mb-4">{{ trip.user }}의 "{{trip.region}}" 여행기</h3>
+    <!-- <hr> -->
     <table class="table table-bordered table-hover text-center">
         <thead class="thead-dark">
             <tr>
@@ -42,6 +43,9 @@
         {% else %}
             <img class="card-img-top" src="/path/to/default/image.jpg" alt="default image" style="width:100%">
         {% endif %}
+        <!-- {% for image in imageList %}
+        <img class="card-img-top" src="{{image}}" alt="image" style="width:100%">
+        {% endfor %} -->
         <div class="card-body">
             <h4 class="card-title">DAY  -  {{ tripdetail.day }}</h4>
             <p class="card-text">{{ tripdetail.destination.name }}</p>

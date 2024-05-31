@@ -1,34 +1,53 @@
 {% extends 'index.html' %}
-{% block title %}여행 일정 추가{% endblock %}
+{% block title %}여행 일정 만들기{% endblock %}
 {% block content %}
-<div class="container">
-    <h2 class="mt-4">여행 일정 추가</h2>
-    <form method="post" enctype="multipart/form-data">
+<main class="container my-5">
+    <div class="text-center my-4">
+        <h3>Day-{{ tripdetail.day }} 의 기록을 남겨요</h3>
+    </div>
+    <div class="p-2 bg-warning" style="width: 18%; background-color: rgb(255, 247, 204) !important;
+    text-align: center;">조회수 {{border.조회수}}</div>
+    <form method="post" enctype="multipart/form-data"> 
         {% csrf_token %}
-        <div class="form-group">
-            <label for="title">제목</label>
-            <input type="text" class="form-control" id="title" name="title" value="{{ border.제목|default:'' }}" required>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">제목</th>
+                        <th scope="col">장소</th>
+                        <th scope="col">지출비용</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <input type="text" name="title" class="form-control" value="{{border.제목}}"></td>
+                        <td>{{ tripdetail.destination.name }}</td>
+                        <td>{{ tripdetail.expense }}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th scope="col" colspan="2">내용</th>
+                        <th scope="col">작성일</th>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <textarea name="form_context" class="form-control" 
+                            rows="10" style="resize:none;">{{tripdetail.context}}</textarea>                         
+                        </td>
+                        <td>{{ now }}</td>
+                    </tr>
+                </tfoot>
+            </table>
         </div>
-        <div class="form-group">
-            <label for="form_context">내용</label>
-            <textarea class="form-control" id="form_context" name="form_context" rows="5" required>{{ tripdetail.context|default:'' }}</textarea>
+        <div class="text-center mt-3">
+            <input type="file" name="images" class="btn btn-secondary" multiple>
+            <!-- 여러 개의 파일 업로드 -->
         </div>
-        <div class="form-group">
-            <label for="images">이미지 업로드</label>
-            <input type="file" class="form-control-file" id="images" name="images" multiple>
+        <div class="text-center mt-3">
+            <button type="submit" class="btn btn-primary custom-button">넘어가기</button>
         </div>
-        <button type="submit" class="btn btn-primary">저장</button>
     </form>
-    <hr>
-    {% if borderImages %}
-        <h3>기존 이미지</h3>
-        <div class="row">
-            {% for image in borderImages %}
-                <div class="col-md-3">
-                    <img src="/media/{{ image.image }}" class="img-thumbnail" alt="border image">
-                </div>
-            {% endfor %}
-        </div>
-    {% endif %}
-</div>
+</main>
 {% endblock %}
