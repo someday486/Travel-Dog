@@ -10,22 +10,25 @@
 
 {% block title %}내장소{% endblock %}
 {% block content %}
+<div class="container">
+    <div>
+    <button type="button" class="btn btn-outline-primary" style="width:250px"
+            onclick="location.href='/myplace/addmyplace'">장소추가</button>
+    </div>
 
-    <table class="table table-bordered border-primary text-center table-hover" style='width:100%;'>
-        <thead class="table-primary border-primary">
-        <tr>
-            <th>장소명</th>
-        </tr>
-        </thead>
-        
-        {% for i in myplace %}
+    <table class="table table-bordered border text-center table-hover" style='width:100%;'>
+        {% for d, src in destinationSrc %}
+            <thead class="table-primary border">
+                <tr>
+                    <th colspan="4"><a href="https://map.naver.com/p/search/{{ d.destination.address }}" style="text-decoration: none;">{{ d.destination.name }}</a></th><br>
+                </tr>
+            </thead>
             <tr>
-                <td>
-                    상호명: {{ i.destination.name }}<br>
-                    주소: {{ i.destination.address }}
-                </td>
+                {% for k in src %}
+                    <td class="col"><img src="{{ k }}" class="img-fluid"></td>
+                {% endfor %}
             </tr>
         {% endfor %}
     </table>
-
+</div>
 {% endblock %}

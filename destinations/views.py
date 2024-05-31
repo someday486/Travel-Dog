@@ -6,7 +6,6 @@ import requests
 from trips.models import Trip, Destination
 import re
 
-
 # Create your views here.
 
 def location(request,trip_id):
@@ -95,5 +94,3 @@ def searchElse(request):
         'data' : data
     }
     return render(request, content)
-
-    
