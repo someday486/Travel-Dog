@@ -5,6 +5,8 @@
     <div class="text-center my-4">
         <h3>Day-{{ tripdetail.day }} 의 기록을 남겨요</h3>
     </div>
+    <div class="p-2 bg-warning" style="width: 18%; background-color: rgb(255, 247, 204) !important;
+    text-align: center;">조회수 {{border.조회수}}</div>
     <form method="post" enctype="multipart/form-data"> 
         {% csrf_token %}
         <div class="table-responsive">
@@ -18,7 +20,8 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td><input type="text" name="title" class="form-control"></td>
+                        <td>
+                            <input type="text" name="title" class="form-control" value="{{border.제목}}"></td>
                         <td>{{ tripdetail.destination.name }}</td>
                         <td>{{ tripdetail.expense }}</td>
                     </tr>
@@ -29,8 +32,9 @@
                         <th scope="col">작성일</th>
                     </tr>
                     <tr>
-                        <td colspan="2"><textarea name="form_context" class="form-control" 
-                            rows="10" style="resize:none;"></textarea>
+                        <td colspan="2">
+                            <textarea name="form_context" class="form-control" 
+                            rows="10" style="resize:none;">{{tripdetail.context}}</textarea>                         
                         </td>
                         <td>{{ now }}</td>
                     </tr>
@@ -38,10 +42,11 @@
             </table>
         </div>
         <div class="text-center mt-3">
-            <input type="file" name="image" class="btn btn-secondary">
+            <input type="file" name="images" class="btn btn-secondary" multiple>
+            <!-- 여러 개의 파일 업로드 -->
         </div>
         <div class="text-center mt-3">
-            <button type="submit" class="btn btn-primary custom-button" >넘어가기</button>
+            <button type="submit" class="btn btn-primary custom-button">넘어가기</button>
         </div>
     </form>
 </main>

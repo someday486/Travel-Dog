@@ -11,7 +11,7 @@
             padding-top: 60px;
         }
     </style>
-    <h5 class="text-center mb-4">{{ trip }}의 여행기</h3>
+    <h5 class="text-center mb-4">{{ trip.user }}의 "{{trip.region}}" 여행기</h3>
     <!-- <hr> -->
     <table class="table table-bordered table-hover text-center">
         <thead class="thead-dark">
@@ -19,19 +19,19 @@
                 <th>Day</th>
                 <th>장소</th>
                 <th>지출비용</th>
-                <th>이미지 업로드</th>
+                <!-- <th>이미지 업로드</th> -->
             </tr>
         </thead>
         <tbody>
             <!-- 전체 일정이 테이블로 보인다 -->
-            {{tripdetails}}
+            <!-- {{tripdetails}} -->
             {% for tripdetail in tripdetails %}
             <tr>
                 <td>{{ tripdetail.day }}</td>
                 <td>{{ tripdetail.destination.name }}</td>
                 <td>{{ tripdetail.expense }}</td>
-                <td><input type="file" class="fileInput" data-day="{{ tripdetail.day }}" 
-                    multiple tripdetailId="{{tripdetail.id}}"></td>
+                <!-- <td><input type="file" class="fileInput" data-day="{{ tripdetail.day }}" 
+                    multiple tripdetailId="{{tripdetail.id}}"></td> -->
             </tr>
             {% endfor %}
             </tbody>
@@ -40,20 +40,20 @@
 <hr>
 <!-- ----------------------------------------------------------------------------- -->
 <!-- 카드형 여행일지 - 클릭하면 해당 detail 객체로 이동 -->
-<h3 style="top: 50px;" class="trip-card-title">Trip Cards</h3>
+
+<h3 style="top: 50px;" class="trip-card-title">Trip Cards</h3>  
 <div id="cardContainer" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px;">
     {% for tripdetail in tripdetails %}
     <div class="card" style="width: 20rem; margin: 20px; height: auto;">
-        <img class="card-img-top" src="img_avatar3.png" alt="image" style="width:100%">
+        {% for image in imageList %}
+        <img class="card-img-top" src="{{image}}" alt="image" style="width:100%">
+        {% endfor %}
         <div class="card-body">
             <h4 class="card-title">DAY  -  {{ tripdetail.day }}</h4>
             <p class="card-text">{{ tripdetail.destination.name }}</p>
             <p class="card-context">{{ tripdetail.context }}</p>
-            <!-- border 내용이 나올 곳 -->
-            <!-- {% for border in borderList %}
-                {{border.내용}}
-            {% endfor %} -->
-            <a href="javascript:void(0)" class="btn btn-primary" onclick="window.location.href='/review/add/{{tripdetail.id}}/'">This Trip</a>
+            <a href="javascript:void(0)" class="btn btn-primary" 
+            onclick="window.location.href='/review/add/{{tripdetail.id}}/'">This Trip</a>
             <!-- this trip 버튼을 누르면 border add로 연결 -->
         </div>
     </div>
@@ -75,59 +75,4 @@
         {% endfor %}  
     <!-- tripdetail이 없는 경우 -->
 </div>
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    const fileInputs = document.querySelectorAll(".fileInput");
-
-    fileInputs.forEach((fileInput) => {
-        fileInput.addEventListener('change', function(e) {
-            const day = fileInput.getAttribute('data-day');
-            const tripDetailId= fileInput.getAttribute('tripdetailId');  // 업로드되는 이미지의 tripdetail ID 변수에 할당
-            const tripId = "{{ trip.id }}";  // 현재 여행 ID를 가져옵니다.
-            Array.from(e.target.files).forEach(file => {
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(event) {
-                        const imgElement = document.createElement('img');
-                        imgElement.src = event.target.result;
-
-                        const card = document.createElement('div');
-                        card.className = 'image-card';
-
-                        const dayText = document.createElement('p');
-                        dayText.innerText = `Day ${day}`;
-
-                        const link = document.createElement('a');
-                        link.setAttribute('href', `/review/add/${tripDetailId}/`);
-                        link.appendChild(imgElement);
-
-                        card.appendChild(dayText);
-                        card.appendChild(link);
-
-                        const previewContainer = document.getElementById('previewContainer');
-                        previewContainer.appendChild(card);
-                    };
-                    reader.readAsDataURL(file);
-
-                    // 파일을 서버로 업로드
-                    const formData = new FormData();
-                    formData.append('file', file);
-                    formData.append('trip_id', tripId);
-                    formData.append('day', day);
-
-                    fetch('/review/upload/', {
-                        method: 'POST',
-                        body: formData
-                    }).then(response => response.json())
-                    .then(data => {
-                        console.log(data);
-                    }).catch(error => {
-                        console.error('Error:', error);
-                    });
-                }
-            });
-        });
-    });
-});
-</script>
 {% endblock %}
