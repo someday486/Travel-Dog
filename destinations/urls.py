@@ -8,5 +8,5 @@ urlpatterns = [
     re_path(r"(\d+)/$", views.location, name='loca'),
     re_path(r"(\d+)/([0-9a-zA-Zㄱ-힣 %()_.-]+)/([0-9a-zA-Zㄱ-힣 %()_.-]+)/$", views.addtrip),
     re_path(r"addmyplace/(\d+)/([0-9a-zA-Zㄱ-힣 %()_.-]+)/([0-9a-zA-Zㄱ-힣 %()_.-]+)/$",views.addmyplace),
-    path('myplace',views.myplace),
+    
 ]

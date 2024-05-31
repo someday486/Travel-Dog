@@ -1,38 +1,41 @@
-from bs4 import BeautifulSoup
 from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
+from bs4 import BeautifulSoup
 
-base_url = "https://map.naver.com/p/search/"
+url = "https://search.naver.com/search.naver?ssc=tab.blog.all&sm=tab_jum&query="
 
-keyword = input('검색어: ')
+keword = "제주특별자치도 서귀포시 성산읍 섭지코지로 95 아쿠아플라넷 제주"
+search_url = url + keword
 
-search_url = base_url + keyword
-driver = webdriver.Chrome()
-css = '#_pcmap_list_scroll_container > ul > li:nth-child(4) > div.cOfu6.FlUUg.bnOAZ > div > div > div > div:nth-child(1) > a'
-try:
-    # 검색 페이지로 이동
-    driver.get(search_url)
-    print("페이지 로드 중...")
+# Chrome WebDriver 옵션 설정
+options = Options()
+options.add_argument('--headless')  # 브라우저 숨기기
 
-    # 페이지가 로드될 때까지 기다림
-    WebDriverWait(driver, 20).until(
-        EC.presence_of_element_located((By.CSS_SELECTOR, css))
-    )
-    print("페이지 로드 완료")
+# Chrome WebDriver 생성
+driver = webdriver.Chrome(options=options)
 
-    # 페이지 소스 가져오기
-    html = driver.page_source
-    soup = BeautifulSoup(html, "html.parser")
+# 블로그 페이지 열기
+driver.get(search_url)
+
+# 페이지 소스 가져오기
+html = driver.page_source
+
+# BeautifulSoup으로 파싱
+soup = BeautifulSoup(html, "html.parser")
+
+# 이미지 태그 선택
+image_tags = soup.find_all("img")
+
+# 이미지 소스 URL을 담을 리스트 생성
+src_list = []
+
+# 이미지 태그의 src 속성을 src_list에 추가
+for img_tag in image_tags[2:12]:
+    src = img_tag.get('src')
+    src_list.append(src)
+
+print(src_list)
     
-    # 검색 결과 선택
-    items = soup.select(css)
-    print(f"검색 결과 수: {len(items)}")
-
-    for i, v in enumerate(items, 1):
-        print(f'{i}: {v.text.strip()}')
-
-finally:
-    # 드라이버 종료
-    driver.quit()
+# 웹 브라우저 닫기
+driver.quit()
