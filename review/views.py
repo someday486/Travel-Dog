@@ -108,6 +108,7 @@ def tripDetail(request,tripId):
         return render(request, 'review/tripDetail.html', content)
 
 
+
 @csrf_exempt
 def upload_file(request):
     if request.method == 'POST':
