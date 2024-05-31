@@ -82,11 +82,20 @@ def addmyplace(request,trip_id,title,roadAddress):
         return HttpResponse(msg)
     
 def myplace(request):
-    destination = Destination.objects.all()
-    content = {
-        'destination':destination,
-    }
-    return render(request,'destinations/myplace.html',content)
+    if request.user.is_active:
+        destination = Destination.objects.all()
+        content = {
+            'destination':destination,
+        }
+        return render(request,'destinations/myplace.html',content)
+    
+    else:
+        msg = "<script>;"
+        msg += "alert('로그인이 되어 있지 않습니다. 로그인 페이지로 넘어갑니다.');"
+        msg += "location.href='/admin';"
+        msg += "</script>;"
+        return HttpResponse(msg)
+    
 
 
 def searchElse(request):

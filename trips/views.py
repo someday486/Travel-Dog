@@ -33,14 +33,6 @@ def next_page(request,trip_id):
         index = str(trip).find('-')
         head = str(trip)[index+1:].strip()
 
-        # 날짜 리스트
-        # trip_dates = []
-        # for i in range(delta.days + 1):
-        #     day = start_date + datetime.timedelta(days=i)
-        #     trip_dates.append(day)
-        # day = len(trip_dates)
-
-
         trip_dates = {}
         for i in range(1,delta.days + 2):
             day = start_date + datetime.timedelta(days=i)
@@ -67,6 +59,4 @@ def next_page(request,trip_id):
         tripdetail.expense = request.POST['expense']
         tripdetail.context = request.POST['context']
         tripdetail.save()
-
-
         return redirect('trips:next_page', trip_id)
