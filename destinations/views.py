@@ -6,7 +6,6 @@ import requests
 from trips.models import Trip, Destination
 import re
 
-
 # Create your views here.
 
 def location(request,trip_id):
@@ -81,18 +80,12 @@ def addmyplace(request,trip_id,title,roadAddress):
         msg += "</script>;"
         return HttpResponse(msg)
     
-def myplace(request):
-    destination = Destination.objects.all()
-    content = {
-        'destination':destination,
-    }
-    return render(request,'destinations/myplace.html',content)
-
+    
 
 def searchElse(request):
     url = "https://search.naver.com/search.naver?ssc=tab.blog.all&sm=tab_jum&query="
 
-    keword = input('검색어입력: ')
+    keword = "제주특별자치도 서귀포시 성산읍 섭지코지로 95 아쿠아플라넷 제주"
     search_url = url + keword
 
     data = requests.get(search_url)
@@ -101,5 +94,3 @@ def searchElse(request):
         'data' : data
     }
     return render(request, content)
-
-    
