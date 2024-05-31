@@ -1,11 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    add 페이지입니다.
-</body>
-</html>
+{% extends 'index.html' %}
+{% block title %}여행 일정 추가{% endblock %}
+{% block content %}
+<div class="container">
+    <h2 class="mt-4">여행 일정 추가</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="title">제목</label>
+            <input type="text" class="form-control" id="title" name="title" value="{{ border.제목|default:'' }}" required>
+        </div>
+        <div class="form-group">
+            <label for="form_context">내용</label>
+            <textarea class="form-control" id="form_context" name="form_context" rows="5" required>{{ tripdetail.context|default:'' }}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="images">이미지 업로드</label>
+            <input type="file" class="form-control-file" id="images" name="images" multiple>
+        </div>
+        <button type="submit" class="btn btn-primary">저장</button>
+    </form>
+    <hr>
+    {% if borderImages %}
+        <h3>기존 이미지</h3>
+        <div class="row">
+            {% for image in borderImages %}
+                <div class="col-md-3">
+                    <img src="/media/{{ image.image }}" class="img-thumbnail" alt="border image">
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

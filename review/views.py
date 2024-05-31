@@ -36,18 +36,14 @@ def index(request):
 
 def detail(request,userId): # tripdetailId를 넘겨줘야 한다.
     userName=request.user.username
-    trips=Trip.objects.filter(user=userId)
+    trips=Trip.objects.filter(user_id=userId)
     # 해당 trips에 맞는 tripdetail id를 찾기
     detailList=findTripDetails(trips);
-    for trip,details in detailList.items():
-        borderList={}
-        for detail in details:
-            border=Border.objects.get(trip_detail=detail) # detail 객체와 동일한 border를 끌어온다
-    # detailList={}
-    # for t in trips:
-    #     tripdetails=TripDetail.objects.filter(trip=t)
-    #     detailList[f'{t}']=tripdetails   # trip에 대한 detail 객체들 저장
-    # print(detailList);
+    # try:
+    #     for trip,details in detailList.items():
+    #         borderList={}
+    #         for detail in details:
+    #             border=Border.objects.get(trip_detail=detail) # detail 객체와 동일한 border를 끌어온다
     content={
         'trips':trips,
         'userName':userName,
@@ -62,36 +58,44 @@ def findTripDetails(trips):
         detailList[f'{t}']=tripdetails   # trip에 대한 detail 객체들 저장
     return detailList;  # {trip1:tripdetail1 tripdetail2, trip2:....}
 
+def findBorder(tripdetails, borders): # 디테일id에 맞는 border id찾기
+    borderList=[]
+    for t in tripdetails:
+        for b in borders:
+            if t == b.trip_detail:
+                borderList.append(b)
+    return borderList;   # 디테일에 맞는 border객체들
+
 def tripDetail(request,tripId):
+    trip=Trip.objects.get(id=tripId)
+    userName=trip.user.last_name
     trip=get_object_or_404(Trip,id=tripId) #tripId 가 동일한 글 불러오기
     # borders=Border.objects.all()  # 게시판 전체 객체 가져오기 (없어도 에러발생하지 않음)
     tripdetails=TripDetail.objects.filter(trip=trip) # 현재 trip과 같은 객체를 가진 tripdetail들을 가져옴
     borders = Border.objects.all() 
 
-    if not borders.exists():
-        return render(request,'review/add.html',{
-            'message': '여행일지가 없는 Trip입니다. add페이지로 이동할게요',
-            'tripdetails':tripdetails,
-        }); 
+    borderList=findBorder(tripdetails, borders);   # border 객체들
 
-    borderList=findBorder(tripdetails, borders);
-    print(borderList)
     try:
-        fileList= fileFind(trip);
-        content = {
-            'trip': trip,
-            'tripdetails': tripdetails,
-            'fileList': fileList,
-            'borderList': borderList,
-        }
-        return render(request,'review/tripDetail.html',content);
-    except:
+        for tripdetail in tripdetails:
+            tripdetail.images = get_trip_images(tripdetail)  # 각 tripdetail에 이미지 목록 추가
+
         content = {
             'trip': trip,
             'tripdetails': tripdetails,
             'borderList': borderList,
+            'userName' : userName,
         }
-        return render(request,'review/tripDetail.html',content);
+        return render(request, 'review/tripDetail.html', content)
+    except Exception as e:
+        print(e)
+        content = {
+            'trip': trip,
+            'tripdetails': tripdetails,
+            'borderList': borderList,
+            'userName' : userName,
+        }
+        return render(request, 'review/tripDetail.html', content)
 
 
 def add(request, borderId):
@@ -145,10 +149,10 @@ def fileFind(trip):
 
     return fileList;
 
-def findBorder(tripdetails, borders): # 디테일id에 맞는 border id찾기
-    borderList=[]
-    for t in tripdetails:
-        for b in borders:
-            if t == b.trip_detail:
-                borderList.append(b)
-    return borderList;   # 디테일에서 입력한 border 리스트 전달
+def get_trip_images(tripdetail):
+    folder_path = os.path.join(settings.MEDIA_ROOT, 'images', str(tripdetail.id))
+    images = []
+    if os.path.exists(folder_path):
+        images = os.listdir(folder_path)
+        images = [img for img in images if img.endswith(('jpg', 'jpeg', 'png', 'gif'))]  # 이미지 파일만 필터링
+    return images
