@@ -27,11 +27,15 @@ urlpatterns = [
     path('expense/', include('expense.urls')),
     path('trips/', include('trips.urls')),
     path('review/',include('review.urls')),
+    path('updown/', include('updown.urls')),
+    path('managetrip/',include('managetrip.urls')),
     path('destinations/', include('destinations.urls'), name='destinations'),
     path("account/login/", views.login, name='login'),
     path("account/logout/", views.logout, name='logout'),
     path("account/register/", views.createAccount, name="create"),
     path('account/myinfo/', views.myinfo, name='myinfo'),
     path('account/myinfoDel/', views.myinfoDel, name='delete'),
-] 
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

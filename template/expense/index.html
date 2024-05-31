@@ -1,13 +1,75 @@
 {% extends 'index.html' %}
-{% block title %}여행 가계부 만들기{% endblock %}
+{% block title %}여행 가계부 목록{% endblock %}
 {% block content %}
-<ul>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+    li {
+        margin: 10px 0;
+    }
+    .trip-button {
+        display: block;
+        width: 100%;
+        padding: 15px;
+        background-color: #4CAF50;
+        color: white;
+        text-align: center;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 16px;
+        transition: background-color 0.3s;
+    }
+    .trip-button:hover {
+        background-color: #45a049;
+    }
+    .empty-message {
+        font-size: 18px;
+        color: #ff0000;
+        text-align: center;
+    }
+    .search-bar {
+        width: 100%;
+        padding: 10px;
+        margin: 20px 0;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+</style>
+
+<input type="text" id="searchBar" class="search-bar" placeholder="여행지를 검색하세요..." onkeyup="filterTrips()">
+
+<ul id="tripList">
     {% for x in trip_list %}
     <li>
-        <button><a href="{% url 'EP:E' x.id %}">{{ x.region.name }} ({{ x.start_date }} to {{ x.end_date }})</a></button>
+        <a class="trip-button" href="{% url 'EP:E' x.id %}">{{ x.region.name }} ({{ x.start_date }} to {{ x.end_date }})</a>
     </li>
     {% empty %}
-        <li>여행 목록이 없습니다.</li>
+        <li class="empty-message">여행 목록이 없습니다.</li>
     {% endfor %}
 </ul>
+
+<script>
+    function filterTrips() {
+        const searchInput = document.getElementById('searchBar').value.toLowerCase();
+        const tripList = document.getElementById('tripList');
+        const trips = tripList.getElementsByTagName('li');
+
+        for (let i = 0; i < trips.length; i++) {
+            const trip = trips[i];
+            const tripText = trip.textContent || trip.innerText;
+            if (tripText.toLowerCase().includes(searchInput)) {
+                trip.style.display = '';
+            } else {
+                trip.style.display = 'none';
+            }
+        }
+    }
+</script>
 {% endblock %}
