@@ -30,6 +30,7 @@ urlpatterns = [
     path('updown/', include('updown.urls')),
     path('managetrip/',include('managetrip.urls')),
     path('destinations/', include('destinations.urls'), name='destinations'),
+    path('myplace/', include('myplace.urls')),
     path("account/login/", views.login, name='login'),
     path("account/logout/", views.logout, name='logout'),
     path("account/register/", views.createAccount, name="create"),

@@ -1,3 +1,4 @@
 from django.contrib import admin
+from myplace.models import Myplace
 
-# Register your models here.
+admin.site.register(Myplace)

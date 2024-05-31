@@ -81,27 +81,12 @@ def addmyplace(request,trip_id,title,roadAddress):
         msg += "</script>;"
         return HttpResponse(msg)
     
-def myplace(request):
-    if request.user.is_active:
-        destination = Destination.objects.all()
-        content = {
-            'destination':destination,
-        }
-        return render(request,'destinations/myplace.html',content)
     
-    else:
-        msg = "<script>;"
-        msg += "alert('로그인이 되어 있지 않습니다. 로그인 페이지로 넘어갑니다.');"
-        msg += "location.href='/admin';"
-        msg += "</script>;"
-        return HttpResponse(msg)
-    
-
 
 def searchElse(request):
     url = "https://search.naver.com/search.naver?ssc=tab.blog.all&sm=tab_jum&query="
 
-    keword = input('검색어입력: ')
+    keword = "제주특별자치도 서귀포시 성산읍 섭지코지로 95 아쿠아플라넷 제주"
     search_url = url + keword
 
     data = requests.get(search_url)

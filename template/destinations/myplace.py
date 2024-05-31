@@ -4,39 +4,40 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import requests
 
-base_url = "https://map.naver.com/p/search/"
-
-keyword = "제주특별자치도 서귀포시 성산읍 섭지코지로 95 아쿠아플라넷 제주"
-
-search_url = base_url + keyword
-
-r = requests.get(search_url)
-
-print(r.text)
 
 
+url = "https://search.naver.com/search.naver?ssc=tab.blog.all&sm=tab_jum&query="
 
-# driver = webdriver.Chrome()
+keword = "제주특별자치도 서귀포시 성산읍 섭지코지로 95 아쿠아플라넷 제주"
+search_url = url + keword
+# Initialize the WebDriver
+driver = webdriver.Chrome()
 
-# css = '#app-root > div > div > div > div.CB8aP > div > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div > a > img src'  # 사진의 CSS 셀렉터
-# try:
-#     # 페이지 열기
-#     driver.get(search_url)
-#     print("페이지 로드 중...")
+try:
+    # Open the search URL
+    driver.get(search_url)
+   
+    # Wait until images are loaded
+    WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.TAG_NAME, "img"))
+    )
+   
+    # Find all image elements
+    images = driver.find_elements(By.TAG_NAME, "img")
+   
+    # Extract the source URLs of the images
+    img_urls = [img.get_attribute("src") for img in images if img.get_attribute("src")]
 
-#     # 사진 섹션이 로드될 때까지 대기
-#     WebDriverWait(driver, 20).until(
-#         EC.presence_of_element_located((By.CSS_SELECTOR, css))
-#     )
-#     print("페이지 로드 완료")
+    # Download the images
+    for idx, img_url in enumerate(img_urls):
+        response = requests.get(img_url)
+        if response.status_code == 200:
+            with open(f"image_{idx}.jpg", "wb") as file:
+                file.write(response.content)
+            print(f"Downloaded image_{idx}.jpg")
+        else:
+            print(f"Failed to download image from {img_url}")
 
-#     # 사진 요소 찾기
-#     images = driver.find_elements(By.CSS_SELECTOR, css)
-    
-#     # 이미지 URL 추출 및 출력
-#     print(f"사진 수: {len(images)}")
-#     for i, img in enumerate(images, 1):
-#         print(f'{i}: {img.get_attribute("src")}')
-# finally:
-#     # 드라이버 종료
-#     driver.quit()
+finally:
+    # Close the WebDriver
+    driver.quit()

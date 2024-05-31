@@ -18,12 +18,11 @@
         </tr>
         </thead>
         
-        {% for i in destination %}
+        {% for i in myplace %}
             <tr>
                 <td>
-                    장소명: {{ i.name }}<br>
-                    주소: {{ i.address }}
-                    {% comment %} <img src="..." class="rounded mx-auto d-block" alt="..."> {% endcomment %}
+                    상호명: {{ i.destination.name }}<br>
+                    주소: {{ i.destination.address }}
                 </td>
             </tr>
         {% endfor %}
