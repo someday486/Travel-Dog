@@ -24,7 +24,7 @@
         <li><a href="/trips/index" class="nav-link px-2">일정만들기</a></li>
         <li><a href="/expense/" class="nav-link px-2">가계부</a></li>
         <li><a href="/review/index" class="nav-link px-2">리뷰</a></li>
-        <li><a href="/myplace" class="nav-link px-2">내장소</a></li>
+        <li><a href="/destinations/myplace" class="nav-link px-2">내장소</a></li>
       </ul>
       <div class="col-md-3 text-end">
         {% if not user.is_active %}
@@ -36,6 +36,7 @@
         </span>
         <button type="button" class="btn btn-outline-primary me-2" onclick="document.location.href='/account/logout/'" id="logout">로그아웃</button>
         <button type="button" class="btn btn-primary" onclick="document.location.href='/account/myinfo/'" id="myinfo">내정보</button>
+        <button type="button" class="btn btn-primary" onclick="document.location.href='/managetrip'" id="myinfo">일정관리</button>
         {% endif %}
       </div>
     </header>

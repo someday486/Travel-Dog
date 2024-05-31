@@ -5,5 +5,5 @@ app_name = 'trips'
 
 urlpatterns= [
     path('index/', views.index, name="I"),
-    path('next_page/', views.next_page, name='next_page'),
+    re_path(r'next_page/(\d+)', views.next_page, name='next_page'),
 ]

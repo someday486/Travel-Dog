@@ -3,7 +3,7 @@ from review.models import Border
 
 # Register your models here.
 class BorderAdmin(admin.ModelAdmin):
-    list_display = ['id', '제목', '작성자', '조회수']
+    list_display = ['trip_detail', '작성일']
 
 
 admin.site.register(Border, BorderAdmin)
