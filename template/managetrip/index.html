@@ -9,8 +9,11 @@
     <ul>
         {% for x in trip_list %}
         <li>
-            <button><a href="{% url 'managetrip:M' x.id %}">{{ x.region.name }} ({{ x.start_date }} to {{ x.end_date }})</a></button>
-            <button type='button' class="btn btn-secondary btn-sm  mx-2">삭제</button>
+            <button><a href="{% url 'managetrip:M' x.id %}">
+            {{ x.region.name }} ({{ x.start_date }} to {{ x.end_date }})</a></button>
+            <button type='button' class="btn btn-secondary btn-sm  mx-2"
+            onclick="document.location.href='/managetrip/deletetrip/{{x.id}}/'">
+            삭제</button>
         </li>
         {% empty %}
             <li>여행 목록이 없습니다.</li>
