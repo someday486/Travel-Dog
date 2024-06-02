@@ -4,12 +4,37 @@ from review.models import Border, BorderImage
 from trips.models import TripDetail, Trip
 from datetime import datetime
 from django.conf import settings
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.files.storage import default_storage
-
+import urllib.parse
 
 # Create your views here.
+
+def delete_image(request, borderId, image_url):
+    # 이미지 URL을 디코딩합니다.
+    decoded_url = urllib.parse.unquote(image_url)
+    image_path = os.path.join(settings.MEDIA_ROOT, decoded_url.replace(settings.MEDIA_URL, ''))
+
+    try:
+        # Border 및 관련된 TripDetail 객체를 가져옵니다.
+        border = get_object_or_404(Border, id=borderId)
+        tripDetail = get_object_or_404(TripDetail, id=border.trip_detail.id)
+        
+        # 이미지 파일 삭제
+        if default_storage.exists(image_path):
+            default_storage.delete(image_path)
+        
+        # 데이터베이스에서 BorderImage 객체 삭제
+        BorderImage.objects.filter(border=border, image=decoded_url).delete()
+
+        # 성공적으로 삭제된 경우 add 페이지로 리디렉션
+        return redirect(f'/review/add/{tripDetail.id}/')
+    
+    except Exception as e:
+        # 에러 발생 시 메시지를 생성합니다.
+        return JsonResponse({'success': False, 'error': str(e)})
+    
 
 def extract_hashtags(text):
     if text:
