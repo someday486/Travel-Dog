@@ -61,14 +61,12 @@
         {% if tripdetail.id in imageUrls %}
             {% for tripdetailID, urls in imageUrls.items %}
                 {% for url in urls %}
-                    {% if tripdetailID == tripdetail.id and forloop.first %}
-                        <!-- 리스트 내에 url이 존재하면 이미지 보여주기 -->
+                    {% if tripdetailID == tripdetail.id and forloop.last %}
+                        <!-- 리스트 내에 url이 존재하면 마지막 등록 이미지 보여주기 -->
                         <img class="card-img-top" src="{{ url }}" alt="Trip image">
                     {% endif %}
                 {% endfor %}
             {% endfor %}
-        {% else %}
-            <img class="card-img-top" src="{{ defaultImg_path }}" alt="default image">
         {% endif %}
         <div class="card-body">
             <h5 class="card-title">DAY - {{ tripdetail.day }}</h5>

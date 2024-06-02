@@ -27,7 +27,7 @@
                         {% if trip.id in imageList %}
                         {% for tripId, image in imageList.items %}
                             {% for image in image %}
-                                {% if trip.id == tripId and forloop.first %}
+                                {% if trip.id == tripId and forloop.last %}
                                 <img src="{{ image }}" class="card-img-top" alt="{{ trip.region }}">
                                 {% endif %}
                             {% endfor %}

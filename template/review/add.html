@@ -22,7 +22,8 @@
                 <tbody>
                     <tr>
                         <td>
-                            <input type="text" name="title" class="form-control" value="{{border.제목}}">
+                            <input type="text" name="title" class="form-control" value="{{border.제목}}" 
+                            {% if not userCheck %}readonly{% endif %}>
                         </td>
                         <td>{{ tripdetail.destination.name }}</td>
                         <td>{{ tripdetail.expense }}</td>
@@ -35,7 +36,8 @@
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <textarea name="form_context" class="form-control" rows="10" style="resize:none;">{{tripdetail.context}}</textarea>                         
+                            <textarea name="form_context" class="form-control" rows="10" style="resize:none;" 
+                            {% if not userCheck %}readonly{% endif %}>{{tripdetail.context}}</textarea>                         
                         </td>
                         <td>{{ now }}</td>
                     </tr>
@@ -43,18 +45,11 @@
             </table>
         </div>
         <div class="text-center mt-3">
-            <input type="file" name="images" class="btn btn-secondary" multiple>
-            <!-- 여러 개의 파일 업로드 -->
-        </div>
-        <div class="text-center mt-3">
-            <button type="submit" class="btn btn-primary custom-button">저장</button>
+            {% if userCheck %}
+                <button type="submit" class="btn btn-primary custom-button">저장</button>
+            {% endif %}
             <button type="button" onclick="window.location.href='/review/tripDetail/{{tripId}}/'" class="btn btn-primary custom-button">이전으로</button>
         </div>
     </form>
-    {% if not border_images %}
-    <div class="text-center mt-3">
-        <img src="{{ defaultImg_path }}" alt="default image" class="card-img-top">
-    </div>
-    {% endif %}
 </main>
 {% endblock %}

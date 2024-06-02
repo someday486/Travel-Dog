@@ -19,12 +19,29 @@ def extract_hashtags(text):
 def index(request):
     userId=request.user.id
     query=request.GET.get('topic','')
+    trips = Trip.objects.all()
+    imageList={}  # {trip1 : imgurl1, trip2: imgurl2, ...}
+    # 각 trip에 맞는 이미지 리스트
+    for trip in trips:
+        tripDetails = TripDetail.objects.filter(trip_id=trip.id)
+        for detail in tripDetails:
+            try:
+                imgs=[]
+                border=Border.objects.get(trip_detail=detail)
+                images=BorderImage.objects.filter(border_id=border.id)
+                for img in images:
+                    imgs.append(img.image.url)
+                imageList[trip.id]=imgs
+            except:
+                imageList[trip.id]=[]
+
     if query:
         tripdetails=TripDetail.objects.filter(context__icontains=f'#{query}')
         content={
             'tripdetails':tripdetails,
             'userId':userId,
             'topic':query,
+            'imageList':imageList,
         }
     else:
         trips=Trip.objects.all()  # 해시태그로 검색한거 아니면 일정 다 가져오기
@@ -33,6 +50,7 @@ def index(request):
             'trips':trips,
             'userId':userId,
             'detailList':detailList,
+            'imageList':imageList,
         }
     return render(request,'review/index.html',content);
 
@@ -100,7 +118,6 @@ def tripDetail(request,tripId):
     tripdetails=TripDetail.objects.filter(trip=trip) # 현재 trip과 같은 객체를 가진 tripdetail들을 가져옴
     borders = Border.objects.filter(trip_detail__in=tripdetails) 
     borderList=findBorder(tripdetails, borders);  # 각 디테일과 일치하는 border 객체반환
- 
     try:
         imageUrls= findImage(tripdetails, borderList);
         content = {
@@ -108,16 +125,16 @@ def tripDetail(request,tripId):
             'tripdetails': tripdetails,
             'imageUrls': imageUrls,
             'borderList': borderList,
-            'defaultImg_path': settings.DEFAULT_IMAGE_URL,  # 기본 이미지 경로 전달
+            # 'defaultImg_path': settings.DEFAULT_IMAGE_URL,  # 기본 이미지 경로 전달
         }
-        # print('urls:',content['imageUrls'])
+        print(imageUrls)
         return render(request,'review/tripDetail.html',content);
     except Exception as e:
         content = {
             'trip': trip,
             'tripdetails': tripdetails,
             'borderList': borderList,
-            'defaultImg_path': settings.DEFAULT_IMAGE_URL,  # 기본 이미지 경로 전달
+            # 'defaultImg_path': settings.DEFAULT_IMAGE_URL,  # 기본 이미지 경로 전달
         }
         return render(request, 'review/tripDetail.html', content)
 
@@ -151,8 +168,10 @@ def add(request, tripdetailId):
     now = datetime.now()
     tripId = tripdetail.trip.id
     defaultImg_path = os.path.join(settings.MEDIA_URL, 'images', 'dog.jpg')
-    
-    if request.method == "POST":
+
+    is_owner = request.user == tripdetail.trip.user
+
+    if request.method == "POST" and is_owner:
         # 기존 Border 객체를 가져오거나 없으면 새로 생성합니다.
         border, created = Border.objects.get_or_create(
             trip_detail=tripdetail,
@@ -188,7 +207,7 @@ def add(request, tripdetailId):
 
         return redirect(f'/review/tripDetail/{tripId}/')
 
-    # GET 요청 처리
+    # GET 요청 처리 또는 사용자가 소유자가 아닌 경우
     try:
         border = Border.objects.get(trip_detail=tripdetail)
     except Border.DoesNotExist:
@@ -199,15 +218,16 @@ def add(request, tripdetailId):
     else:
         border_images = []
 
-    content = { 
+    content = {
         'border': border,
         'borderImages': border_images,
         'tripdetail': tripdetail,
         'now': now,
         'tripId': tripId,
-        'defaultImg_path': defaultImg_path,
+        'userCheck': is_owner,
     }
     return render(request, 'review/add.html', content)
+
 
 
 
