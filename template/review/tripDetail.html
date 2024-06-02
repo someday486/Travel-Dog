@@ -57,15 +57,5 @@
     {% endfor %}
 </div>
 
-<div id="previewContainer" class="card" style="width:20rem;margin:20px 0 24px 0"> 
-    {% for key, values in fileList.items %}
-        {% for k, value in values.items %}
-            {% for v in value %}
-                <div class="image-card">
-                    <a href='/review/add/{{ k }}'><img src="/media/{{ trip.id }}/{{ key }}/{{ v }}"></a>
-                </div>
-            {% endfor %}
-        {% endfor %}
-    {% endfor %}
-</div>
+
 {% endblock %}
