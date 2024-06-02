@@ -11,3 +11,6 @@ urlpatterns = [
     path('upload/', views.upload_file, name='upload_file'),
     path('add/<int:tripdetailId>/',views.add),
 ] 
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -96,7 +96,7 @@ def tripDetail(request,tripId):
     tripdetails=TripDetail.objects.filter(trip=trip) # 현재 trip과 같은 객체를 가진 tripdetail들을 가져옴
     borders = Border.objects.filter(trip_detail__in=tripdetails) 
     borderList=findBorder(tripdetails, borders);  # 각 디테일과 일치하는 border 객체반환
-    # print('borderList:',borderList)
+ 
     try:
         imageUrls= findImage(tripdetails, borderList);
         content = {
@@ -104,17 +104,18 @@ def tripDetail(request,tripId):
             'tripdetails': tripdetails,
             'imageUrls': imageUrls,
             'borderList': borderList,
+            'defaultImg_path': settings.DEFAULT_IMAGE_URL,  # 기본 이미지 경로 전달
         }
-        print('urls:',content['imageUrls'])
+        # print('urls:',content['imageUrls'])
         return render(request,'review/tripDetail.html',content);
     except Exception as e:
         content = {
             'trip': trip,
             'tripdetails': tripdetails,
             'borderList': borderList,
+            'defaultImg_path': settings.DEFAULT_IMAGE_URL,  # 기본 이미지 경로 전달
         }
         return render(request, 'review/tripDetail.html', content)
-
 
 
 @csrf_exempt
@@ -145,7 +146,8 @@ def add(request, tripdetailId):
     tripdetail = get_object_or_404(TripDetail, id=tripdetailId)
     now = datetime.now()
     tripId = tripdetail.trip.id
-    print(tripId)
+    defaultImg_path = os.path.join(settings.MEDIA_ROOT, 'images', 'dog.jpg')
+    print(defaultImg_path)
     if request.method == "POST":
         # 기존 Border 객체를 가져오거나 없으면 새로 생성합니다.
         border, created = Border.objects.get_or_create(
@@ -154,6 +156,7 @@ def add(request, tripdetailId):
                 '제목': request.POST.get('title', ''),
                 '작성일': now,
                 '조회수': 0,
+                'defaultImg_path':defaultImg_path,
             }
         )
         
@@ -180,12 +183,6 @@ def add(request, tripdetailId):
                         destination.write(chunk)
                 borderImage=BorderImage.objects.create(border=border, image=os.path.join('images', str(tripdetail.id), image.name))
 
-            # content={
-            #     'borderImage':borderImage,
-            #     'tripdetail':tripdetail,
-            #     'tripId':tripId,
-            # } 
-
         return redirect(f'/review/tripDetail/{tripId}/');
 
     # GET 요청 처리
@@ -205,6 +202,7 @@ def add(request, tripdetailId):
         'tripdetail': tripdetail,
         'now': now,
         'tripId': tripId,
+        'defaultImg_path':defaultImg_path,
     }
     return render(request, 'review/add.html', content)
 

@@ -68,7 +68,7 @@
                 {% endfor %}
             {% endfor %}
         {% else %}
-            <img class="card-img-top" src="/path/to/default/image.jpg" alt="default image">
+            <img class="card-img-top" src="{{ defaultImg_path }}" alt="default image">
         {% endif %}
         <div class="card-body">
             <h5 class="card-title">DAY - {{ tripdetail.day }}</h5>
