@@ -52,4 +52,30 @@
         </div>
     </form>
 </main>
+<div class="container my-5">
+    <div class="row justify-content-center">
+        {% for url in image_urls %}
+        <div class="col-md-6 mb-4">
+            <div class="card text-center">
+                <img src="{{ url }}" class="card-img-top mx-auto" style="height: 200px; object-fit: cover;" alt="{{ tripdetail.destination }}">
+                <div class="card-body">
+                    <button type="button" class="btn btn-danger" onclick="deleteImage('{{ url }}')">삭제</button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Toast -->
+<div id="deleteToast" class="toast position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+    <div class="toast-header">
+        <strong class="me-auto">이미지 삭제</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+        이미지가 삭제되었습니다.
+    </div>
+</div>
+
 {% endblock %}

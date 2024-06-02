@@ -215,18 +215,22 @@ def add(request, tripdetailId):
 
     if border:
         border_images = BorderImage.objects.filter(border=border)
+        image_urls = [i.image.url for i in border_images]  # 이미지 객체의 URL 리스트 생성
     else:
         border_images = []
+        image_urls = []
 
     content = {
         'border': border,
-        'borderImages': border_images,
+        'borderImages': border_images,  # border 이미지 객체 반환 쿼리셋
         'tripdetail': tripdetail,
         'now': now,
         'tripId': tripId,
         'userCheck': is_owner,
+        'image_urls': image_urls,
     }
     return render(request, 'review/add.html', content)
+
 
 
 
