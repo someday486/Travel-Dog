@@ -1,2 +1,8 @@
-lst={'trip1':'tripdetail1'}
-    
+url=['aaa.co.kr','bbb.test.kr',]
+urls={}
+
+for i,u in enumerate(url):
+    urls[i]=u
+
+print(urls)
+

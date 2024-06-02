@@ -65,45 +65,53 @@ def findTripDetails(trips):
         detailList[f'{t}']=tripdetails   # trip에 대한 detail 객체들 저장
     return detailList;  # {trip1:tripdetail1 tripdetail2, trip2:....}
 
-def findBorder(tripdetails, borders): # 디테일id에 맞는 border id찾기
-    borderList=[]
-    for t in tripdetails:
-        for b in borders:
-            if t == b.trip_detail:
-                borderList.append(b)
-    return borderList;   # 디테일에서 입력한 border 리스트 전달
 
-def findFile(borderList):
-    imageList=[]
+# 각 디테일과 일치하는 border 객체 반환
+def findBorder(tripdetails, borders):
+    borderList = []
+    for tripdetail in tripdetails:
+        try:
+            border = borders.get(trip_detail=tripdetail)
+            borderList.append(border)
+        except Border.DoesNotExist:
+            continue
+    return borderList;
+
+
+# 각 TripDetail에 해당하는 BorderImage URL 정보를 딕셔너리 형태로 반환
+def findImage(tripdetails, borderList):
+    images = {}
     for b in borderList:
-        imageUrl=BorderImage.objects.filter(border=b)
-        imageList.append(imageUrl)
-    return imageList;
+        tripdetail = tripdetails.get(id=b.trip_detail.id) 
+        imgs = BorderImage.objects.filter(border=b)  # border에 해당되는 borderImage 객체들만 필터링
+        image_urls = [i.image.url for i in imgs]  # 이미지 객체의 URL 리스트 생성
+        images[tripdetail.id] = image_urls  # tripdetail ID를 키로 사용하여 딕셔너리에 저장
+
+
+    return images;
 
 def tripDetail(request,tripId):
     userId=request.user.id
     trip=get_object_or_404(Trip,id=tripId) #tripId 가 동일한 글 불러오기
     tripdetails=TripDetail.objects.filter(trip=trip) # 현재 trip과 같은 객체를 가진 tripdetail들을 가져옴
-
     borders = Border.objects.filter(trip_detail__in=tripdetails) 
-
     borderList=findBorder(tripdetails, borders);  # 각 디테일과 일치하는 border 객체반환
+    # print('borderList:',borderList)
     try:
-        imageList= findFile(borderList);
+        imageUrls= findImage(tripdetails, borderList);
         content = {
             'trip': trip,
             'tripdetails': tripdetails,
-            'imageList': imageList,
+            'imageUrls': imageUrls,
             'borderList': borderList,
         }
+        print('urls:',content['imageUrls'])
         return render(request,'review/tripDetail.html',content);
     except Exception as e:
-        print(e)
         content = {
             'trip': trip,
             'tripdetails': tripdetails,
             'borderList': borderList,
-            'userName' : userName,
         }
         return render(request, 'review/tripDetail.html', content)
 
@@ -137,7 +145,7 @@ def add(request, tripdetailId):
     tripdetail = get_object_or_404(TripDetail, id=tripdetailId)
     now = datetime.now()
     tripId = tripdetail.trip.id
-
+    print(tripId)
     if request.method == "POST":
         # 기존 Border 객체를 가져오거나 없으면 새로 생성합니다.
         border, created = Border.objects.get_or_create(
@@ -145,7 +153,7 @@ def add(request, tripdetailId):
             defaults={
                 '제목': request.POST.get('title', ''),
                 '작성일': now,
-                '조회수': 0
+                '조회수': 0,
             }
         )
         
@@ -170,30 +178,38 @@ def add(request, tripdetailId):
                 with open(image_path, 'wb+') as destination:
                     for chunk in image.chunks():
                         destination.write(chunk)
-                BorderImage.objects.create(border=border, image=os.path.join('images', str(border.id), image.name))
+                borderImage=BorderImage.objects.create(border=border, image=os.path.join('images', str(tripdetail.id), image.name))
 
-        return redirect(f'/review/tripDetail/{tripId}/')
+            # content={
+            #     'borderImage':borderImage,
+            #     'tripdetail':tripdetail,
+            #     'tripId':tripId,
+            # } 
+
+        return redirect(f'/review/tripDetail/{tripId}/');
 
     # GET 요청 처리
     try:
         border = Border.objects.get(trip_detail=tripdetail)
-        border_images = BorderImage.objects.filter(border=border)
-
-        content = { 
-            'border': border,
-            'borderImages': border_images,
-            'tripdetail': tripdetail,
-            'now': now,
-        }
-        return render(request, 'review/add.html', content)
-
     except Border.DoesNotExist:
-        content = {
-            'tripdetail': tripdetail,
-            'now': now,
-        }
-        return render(request, 'review/add.html', content)
+        border = None
+
+    if border:
+        border_images = BorderImage.objects.filter(border=border)
+    else:
+        border_images = []
+
+    content = { 
+        'border': border,
+        'borderImages': border_images,
+        'tripdetail': tripdetail,
+        'now': now,
+        'tripId': tripId,
+    }
+    return render(request, 'review/add.html', content)
+
     
+
     
      
 

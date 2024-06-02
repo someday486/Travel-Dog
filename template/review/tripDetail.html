@@ -10,9 +10,28 @@
         .trip-card-title {
             padding-top: 60px;
         }
+
+        .card {
+            width: 15rem; /* 카드 너비를 줄입니다 */
+            margin: 10px; /* 카드 사이의 여백을 조정합니다 */
+            height: auto;
+        }
+
+        .card-img-top {
+            width: 100%;
+            height: 150px; /* 이미지 높이를 고정합니다 */
+            object-fit: cover; /* 이미지가 고정된 크기에 맞게 조정되면서 비율을 유지합니다 */
+        }
+
+        .card-body {
+            padding: 10px; /* 카드 본문의 패딩을 줄입니다 */
+        }
+
+        .custom-button {
+            margin-top: 5px; /* 버튼 사이의 간격을 줄입니다 */
+        }
     </style>
-    <h5 class="text-center mb-4">{{ trip.user }}의 "{{trip.region}}" 여행기</h3>
-    <!-- <hr> -->
+    <h5 class="text-center mb-4">{{ trip.user }}의 "{{ trip.region }}" 여행기</h5>
     <table class="table table-bordered table-hover text-center">
         <thead class="thead-dark">
             <tr>
@@ -31,31 +50,33 @@
             {% endfor %}
         </tbody>
     </table>
-</div><br>
+</div>
+<br>
 <hr>
 
-<h3 style="top: 50px;" class="trip-card-title">Trip Cards</h3>  
-<div id="cardContainer" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px;">
+<h3 style="top: 50px;" class="trip-card-title">Trip Cards</h3>
+<div id="cardContainer" class="d-flex flex-wrap justify-content-center gap-3">
     {% for tripdetail in tripdetails %}
-    <div class="card" style="width: 20rem; margin: 20px; height: auto;">
-        {% if tripdetail.images %}
-            <img class="card-img-top" src="/media/images/{{ tripdetail.id }}/{{ tripdetail.images.0 }}" alt="image" style="width:100%">
+    <div class="card">
+        {% if tripdetail.id in imageUrls %}
+            {% for tripdetailID, urls in imageUrls.items %}
+                {% for url in urls %}
+                    {% if tripdetailID == tripdetail.id and forloop.first %}
+                        <!-- 리스트 내에 url이 존재하면 이미지 보여주기 -->
+                        <img class="card-img-top" src="{{ url }}" alt="Trip image">
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
         {% else %}
-            <img class="card-img-top" src="/path/to/default/image.jpg" alt="default image" style="width:100%">
+            <img class="card-img-top" src="/path/to/default/image.jpg" alt="default image">
         {% endif %}
-        <!-- {% for image in imageList %}
-        <img class="card-img-top" src="{{image}}" alt="image" style="width:100%">
-        {% endfor %} -->
         <div class="card-body">
-            <h4 class="card-title">DAY  -  {{ tripdetail.day }}</h4>
+            <h5 class="card-title">DAY - {{ tripdetail.day }}</h5>
             <p class="card-text">{{ tripdetail.destination.name }}</p>
-            <p class="card-context">{{ tripdetail.context }}</p>
-            <a href="javascript:void(0)" class="btn btn-primary" 
-            onclick="window.location.href='/review/add/{{tripdetail.id}}/'">This Trip</a>
+            <p class="card-text">{{ tripdetail.context }}</p>
+            <a href="javascript:void(0)" class="btn btn-primary" onclick="window.location.href='/review/add/{{tripdetail.id}}/'">This Trip</a>
         </div>
     </div>
     {% endfor %}
 </div>
-
-
 {% endblock %}
