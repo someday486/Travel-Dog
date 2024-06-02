@@ -37,24 +37,28 @@ def index(request):
     return render(request,'review/index.html',content);
 
 def detail(request, userId):  # tripdetailId를 넘겨줘야 한다.
-    userName = request.user.username
+    userName=request.user.username
     trips = Trip.objects.filter(user_id=userId)
-    
-    detailList = findTripDetails(trips)
-    borderList = {}
-    
-    for trip, details in detailList.items():
-        for detail in details:
-            border = Border.objects.filter(trip_detail=detail).first()  # detail 객체와 동일한 border를 끌어온다
-            if border:
-                borderList[detail.id] = border
+    imageList={}  # {trip1 : imgurl1, trip2: imgurl2, ...}
+    for trip in trips:
+        tripDetails = TripDetail.objects.filter(trip_id=trip.id)
+        for detail in tripDetails:
+            try:
+                imgs=[]
+                border=Border.objects.get(trip_detail=detail)
+                images=BorderImage.objects.filter(border_id=border.id)
+                for img in images:
+                    imgs.append(img.image.url)
+                imageList[trip.id]=imgs
+            except:
+                imageList[trip.id]=[]
+  
     
     content = {
         'trips': trips,
-        'userName': userName,
-        'detailList': detailList,
-        'borderList': borderList,
         'userId': userId,
+        'userName':userName,
+        'imageList':imageList,
     }
     return render(request, 'review/detail.html', content)
 
@@ -62,7 +66,7 @@ def findTripDetails(trips):
     detailList={}
     for t in trips:
         tripdetails=TripDetail.objects.filter(trip=t)
-        detailList[f'{t}']=tripdetails   # trip에 대한 detail 객체들 저장
+        detailList[t]=tripdetails   # trip에 대한 detail 객체들 저장
     return detailList;  # {trip1:tripdetail1 tripdetail2, trip2:....}
 
 
@@ -146,8 +150,8 @@ def add(request, tripdetailId):
     tripdetail = get_object_or_404(TripDetail, id=tripdetailId)
     now = datetime.now()
     tripId = tripdetail.trip.id
-    defaultImg_path = os.path.join(settings.MEDIA_ROOT, 'images', 'dog.jpg')
-    print(defaultImg_path)
+    defaultImg_path = os.path.join(settings.MEDIA_URL, 'images', 'dog.jpg')
+    
     if request.method == "POST":
         # 기존 Border 객체를 가져오거나 없으면 새로 생성합니다.
         border, created = Border.objects.get_or_create(
@@ -156,7 +160,6 @@ def add(request, tripdetailId):
                 '제목': request.POST.get('title', ''),
                 '작성일': now,
                 '조회수': 0,
-                'defaultImg_path':defaultImg_path,
             }
         )
         
@@ -181,9 +184,9 @@ def add(request, tripdetailId):
                 with open(image_path, 'wb+') as destination:
                     for chunk in image.chunks():
                         destination.write(chunk)
-                borderImage=BorderImage.objects.create(border=border, image=os.path.join('images', str(tripdetail.id), image.name))
+                BorderImage.objects.create(border=border, image=os.path.join('images', str(tripdetail.id), image.name))
 
-        return redirect(f'/review/tripDetail/{tripId}/');
+        return redirect(f'/review/tripDetail/{tripId}/')
 
     # GET 요청 처리
     try:
@@ -202,9 +205,11 @@ def add(request, tripdetailId):
         'tripdetail': tripdetail,
         'now': now,
         'tripId': tripId,
-        'defaultImg_path':defaultImg_path,
+        'defaultImg_path': defaultImg_path,
     }
     return render(request, 'review/add.html', content)
+
+
 
     
 

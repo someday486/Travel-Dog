@@ -17,16 +17,24 @@
 <body>
 <div class="container mt-5">
     <h3 class="text-center mb-4">{{ userName }}님의 Triplus</h3>
-    {{detailList}}
     {% if trips %}
-    <!-- 본인 게시물이 하나라도 있을 때 -->
     <div class="album py-5 bg-light">
         <div class="container">
             <div class="row">
                 {% for trip in trips %}
                 <div class="col-md-4">
                     <div class="card mb-4 shadow-sm">
-                        <img src="{{ trip.image_url }}" class="card-img-top" alt="{{ trip.region }}">
+                        {% if trip.id in imageList %}
+                        {% for tripId, image in imageList.items %}
+                            {% for image in image %}
+                                {% if trip.id == tripId and forloop.first %}
+                                <img src="{{ image }}" class="card-img-top" alt="{{ trip.region }}">
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                        {% else %}
+                        <img class="card-img-top" src="/path/to/default/image.jpg" alt="default image">
+                        {% endif %}
                         <div class="card-body">
                             <p class="card-text"><strong>여행지:</strong> {{ trip.region }}</p>
                             <p class="card-text"><strong>작성자:</strong> {{ trip.user }}</p>
@@ -42,7 +50,7 @@
                         </div>
                     </div>
                 </div>
-                {% endfor %}
+               {% endfor %}
             </div>
         </div>
     </div>
@@ -55,3 +63,5 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
+
+
