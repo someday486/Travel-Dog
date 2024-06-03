@@ -51,6 +51,7 @@
             newMap(lat, long, title);
         }
     </script>
+
     <div class='container' style='margin-top: 0px'>
         <div class="row">
             <div class="col">
@@ -83,12 +84,11 @@
                                 <td>                         
                                 <li>
                                     <button class="btn btn-primary btn-lg mx-2" onclick="loca('{{ i.mapy }}', '{{ i.mapx }}', '{{ i.title }}')">{{ i.title }}</button>
-                                    <form method="post" action="/destinations/{{ trip_id }}/{{ i.title }}/{{ i.roadAddress }}/"> {% csrf_token %}                                    
-                                        <button type='submit' class="btn btn-outline-danger btn-lg mx-2" onclick="location.href='{{ trip_id }}/{{ i.title }}/{{ i.roadAddress }}/'">+일정추가</button><br>
-                                    </form>
+
                                     <form method="post" action="/destinations/addmyplace/{{ trip_id }}/{{ i.title }}/{{ i.roadAddress }}/"> {% csrf_token %}   
                                         <button type='submit' class="btn btn-outline-danger btn-lg mx-2" onclick="location.href='addmyplace/{{ trip_id }}/{{ i.title }}/{{ i.roadAddress }}/'">+내장소♥</button><br>
                                     </form> 
+                                    
                                     주소: {{ i.roadAddress }}<br>
                                     링크: <a href='{{ i.link }}'>{{ i.link }}</a><br>
                                     분류: {{ i.category }}<br>  

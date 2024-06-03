@@ -68,6 +68,8 @@ def index(request):
             'topic':query,
             'imageList':imageList,
         }
+
+        
     else:
         trips=Trip.objects.all()  # 해시태그로 검색한거 아니면 일정 다 가져오기
         detailList=findTripDetails(trips);
