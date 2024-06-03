@@ -1,5 +1,7 @@
 {% extends 'index.html' %}
+
 {% block title %}여행 가계부 만들기{% endblock %}
+
 {% block content %}
 <style>
     body {
@@ -31,36 +33,13 @@
         color: #333;
         margin-bottom: 20px;
     }
-    .btn {
-        display: inline-block;
-        padding: 10px 20px;
-        font-size: 16px;
-        cursor: pointer;
-        text-align: center;
-        text-decoration: none;
-        outline: none;
-        color: #fff;
-        background-color: #4CAF50;
-        border: none;
-        border-radius: 15px;
-        box-shadow: 0 5px #999;
-    }
-    .btn:hover {background-color: #45a049}
-    .btn:active {
-        background-color: #45a049;
-        box-shadow: 0 5px #666;
-        transform: translateY(4px);
-    }
-    .btn-danger {
-        background-color: #f44336;
-    }
-    .btn-danger:hover {background-color: #e53935}
-
+    
     /* 비고 입력 칸 스타일 */
     textarea[name^="memo_"] {
-        width: calc(100% - 40px); /* 비고 입력 칸의 크기를 고정 */
+        width: 100%; /* 너비를 100%로 설정하여 테이블 셀에 맞춤 */
         height: 100px; /* 높이 조정 */
         resize: none; /* 사용자가 크기 조정 못하도록 설정 */
+        box-sizing: border-box; /* padding과 border를 width와 height에 포함시킴 */
     }
 
     /* 영수증 입력 칸 스타일 */
@@ -69,7 +48,7 @@
         overflow: hidden;
         display: inline-block;
         margin-top: 8px;
-        width: calc(100% - 10px);
+        width: 100%; /* 너비를 100%로 설정하여 테이블 셀에 맞춤 */
     }
 
     .file-input-wrapper input[type="file"] {
@@ -85,6 +64,31 @@
 
     .file-input-text {
         margin-left: 10px;
+    }
+
+    .receipt-preview {
+        margin-top: 8px;
+    }
+
+    .receipt-preview img {
+        max-width: 100%;
+        max-height: 100px; /* 이미지 최대 높이 설정 */
+    }
+
+    .receipt-link {
+        display: inline-block;
+        max-width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .receipt-link a {
+        text-decoration: none;
+        color: #000;
+        background-color: #f1f1f1;
+        padding: 2px 5px;
+        border-radius: 3px;
     }
 </style>
 
@@ -111,17 +115,24 @@
         <td>{{ trip_detail.destination.name }}</td>
         <td>{{ trip_detail.expense|floatformat:0 }}원</td>
         {% with expensedetail=trip_detail.expensedetail %}
-        <td>            
-            <textarea name="memo_{{ forloop.counter0 }}" rows="4">{{ expensedetail.memo }}</textarea>          
+        <td>
+            <textarea name="memo_{{ forloop.counter0 }}" rows="4">{{ expensedetail.memo }}</textarea>
         </td>
         <td>
             <div class="file-input-wrapper">
-                <input type="file" name="files_{{ forloop.counter0 }}" id="file-input" class="input-file">
-                <button for="file-input" class="file-input-label">파일 선택</button>
+                <input type="file" name="files_{{ forloop.counter0 }}" 
+                id="file-input-{{ forloop.counter0 }}" class="input-file" 
+                onchange="previewFile('{{ forloop.counter0 }}')">
+                <button for="file-input-{{ forloop.counter0 }}" class="file-input-label">파일 선택</button>
             </div>
-            {% if expensedetail.receipt %}
-                <a href="{{ expensedetail.receipt.url }}" target="_blank">{{ expensedetail.receipt.name }}</a>
-            {% endif %}
+            <div id="preview-{{ forloop.counter0 }}" class="receipt-preview">
+                {% if expensedetail.receipt %}
+                    <div class="receipt-link">
+                        <a href="{{ expensedetail.receipt.url }}" target="_blank">영수증 보기</a>
+                        <button type="button" onclick="deleteFile('{{ forloop.counter0 }}')">파일 삭제</button>                   
+                    </div>
+                {% endif %}
+            </div>
         </td>
         {% endwith %}
     </tr>
@@ -141,6 +152,40 @@
             e.preventDefault();
         }
     });
+
+    function previewFile(index) {
+        const fileInput = document.getElementById(`file-input-${index}`);
+        const preview = document.getElementById(`preview-${index}`);
+        const file = fileInput.files[0];
+        const reader = new FileReader();
+
+        reader.addEventListener("load", function() {
+            const img = document.createElement("img");
+            img.src = reader.result;
+            preview.innerHTML = ''; // 기존 내용을 지우고
+            preview.appendChild(img); // 새로운 이미지를 추가
+        }, false);
+
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function deleteFile(index) {
+        const fileInput = document.getElementById(`file-input-${index}`);
+        const preview = document.getElementById(`preview-${index}`);
+        const receiptLink = document.getElementById(`receipt-link-${index}`);
+        
+       // 파일 입력 필드를 비웁니다.
+       fileInput.value = '';
+
+        // 미리보기 및 파일 링크를 제거합니다.
+        preview.innerHTML = '';
+
+        // 파일 삭제 버튼을 숨깁니다.
+        receiptLink.querySelector('button').style.display = 'none';
+
+    }
 </script>
 
 {% endblock %}
