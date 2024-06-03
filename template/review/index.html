@@ -1,8 +1,8 @@
 {% extends 'index.html' %}
+{% load humanize %}
 {% block title %}여행 일정 만들기{% endblock %}
 {% block content %}
 <div>
-    <!-- <h3 class="text-center mb-4">리뷰 index 페이지입니다.</h3> -->
     <form method="get">
         <div class="row mb-3 justify-content-center">
             <div class="col-auto">
@@ -24,10 +24,45 @@
                 </div>
             </div>
         </div>
-        <!-- <hr> -->
     </form>
     <!-- Card Layout for Trips -->
-    {% if trips %}
+    {% if topic %}
+    <!-- 검색한 경우 -->
+    <div class="album py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                {% for tId, details in detailList.items %}
+                {% for detail in details %}
+                <div class="col-md-4">
+                    <div class="card mb-4 shadow-sm" style="width: 15rem; height: auto;">
+                        {% if tId in imageList %}
+                        {% for tripId, image in imageList.items %}
+                            {% for img in image %}
+                                {% if tId == tripId and forloop.first %}
+                                <img src="{{ img }}" class="card-img-top" style="width: 100%; height: 150px; object-fit: cover;" alt="{{ detail.destination.name }}">
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                        {% endif %}
+                        <div class="card-body" style="padding: 10px;">
+                            <p class="card-text"><strong>장소:</strong> {{ detail.destination.name }}</p>
+                            <p class="card-text"><strong>비용:</strong> {{ detail.expense|floatformat:0|intcomma }}</p>
+                            <p class="card-text"><strong>내용:</strong> {{ detail.context }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" 
+                                    onclick="location.href='/review/tripDetail/{{tId}}/'">View</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% elif trips %}
     <div class="album py-5 bg-light">
         <div class="container">
             <div class="row">
@@ -36,9 +71,9 @@
                     <div class="card mb-4 shadow-sm" style="width: 15rem; height: auto;">
                         {% if trip.id in imageList %}
                         {% for tripId, image in imageList.items %}
-                            {% for image in image %}
+                            {% for img in image %}
                                 {% if trip.id == tripId and forloop.last %}
-                                <img src="{{ image }}" class="card-img-top" style="width: 100%; height: 150px; object-fit: cover;" alt="{{ trip.region }}">
+                                <img src="{{ img }}" class="card-img-top" style="width: 100%; height: 150px; object-fit: cover;" alt="{{ trip.region }}">
                                 {% endif %}
                             {% endfor %}
                         {% endfor %}
