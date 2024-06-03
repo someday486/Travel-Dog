@@ -6,6 +6,11 @@ from . import views
 
 
 urlpatterns = [
+<<<<<<< HEAD
     path("", views.myplace),
     path("addmyplace",views.addmyplace),
+=======
+    path("", views.myplace),    
+    
+>>>>>>> fb7c23d54dba6485d2bc0fcc1fa9d1627698467d
 ]

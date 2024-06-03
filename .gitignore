@@ -8,15 +8,3 @@
 __pycache__/
 local_settings.py
 db.sqlite3
-<<<<<<< HEAD
-*.pyc
-# Created by https://www.toptal.com/developers/gitignore/api/windows,django,python
-# Edit at https://www.toptal.com/developers/gitignore?templates=windows,django,python
-
-### Django ###
-*.log
-*.pot
-*.pyc
-__pycache__/
-local_settings.py
-db.sqlite3

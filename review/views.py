@@ -26,7 +26,9 @@ def delete_image(request, borderId, image_url):
             default_storage.delete(image_path)
         
         # 데이터베이스에서 BorderImage 객체 삭제
-        BorderImage.objects.filter(border=border, image=decoded_url).delete()
+        # decoded_url이 전체 URL일 경우, DB의 image 필드와 일치하도록 수정 필요
+        decoded_image_path = os.path.join('images', '/'.join(decoded_url.split('/')[-3:]))
+        BorderImage.objects.filter(border=border, image=decoded_image_path).delete()
 
         # 성공적으로 삭제된 경우 add 페이지로 리디렉션
         return redirect(f'/review/add/{tripDetail.id}/')
@@ -42,42 +44,51 @@ def extract_hashtags(text):
         return re.findall(r'#\w+', text);
 
 def index(request):
-    userId=request.user.id
-    query=request.GET.get('topic','')
+    userId = request.user.id
+    query = request.GET.get('topic', '')
+    print('쿼리:', query)
+    
     trips = Trip.objects.all()
-    imageList={}  # {trip1 : imgurl1, trip2: imgurl2, ...}
-    # 각 trip에 맞는 이미지 리스트
+    imageList = {}  # {trip1: [imgurl1, imgurl2, ...], trip2: [imgurl1, imgurl2, ...], ...}
+    
+    # 각 trip에 맞는 이미지 리스트 생성
     for trip in trips:
         tripDetails = TripDetail.objects.filter(trip_id=trip.id)
         for detail in tripDetails:
             try:
-                imgs=[]
-                border=Border.objects.get(trip_detail=detail)
-                images=BorderImage.objects.filter(border_id=border.id)
+                imgs = []
+                border = Border.objects.get(trip_detail=detail)
+                images = BorderImage.objects.filter(border_id=border.id)
                 for img in images:
                     imgs.append(img.image.url)
-                imageList[trip.id]=imgs
+                imageList[trip.id] = imgs
             except:
-                imageList[trip.id]=[]
-
+                imageList[trip.id] = []
+    
     if query:
-        tripdetails=TripDetail.objects.filter(context__icontains=f'#{query}')
-        content={
-            'tripdetails':tripdetails,
-            'userId':userId,
-            'topic':query,
-            'imageList':imageList,
+        tripdetails = TripDetail.objects.filter(context__icontains=f'#{query}')
+        detailList = {}  # {tripId: [details]}
+        
+        for d in tripdetails:
+            if d.trip.id not in detailList:
+                detailList[d.trip.id] = []
+            detailList[d.trip.id].append(d)
+        
+        content = {
+            'detailList': detailList,
+            'userId': userId,
+            'topic': query,
+            'imageList': imageList,
         }
+
+        
     else:
-        trips=Trip.objects.all()  # 해시태그로 검색한거 아니면 일정 다 가져오기
-        detailList=findTripDetails(trips);
-        content={
-            'trips':trips,
-            'userId':userId,
-            'detailList':detailList,
-            'imageList':imageList,
+        content = {
+            'trips': trips,
+            'userId': userId,
+            'imageList': imageList,
         }
-    return render(request,'review/index.html',content);
+        return render(request, 'review/index.html', content)
 
 def detail(request, userId):  # tripdetailId를 넘겨줘야 한다.
     userName=request.user.username
@@ -137,27 +148,43 @@ def findImage(tripdetails, borderList):
 
     return images;
 
-def tripDetail(request,tripId):
+def tripDetail(request,tripId):  # day 순서로 정렬 필요
     userId=request.user.id
     trip=get_object_or_404(Trip,id=tripId) #tripId 가 동일한 글 불러오기
-    tripdetails=TripDetail.objects.filter(trip=trip) # 현재 trip과 같은 객체를 가진 tripdetail들을 가져옴
+    tripdetails=TripDetail.objects.filter(trip=trip).order_by('day') # 현재 trip과 같은 객체를 가진 tripdetail들을 가져옴
+    
+    # day: tripdetail 객체 딕셔너리
+    detailDict = {detail.day: detail for detail in tripdetails}
+    print('정렬된 데이터:', detailDict)
+    # detailDict={}
+    # for detail in tripdetails:
+    #     detailDict[detail]=detail.day
+    # print('원본:',detailDict)
+
+    # detailDict_2= sorted(detailDict.items(), key=lambda x: x[1])
+    # print('전송할 데이터:',detailDict_2)
+    # detailDict_3={}
+    # for d,k in detailDict_2:
+    #     detailDict_3[k]=d
+    # print('detailDict_3:',detailDict_3)
+
     borders = Border.objects.filter(trip_detail__in=tripdetails) 
     borderList=findBorder(tripdetails, borders);  # 각 디테일과 일치하는 border 객체반환
     try:
         imageUrls= findImage(tripdetails, borderList);
         content = {
             'trip': trip,
-            'tripdetails': tripdetails,
+            # 'tripdetails': tripdetails,
+            'detailDict':detailDict,
             'imageUrls': imageUrls,
             'borderList': borderList,
             # 'defaultImg_path': settings.DEFAULT_IMAGE_URL,  # 기본 이미지 경로 전달
         }
-        print(imageUrls)
         return render(request,'review/tripDetail.html',content);
     except Exception as e:
         content = {
             'trip': trip,
-            'tripdetails': tripdetails,
+            'detailDict': detailDict,
             'borderList': borderList,
             # 'defaultImg_path': settings.DEFAULT_IMAGE_URL,  # 기본 이미지 경로 전달
         }
