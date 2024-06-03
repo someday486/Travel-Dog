@@ -42,42 +42,50 @@ def extract_hashtags(text):
         return re.findall(r'#\w+', text);
 
 def index(request):
-    userId=request.user.id
-    query=request.GET.get('topic','')
+    userId = request.user.id
+    query = request.GET.get('topic', '')
+    print('쿼리:', query)
+    
     trips = Trip.objects.all()
-    imageList={}  # {trip1 : imgurl1, trip2: imgurl2, ...}
-    # 각 trip에 맞는 이미지 리스트
+    imageList = {}  # {trip1: [imgurl1, imgurl2, ...], trip2: [imgurl1, imgurl2, ...], ...}
+    
+    # 각 trip에 맞는 이미지 리스트 생성
     for trip in trips:
         tripDetails = TripDetail.objects.filter(trip_id=trip.id)
         for detail in tripDetails:
             try:
-                imgs=[]
-                border=Border.objects.get(trip_detail=detail)
-                images=BorderImage.objects.filter(border_id=border.id)
+                imgs = []
+                border = Border.objects.get(trip_detail=detail)
+                images = BorderImage.objects.filter(border_id=border.id)
                 for img in images:
                     imgs.append(img.image.url)
-                imageList[trip.id]=imgs
+                imageList[trip.id] = imgs
             except:
-                imageList[trip.id]=[]
-
+                imageList[trip.id] = []
+    
     if query:
-        tripdetails=TripDetail.objects.filter(context__icontains=f'#{query}')
-        content={
-            'tripdetails':tripdetails,
-            'userId':userId,
-            'topic':query,
-            'imageList':imageList,
+        tripdetails = TripDetail.objects.filter(context__icontains=f'#{query}')
+        detailList = {}  # {tripId: [details]}
+        
+        for d in tripdetails:
+            if d.trip.id not in detailList:
+                detailList[d.trip.id] = []
+            detailList[d.trip.id].append(d)
+        
+        content = {
+            'detailList': detailList,
+            'userId': userId,
+            'topic': query,
+            'imageList': imageList,
         }
+        return render(request, 'review/index.html', content)
     else:
-        trips=Trip.objects.all()  # 해시태그로 검색한거 아니면 일정 다 가져오기
-        detailList=findTripDetails(trips);
-        content={
-            'trips':trips,
-            'userId':userId,
-            'detailList':detailList,
-            'imageList':imageList,
+        content = {
+            'trips': trips,
+            'userId': userId,
+            'imageList': imageList,
         }
-    return render(request,'review/index.html',content);
+        return render(request, 'review/index.html', content)
 
 def detail(request, userId):  # tripdetailId를 넘겨줘야 한다.
     userName=request.user.username
