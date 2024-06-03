@@ -26,7 +26,9 @@ def delete_image(request, borderId, image_url):
             default_storage.delete(image_path)
         
         # 데이터베이스에서 BorderImage 객체 삭제
-        BorderImage.objects.filter(border=border, image=decoded_url).delete()
+        # decoded_url이 전체 URL일 경우, DB의 image 필드와 일치하도록 수정 필요
+        decoded_image_path = os.path.join('images', '/'.join(decoded_url.split('/')[-3:]))
+        BorderImage.objects.filter(border=border, image=decoded_image_path).delete()
 
         # 성공적으로 삭제된 경우 add 페이지로 리디렉션
         return redirect(f'/review/add/{tripDetail.id}/')
