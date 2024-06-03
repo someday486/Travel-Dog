@@ -17,16 +17,24 @@
 <body>
 <div class="container mt-5">
     <h3 class="text-center mb-4">{{ userName }}님의 Triplus</h3>
-    {{detailList}}
     {% if trips %}
-    <!-- 본인 게시물이 하나라도 있을 때 -->
     <div class="album py-5 bg-light">
         <div class="container">
             <div class="row">
                 {% for trip in trips %}
                 <div class="col-md-4">
                     <div class="card mb-4 shadow-sm">
-                        <img src="{{ trip.image_url }}" class="card-img-top" alt="{{ trip.region }}">
+                        {% if trip.id in imageList %}
+                        {% for tripId, image in imageList.items %}
+                            {% for image in image %}
+                                {% if trip.id == tripId and forloop.last %}
+                                <img src="{{ image }}" class="card-img-top" alt="{{ trip.region }}">
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                        {% else %}
+                        <img class="card-img-top" src="/path/to/default/image.jpg" alt="default image">
+                        {% endif %}
                         <div class="card-body">
                             <p class="card-text"><strong>여행지:</strong> {{ trip.region }}</p>
                             <p class="card-text"><strong>작성자:</strong> {{ trip.user }}</p>
@@ -42,7 +50,7 @@
                         </div>
                     </div>
                 </div>
-                {% endfor %}
+               {% endfor %}
             </div>
         </div>
     </div>
@@ -57,49 +65,3 @@
 </html>
 
 
-<!--
-    <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Triplus</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'review/css/style.css' %}">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
-<body>
-<div class="container mt-5">
-    <h3 class="text-center mb-4">{{ userId }}님의 Triplus</h3>
-    {% if trips %}
-    <div class="table-responsive">
-        <table class="table table-bordered table-hover text-center">
-            <thead class="thead-dark">
-                <tr>
-                    <th scope="col">작성자</th>
-                    <th scope="col">여행지</th>
-                    <th scope="col">시작일</th>
-                    <th scope="col">종료일</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for trip in trips %}
-                <tr>
-                    <td>{{ trip.user }}</td>
-                    <td><button type="button" 
-                        onclick="location.href='/review/tripDetail/{{trip.id}}/'">{{ trip.region }}</button></td>
-                    <td>{{ trip.start_date }}</td>
-                    <td>{{ trip.end_date }}</td>
-                    제목을 클릭하면 해당 게시물로 이동
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    {% else %}
-    <p class="text-center">게시물이 없습니다.</p>
-    {% endif %}
-</div>
-</body>
-</html>
--->
