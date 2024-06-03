@@ -41,7 +41,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for tripdetail in tripdetails %}
+            {% for day, tripdetail in detailDict.items %}
             <tr>
                 <td>{{ tripdetail.day }}</td>
                 <td>{{ tripdetail.destination.name }}</td>
@@ -60,7 +60,7 @@
 
 <h3 style="top: 50px;" class="trip-card-title">Trip Cards</h3>
 <div id="cardContainer" class="d-flex flex-wrap justify-content-center gap-3">
-    {% for tripdetail in tripdetails %}
+    {% for day, tripdetail in detailDict.items %}
     <div class="card">
         {% if tripdetail.id in imageUrls %}
             {% for tripdetailID, urls in imageUrls.items %}

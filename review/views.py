@@ -137,27 +137,43 @@ def findImage(tripdetails, borderList):
 
     return images;
 
-def tripDetail(request,tripId):
+def tripDetail(request,tripId):  # day 순서로 정렬 필요
     userId=request.user.id
     trip=get_object_or_404(Trip,id=tripId) #tripId 가 동일한 글 불러오기
-    tripdetails=TripDetail.objects.filter(trip=trip) # 현재 trip과 같은 객체를 가진 tripdetail들을 가져옴
+    tripdetails=TripDetail.objects.filter(trip=trip).order_by('day') # 현재 trip과 같은 객체를 가진 tripdetail들을 가져옴
+    
+    # day: tripdetail 객체 딕셔너리
+    detailDict = {detail.day: detail for detail in tripdetails}
+    print('정렬된 데이터:', detailDict)
+    # detailDict={}
+    # for detail in tripdetails:
+    #     detailDict[detail]=detail.day
+    # print('원본:',detailDict)
+
+    # detailDict_2= sorted(detailDict.items(), key=lambda x: x[1])
+    # print('전송할 데이터:',detailDict_2)
+    # detailDict_3={}
+    # for d,k in detailDict_2:
+    #     detailDict_3[k]=d
+    # print('detailDict_3:',detailDict_3)
+
     borders = Border.objects.filter(trip_detail__in=tripdetails) 
     borderList=findBorder(tripdetails, borders);  # 각 디테일과 일치하는 border 객체반환
     try:
         imageUrls= findImage(tripdetails, borderList);
         content = {
             'trip': trip,
-            'tripdetails': tripdetails,
+            # 'tripdetails': tripdetails,
+            'detailDict':detailDict,
             'imageUrls': imageUrls,
             'borderList': borderList,
             # 'defaultImg_path': settings.DEFAULT_IMAGE_URL,  # 기본 이미지 경로 전달
         }
-        print(imageUrls)
         return render(request,'review/tripDetail.html',content);
     except Exception as e:
         content = {
             'trip': trip,
-            'tripdetails': tripdetails,
+            'detailDict': detailDict,
             'borderList': borderList,
             # 'defaultImg_path': settings.DEFAULT_IMAGE_URL,  # 기본 이미지 경로 전달
         }
