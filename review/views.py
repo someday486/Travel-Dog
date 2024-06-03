@@ -11,33 +11,39 @@ import urllib.parse
 
 # Create your views here.
 
-def delete_image(request, borderId, image_url):
+def delete_image(request, borderId, imageId):
     # 이미지 URL을 디코딩합니다.
-    decoded_url = urllib.parse.unquote(image_url)
-    image_path = os.path.join(settings.MEDIA_ROOT, decoded_url.replace(settings.MEDIA_URL, ''))
-
+    # decoded_url = urllib.parse.unquote(imageId)
+    # image_path = os.path.join(settings.MEDIA_ROOT, decoded_url.replace(settings.MEDIA_URL, '').lstrip('/'))
+    print(f'image_url: {imageId}')
+    # print(f'decode_url: {decoded_url}')
+    # print(f'image_path: {image_path}')
+    
     try:
         # Border 및 관련된 TripDetail 객체를 가져옵니다.
         border = get_object_or_404(Border, id=borderId)
         tripDetail = get_object_or_404(TripDetail, id=border.trip_detail.id)
         
-        # 이미지 파일 삭제
-        if default_storage.exists(image_path):
-            default_storage.delete(image_path)
-        
-        # 데이터베이스에서 BorderImage 객체 삭제
-        # decoded_url이 전체 URL일 경우, DB의 image 필드와 일치하도록 수정 필요
-        decoded_image_path = os.path.join('images', '/'.join(decoded_url.split('/')[-3:]))
-        BorderImage.objects.filter(border=border, image=decoded_image_path).delete()
+        #ExpenseDetail.objects.filter(trip_detail__in=trip_details).delete()  
 
+        # 데이터베이스에서 BorderImage 객체 삭제
+        borderImg = get_object_or_404(BorderImage, id=imageId)
+        print(f'borderImg: {borderImg}')
+        borderImg.delete()
+
+        # 이미지 파일 삭제
+        # if default_storage.exists(image_path):
+        #     default_storage.delete(image_path)
+        
         # 성공적으로 삭제된 경우 add 페이지로 리디렉션
         return redirect(f'/review/add/{tripDetail.id}/')
     
     except Exception as e:
         # 에러 발생 시 메시지를 생성합니다.
         return JsonResponse({'success': False, 'error': str(e)})
-    
 
+
+    
 def extract_hashtags(text):
     if text:
     # tripdetail 객체에서 해시태그 내용만 골라낸다
@@ -80,7 +86,7 @@ def index(request):
             'topic': query,
             'imageList': imageList,
         }
-
+        return render(request, 'review/index.html', content)
         
     else:
         content = {
@@ -147,6 +153,93 @@ def findImage(tripdetails, borderList):
 
 
     return images;
+
+def add(request, tripdetailId):
+    tripdetail = get_object_or_404(TripDetail, id=tripdetailId)
+    now = datetime.now()
+    tripId = tripdetail.trip.id
+    defaultImg_path = os.path.join(settings.MEDIA_URL, 'images', 'dog.jpg')
+
+    is_owner = request.user == tripdetail.trip.user
+
+    if request.method == "POST" and is_owner:
+        # 기존 Border 객체를 가져오거나 없으면 새로 생성합니다.
+        border, created = Border.objects.get_or_create(
+            trip_detail=tripdetail,
+            defaults={
+                '제목': request.POST.get('title', ''),
+                '작성일': now,
+                '조회수': 0,
+            }
+        )
+        
+        # 만약 기존 Border 객체가 있다면 제목과 작성일을 업데이트합니다.
+        if not created:
+            border.제목 = request.POST.get('title', '')
+            border.작성일 = now
+            border.save()
+
+        # tripdetail의 내용을 업데이트합니다.
+        tripdetail.context = request.POST.get('form_context', '')
+        tripdetail.save()
+
+        # 이미지 파일이 존재하는 경우 BorderImage 객체를 생성합니다.
+        images = request.FILES.getlist('images')
+        if images:
+            folder_path = os.path.join(settings.MEDIA_ROOT, 'images', str(tripdetail.id))
+            os.makedirs(folder_path, exist_ok=True)  # 폴더가 존재하지 않으면 생성
+
+            for image in images:
+                image_path = os.path.join(folder_path, image.name)
+                with open(image_path, 'wb+') as destination:
+                    for chunk in image.chunks():
+                        destination.write(chunk)
+                BorderImage.objects.create(border=border, image=os.path.join('images', str(tripdetail.id), image.name))
+
+        return redirect(f'/review/tripDetail/{tripId}/')
+
+    # GET 요청 처리 또는 사용자가 소유자가 아닌 경우
+    try:
+        border = Border.objects.get(trip_detail=tripdetail)
+    except Border.DoesNotExist:
+        border = None
+
+    if border:
+        border_images=BorderImage.objects.filter(border=border)
+        if border_images:
+        # image_urls = [i.image.url for i in border_images]  # 이미지 객체 리스트 반환
+            images = [i for i in border_images]  # 이미지 객체 리스트 반
+            content = {
+            'border': border,
+            'borderImages': border_images,  # border 이미지 객체 반환 쿼리셋
+            'tripdetail': tripdetail,
+            'now': now,
+            'tripId': tripId,
+            'userCheck': is_owner,
+            'images':images,
+                }
+            return render(request, 'review/add.html', content)
+        else:
+            content = {
+            'border': border,
+            'borderImages': border_images,  # border 이미지 객체 반환 쿼리셋
+            'tripdetail': tripdetail,
+            'now': now,
+            'tripId': tripId,
+            'userCheck': is_owner,
+            }
+            return render(request, 'review/add.html', content)
+    else:
+        content = {
+            # 'border': border,
+            # 'borderImages': border_images,  # border 이미지 객체 반환 쿼리셋
+            'tripdetail': tripdetail,
+            'now': now,
+            'tripId': tripId,
+            'userCheck': is_owner,
+        }
+        return render(request, 'review/add.html', content)
+
 
 def tripDetail(request,tripId):  # day 순서로 정렬 필요
     userId=request.user.id
@@ -215,73 +308,7 @@ def upload_file(request):
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=400)
 
 
-def add(request, tripdetailId):
-    tripdetail = get_object_or_404(TripDetail, id=tripdetailId)
-    now = datetime.now()
-    tripId = tripdetail.trip.id
-    defaultImg_path = os.path.join(settings.MEDIA_URL, 'images', 'dog.jpg')
 
-    is_owner = request.user == tripdetail.trip.user
-
-    if request.method == "POST" and is_owner:
-        # 기존 Border 객체를 가져오거나 없으면 새로 생성합니다.
-        border, created = Border.objects.get_or_create(
-            trip_detail=tripdetail,
-            defaults={
-                '제목': request.POST.get('title', ''),
-                '작성일': now,
-                '조회수': 0,
-            }
-        )
-        
-        # 만약 기존 Border 객체가 있다면 제목과 작성일을 업데이트합니다.
-        if not created:
-            border.제목 = request.POST.get('title', '')
-            border.작성일 = now
-            border.save()
-
-        # tripdetail의 내용을 업데이트합니다.
-        tripdetail.context = request.POST.get('form_context', '')
-        tripdetail.save()
-
-        # 이미지 파일이 존재하는 경우 BorderImage 객체를 생성합니다.
-        images = request.FILES.getlist('images')
-        if images:
-            folder_path = os.path.join(settings.MEDIA_ROOT, 'images', str(tripdetail.id))
-            os.makedirs(folder_path, exist_ok=True)  # 폴더가 존재하지 않으면 생성
-
-            for image in images:
-                image_path = os.path.join(folder_path, image.name)
-                with open(image_path, 'wb+') as destination:
-                    for chunk in image.chunks():
-                        destination.write(chunk)
-                BorderImage.objects.create(border=border, image=os.path.join('images', str(tripdetail.id), image.name))
-
-        return redirect(f'/review/tripDetail/{tripId}/')
-
-    # GET 요청 처리 또는 사용자가 소유자가 아닌 경우
-    try:
-        border = Border.objects.get(trip_detail=tripdetail)
-    except Border.DoesNotExist:
-        border = None
-
-    if border:
-        border_images = BorderImage.objects.filter(border=border)
-        image_urls = [i.image.url for i in border_images]  # 이미지 객체의 URL 리스트 생성
-    else:
-        border_images = []
-        image_urls = []
-
-    content = {
-        'border': border,
-        'borderImages': border_images,  # border 이미지 객체 반환 쿼리셋
-        'tripdetail': tripdetail,
-        'now': now,
-        'tripId': tripId,
-        'userCheck': is_owner,
-        'image_urls': image_urls,
-    }
-    return render(request, 'review/add.html', content)
 
 
 
