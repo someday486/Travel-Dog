@@ -6,6 +6,6 @@ from . import views
 
 
 urlpatterns = [
-    path("", views.myplace),    
-    
+    path("", views.myplace),
+    path("addmyplace",views.addmyplace),
 ]
