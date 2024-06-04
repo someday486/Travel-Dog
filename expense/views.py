@@ -6,7 +6,8 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 import os
 from django.conf import settings
-
+import json
+from django.http import JsonResponse
 
 # Create your views here.
 
@@ -31,21 +32,20 @@ def index2(request, trip_id):
 
             memo = request.POST.get(memo_key)
             receipt = request.FILES.get(receipt_key)
-            delete = request.POST.get(delete_key) == 'true'
-
+            
             expensedetail, created = ExpenseDetail.objects.get_or_create(trip_detail=trip_detail)
             expensedetail.memo = memo
 
             # 파일이 새로 업로드된 경우 또는 삭제 요청이 있는 경우
-            if receipt or delete:
+            if receipt != None:
                 # 기존 파일 삭제
-                if expensedetail.receipt and delete:
+                if expensedetail.receipt:
                     file_path = os.path.join(settings.MEDIA_ROOT, expensedetail.receipt.name)
                     if os.path.exists(file_path):
                         os.remove(file_path)
                 
                 # 새 파일이 업로드된 경우에만 저장
-                if receipt:
+                if receipt != None:
                     expensedetail.receipt = receipt
                 else:
                     expensedetail.receipt = None
@@ -77,4 +77,20 @@ def index2(request, trip_id):
         else:
             return HttpResponse("User is not active")
 
+def file_remove(request, trip_detail_id):
+    trip_detail = TripDetail.objects.get(id = trip_detail_id)
+    expensedetail = get_object_or_404(ExpenseDetail, trip_detail=trip_detail)
+    
+    data = json.loads(request.body)
+    filepath = data['filepath']
+    filepath = filepath.split('/')
 
+    file = filepath[2] + '/' + filepath[3]
+    path = os.path.join(settings.MEDIA_ROOT, file)
+    if os.path.exists(path):
+        os.remove(path)
+
+    expensedetail.receipt = None;
+    expensedetail.save()
+
+    return JsonResponse({"file" : file}, status=200)
