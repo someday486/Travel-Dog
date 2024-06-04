@@ -1,11 +1,74 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    add 페이지입니다.
-</body>
-</html>
+{% extends 'index.html' %}
+{% load humanize %}
+{% block title %}여행 일정 만들기{% endblock %}
+{% block content %}
+<main class="container my-5">
+    <div class="text-center my-4">
+        <h3>Day-{{ tripdetail.day }} 의 기록을 남겨요</h3>
+    </div>
+    <div class="p-2 bg-warning" style="width: 18%; background-color: rgb(255, 247, 204) !important; text-align: center;">
+        조회수 {{border.조회수}}
+    </div>
+    <form method="post" enctype="multipart/form-data"> 
+        {% csrf_token %}
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">제목</th>
+                        <th scope="col">장소</th>
+                        <th scope="col">지출비용</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <input type="text" name="title" class="form-control" value="{{border.제목}}" 
+                            {% if not userCheck %}readonly{% endif %}>
+                        </td>
+                        <td>{{ tripdetail.destination.name }}</td>
+                        <td>{{ tripdetail.expense|floatformat:0|intcomma }}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th scope="col" colspan="2">내용</th>
+                        <th scope="col">작성일</th>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <textarea name="form_context" class="form-control" rows="10" style="resize:none;" 
+                            {% if not userCheck %}readonly{% endif %}>{{tripdetail.context}}</textarea>                         
+                        </td>
+                        <td>{{ now }}</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div class="text-center mt-3">
+            {% if userCheck %}
+                <input type="file" name="images" class="btn btn-secondary" multiple>
+                <button type="submit" class="btn btn-primary custom-button">저장</button>
+            {% endif %}
+            <button type="button" onclick="window.location.href='/review/tripDetail/{{tripId}}/'" 
+            class="btn btn-primary custom-button">이전으로</button>
+        </div>
+    </form>
+</main>
+<div class="container my-5">
+    <div class="row justify-content-center">
+        {% for url in image_urls %}
+        <div class="col-md-6 mb-4" id="image-{{ forloop.counter }}">
+            <div class="card text-center">
+                <img src="{{ url }}" class="card-img-top mx-auto" style="height: 200px; object-fit: cover;" alt="{{ tripdetail.destination }}">
+                <div class="card-body">
+                    <button type="button" class="btn btn-danger" 
+                    onclick="window.location.href='/review/delete/{{border.id}}/{{url|urlencode}}/'">삭제</button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

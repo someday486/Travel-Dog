@@ -47,29 +47,8 @@ def imgdown(address):
     src_list = []
 
     # # 이미지 태그의 src 속성을 src_list에 추가
-    for img_tag in image_tags[2:6]:
+    for img_tag in image_tags[2:3]:
         src = img_tag.get('src')
         src_list.append(src)
         
     return src_list
-
-def addmyplace(request,trip_id,title,roadAddress):
-    if request.user.is_active: 
-        
-        if Destination.objects.filter(address=roadAddress):
-            msg = "<script>;"
-            msg += "alert('이미 저장되어 있는 장소입니다.');"
-            msg += f"location.href='http://localhost:8000/destinations/myplace';"
-            msg += "</script>;"
-            return HttpResponse(msg)
-        else:
-            destination = Destination()
-            destination.name = title
-            destination.address = roadAddress
-            destination.save()
-            
-            msg = "<script>;"
-            msg += "alert('내장소에 추가 되었습니다.');"
-            msg += f"location.href='http://localhost:8000/destinations/myplace';"
-            msg += "</script>;"
-            return HttpResponse(msg)

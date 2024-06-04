@@ -8,6 +8,7 @@
 __pycache__/
 local_settings.py
 db.sqlite3
+<<<<<<< HEAD
 db.sqlite3-journal
 media
 
@@ -291,3 +292,5 @@ $RECYCLE.BIN/
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,django,python
 db.sqlite3
+=======
+>>>>>>> 20394074aa3819da63a9bf4a594ca9b90740fe9e
