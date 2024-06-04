@@ -63,7 +63,7 @@ def addmyplace(request,trip_id,title,roadAddress):
             destination = Destination()
             destination.name = title
             destination.address = roadAddress
-            destination.save() 
+            destination.save()
             myplace = Myplace()
             myplace.user = request.user
             myplace.destination = destination

@@ -10,10 +10,10 @@
     <div class="row">
         <div class="col">
             <form method='post'> {% csrf_token %}
-                <table class="table table-bordered border-primary text-center">
-                <thead class="table-primary border-primary">
+                <table class="table table-bordered border-secondary text-center">
+                <thead class="table-secondary border-secondary">
                 <tr>
-                    <th colspan="2">Add-Trip</th>
+                    <th colspan="2" class="text-uppercase">Add-Trip</th>
                 </tr>
                 </thead>
                 <tr>
@@ -42,16 +42,16 @@
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <input type="submit" class="btn btn-outline-primary" 
-                            style="width:120px" value="add"
+                        <input type="submit" class="btn btn-warning" 
+                            style="width:120px" value="ADD"
                                 onclick="document.location.href='/'">
-                        <input type="reset" class="btn btn-outline-danger" 
-                            style="width:120px" value="reset">
+                        <input type="reset" class="btn outline-danger" 
+                            style="width:120px" value="RESET">
                     </td>
                 </tr>
                 </table>
             </form> 
-            <button type="button" class="btn btn-outline-primary" style="width:250px"
+            <button type="button" class="btn btn-light" style="width:350px"
             onclick="location.href='/destinations/{{trip_id}}'">장소추가</button>           
         </div>
 
@@ -59,14 +59,14 @@
 
         <div class="col">
             <table class="table table-bordered border-primary text-center table-hover" style="width:100%;">
-                <thead class="table-primary border-primary">
+                <thead class="table-secondary border-secondary">
                 <tr>
-                    <th>Trip-Detail</th>
+                    <th class="text-uppercase">Trip-Detail</th>
                 </tr> 
                 </thead>
                 <tbody>
                 {% for day in trip_dates %}                
-                    <tr class="table-primary border-primary">
+                    <tr class="table-secondary border-secondary">
                         <td>{{ day }} DAY</td>
                     </tr>
                     {% for i in tripdetail %}  
