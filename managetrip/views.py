@@ -9,7 +9,7 @@ import os
 @login_required
 def index(request):
     username = request.user.username
-    trip_list = Trip.objects.filter(user=request.user)
+    trip_list = list(Trip.objects.filter(user=request.user))
     content = {
         'username':username,
         'trip_list':trip_list,
