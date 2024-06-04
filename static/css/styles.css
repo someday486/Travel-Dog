@@ -5,7 +5,25 @@ body {
     margin: 0;
     padding: 0;
 }
-
+.header {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: #f8f8f8;
+    border-bottom: 1px solid #ddd;
+}
+.header h1 {
+    margin: 0;
+    font-size: 1.5em;
+    flex-grow: 1;
+    text-align: center;
+}
+.header h3 {
+    margin: 0;
+    font-size: 1.5em;
+    flex-grow: 1;
+    text-align: center;
+}
 .container {
     max-width: 800px;
     margin: 0 auto;
@@ -122,20 +140,53 @@ h3, h4 {
     transform: scale(1);
 }
 
-/* ---------------------------------------------------------------------------------------- */
+.trip-section {
+    margin-bottom: 20px;
+}
+.trip-section h2 {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+.trip-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+.trip-item a {
+    margin-right: 10px;
+}
+.trip-item img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    max-width: 60px;
+    max-height: 60px;
+}
+.trip-item .trip-details {
+    flex-grow: 1;
+    min-width: 0;
+}
+.trip-item .trip-dates {
+    color: #666;
+    font-size: 0.9em;
+}
+.trip-item .trip-cities {
+    font-size: 0.9em;
+    color: #007bff;
+}
+.btn-delete {
+    color: red;
+    font-size: 0.9em;
+    cursor: pointer;
+}
 
-@charset "UTF-8";
-/*!
-* Start Bootstrap - Agency v7.0.12 (https://startbootstrap.com/theme/agency)
-* Copyright 2013-2023 Start Bootstrap
-* Licensed under MIT (https://github.com/StartBootstrap/startbootstrap-agency/blob/master/LICENSE)
-*/
-/*!
- * Bootstrap  v5.2.3 (https://getbootstrap.com/)
- * Copyright 2011-2022 The Bootstrap Authors
- * Copyright 2011-2022 Twitter, Inc.
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
- */
 :root {
   --bs-blue: #0d6efd;
   --bs-indigo: #6610f2;
@@ -506,12 +557,6 @@ select:disabled {
   display: none !important;
 }
 
-button,
-[type=button],
-[type=reset],
-[type=submit] {
-  -webkit-appearance: button;
-}
 button:not(:disabled),
 [type=button]:not(:disabled),
 [type=reset]:not(:disabled),
@@ -566,11 +611,6 @@ legend + * {
   height: auto;
 }
 
-[type=search] {
-  outline-offset: -2px;
-  -webkit-appearance: textfield;
-}
-
 /* rtl:raw:
 [type="tel"],
 [type="url"],
@@ -587,10 +627,6 @@ legend + * {
   padding: 0;
 }
 
-::file-selector-button {
-  font: inherit;
-  -webkit-appearance: button;
-}
 
 output {
   display: inline-block;

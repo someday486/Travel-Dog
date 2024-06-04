@@ -2,23 +2,28 @@
 {% block title %}여행 일정 관리{% endblock %}
 {% block content %}
 <form method="post" enctype="multipart/form-data"> {% csrf_token %}
-<main>
-    <div class="text-center my-4">
-        <h3>여행 일정 관리</h3>
-    </div>
-    <ul>
-        {% for x in trip_list %}
-        <li>
-            <button><a href="{% url 'managetrip:M' x.id %}">
-            {{ x.region.name }} ({{ x.start_date }} to {{ x.end_date }})</a></button>
-            <button type='button' class="btn btn-secondary btn-sm  mx-2"
-            onclick="document.location.href='/managetrip/deletetrip/{{x.id}}/'">
-            삭제</button>
-        </li>
-        {% empty %}
-            <li>여행 목록이 없습니다.</li>
-        {% endfor %}
-    </ul>
-</main>
+    <main>
+        <div class="container">
+            <div class="trip-section">
+                <h2>다가오는 여행</h2>
+                <ul>
+                    {% for x in trip_list %}
+                    <li class="trip-item my-4">
+                        <a href="{% url 'managetrip:M' x.id %}">
+                            <img src="{{ x.region.image.url }}" alt="{{ x.region.name }}">
+                        </a>
+                        <div class="trip-details">
+                            <div>{{ x.region.name }} 여행</div>
+                            <div class="trip-dates">{{ x.start_date }} - {{ x.end_date }}</div>
+                        </div>
+                        <button class="btn-delete" onclick="document.location.href='/managetrip/deletetrip/{{x.id}}/'">삭제</button>
+                    </li>
+                    {% empty %}
+                        <li>여행 목록이 없습니다.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </main>
 </form>
 {% endblock %}
