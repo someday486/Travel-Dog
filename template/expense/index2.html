@@ -127,9 +127,9 @@
             </div>
             <div id="preview-{{ forloop.counter0 }}" class="receipt-preview">
                 {% if expensedetail.receipt %}
-                    <div class="receipt-link">
+                    <div id="receipt-link-{{ forloop.counter0 }}">
                         <a href="{{ expensedetail.receipt.url }}" target="_blank">영수증 보기</a>
-                        <button type="button" onclick="deleteFile('{{ forloop.counter0 }}')">파일 삭제</button>                   
+                        <button type="button" onclick="deleteFile('{{ expensedetail.receipt.url }}', '{{ forloop.counter0 }}', '{{ trip_detail.id }}')">파일 삭제</button>                   
                     </div>
                 {% endif %}
             </div>
@@ -171,7 +171,7 @@
         }
     }
 
-    function deleteFile(index) {
+    function deleteFile(file, index, trip_detail_id) {
         const fileInput = document.getElementById(`file-input-${index}`);
         const preview = document.getElementById(`preview-${index}`);
         const receiptLink = document.getElementById(`receipt-link-${index}`);
@@ -185,7 +185,38 @@
         // 파일 삭제 버튼을 숨깁니다.
         receiptLink.querySelector('button').style.display = 'none';
 
+        const csrftoken = getCookie('csrftoken');
+
+        fetch('/expense/fileremove/' + trip_detail_id, {
+            method:'POST',
+            headers: {
+                'Content-Type':'application/json',
+                'X-CSRFToken': csrftoken,
+            },
+            body: JSON.stringify({ filepath:file })
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.file + '파일을 삭제했습니다.');
+            location.href = window.location.pathname;
+        })
+        .catch((error) => {
+            alert(error + '파일을 삭제에 실패했습니다.');
+        });
     }
+
+function getCookie(c_name){	
+    var i,x,y,ARRcookies=document.cookie.split(";");	
+    for (i=0;i<ARRcookies.length;i++)	{	  
+        x=ARRcookies[i].substr(0,ARRcookies[i].indexOf("="));	  
+        y=ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);	  
+        x=x.replace(/^\s+|\s+$/g,"");	  
+        if (x==c_name)		{		
+            return unescape(y);		
+        }	  
+    }
+}
+
 </script>
 
 {% endblock %}
