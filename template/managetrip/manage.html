@@ -27,7 +27,7 @@
         padding-left: 10px;
     }
     .trip-detail-item .expense {
-        text-align: right;
+        text-align: left;
     }
     .btn-delete {
         color: red;
@@ -39,16 +39,23 @@
 </style>
 <form method="post" enctype="multipart/form-data"> {% csrf_token %}
 <div>{{ trip_info.region }} - ({{ trip_info.start_date }} to {{ trip_info.end_date }})</div>
-<div class="trip-container">
-    {% for x in trip_detail %}
-    <div class="trip-detail-item">
-        <div class="day">DAY.{{ x.day }}</div>
-        <div class="destination">{{ x.destination.name }}</div>
-        <div class="expense">{{ x.expense|floatformat:0 }}원</div>
-        <a class="btn-delete" href="/managetrip/deletetripdetail/{{ x.trip.id }}/{{ x.id }}/">삭제</a>
+    <div class="container">
+        <div class="trip-section">
+        <ul>
+        {% for x in trip_detail %}
+        <li class="trip-item my-4">
+            <div class="trip-details">
+            <div>DAY.{{ x.day }}</div>
+            <div class="destination">{{ x.destination.name }}</div>
+            <div class="expense">{{ x.expense|floatformat:0 }}원</div>
+            <button type='button' class="btn btn-success custom-button" onclick="document.location.href='/trips/next_page/{{x.id}}'">추가</button>
+            <button type='button' class="btn btn-danger custom-button" onclick="document.location.href='/managetrip/deletetripdetail/{{ x.trip.id }}/{{ x.id }}'">삭제</button>
+            </div>
+        </li>
+        {% endfor %}
+        </ul>
+        </div>
     </div>
-    {% endfor %}
-</div>
 </form>
 <button type="button" class="btn btn-danger btn-lg my-1" style="width:150px;" onclick="location.href='/managetrip/'">이전 페이지</button>
 {% endblock %}

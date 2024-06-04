@@ -16,6 +16,7 @@
                             <div><a href="{% url 'managetrip:M' x.id %}">{{ x.region.name }} 여행</a></div>
                             <div class="trip-dates">{{ x.start_date }} - {{ x.end_date }}</div>
                         </div>
+                        
                         <button type='button' class="btn-delete" onclick="document.location.href='/managetrip/deletetrip/{{x.id}}'">삭제</button>
                     </li>
                     {% empty %}
