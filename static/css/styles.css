@@ -5,7 +5,25 @@ body {
     margin: 0;
     padding: 0;
 }
-
+.header {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: #f8f8f8;
+    border-bottom: 1px solid #ddd;
+}
+.header h1 {
+    margin: 0;
+    font-size: 1.5em;
+    flex-grow: 1;
+    text-align: center;
+}
+.header h3 {
+    margin: 0;
+    font-size: 1.5em;
+    flex-grow: 1;
+    text-align: center;
+}
 .container {
     max-width: 800px;
     margin: 0 auto;
