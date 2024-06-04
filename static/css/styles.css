@@ -41,6 +41,14 @@ h3, h4 {
     grid-template-columns: repeat(7, 1fr);
     gap: 5px;
     margin-bottom: 20px;
+    min-height: 50vh;
+}
+
+.container-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .city-button {
@@ -141,7 +149,9 @@ h3, h4 {
 }
 
 .trip-section {
-    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 .trip-section h2 {
     font-size: 1.2em;
@@ -185,6 +195,7 @@ h3, h4 {
     color: red;
     font-size: 0.9em;
     cursor: pointer;
+    text-decoration: none;
 }
 
 :root {
@@ -4962,10 +4973,10 @@ textarea.form-control-lg {
   --bs-list-group-active-bg: #ffc800;
   --bs-list-group-active-border-color: #ffc800;
   display: flex;
-  flex-direction: column;
-  padding-left: 0;
-  margin-bottom: 0;
-  border-radius: var(--bs-list-group-border-radius);
+  justify-content: center; /* 중앙 정렬 */
+  gap: 10px; /* 버튼 간격 조정 */
+  flex-wrap: nowrap; /* 줄바꿈 방지 */
+  overflow-x: auto;
 }
 
 .list-group-numbered {
@@ -4994,13 +5005,15 @@ textarea.form-control-lg {
 }
 
 .list-group-item {
-  position: relative;
-  display: block;
+  flex: 0 0 auto; /* 버튼의 고정 크기 설정 */
   padding: var(--bs-list-group-item-padding-y) var(--bs-list-group-item-padding-x);
   color: var(--bs-list-group-color);
   text-decoration: none;
   background-color: var(--bs-list-group-bg);
   border: var(--bs-list-group-border-width) solid var(--bs-list-group-border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 .list-group-item:first-child {
   border-top-left-radius: inherit;
@@ -11476,3 +11489,4 @@ section#contact form#contactForm :-ms-input-placeholder {
   font-size: 0.9rem;
   font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
+

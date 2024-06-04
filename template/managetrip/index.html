@@ -13,10 +13,10 @@
                             <img src="{{ x.region.image.url }}" alt="{{ x.region.name }}">
                         </a>
                         <div class="trip-details">
-                            <div>{{ x.region.name }} 여행</div>
+                            <div><a href="{% url 'managetrip:M' x.id %}">{{ x.region.name }} 여행</a></div>
                             <div class="trip-dates">{{ x.start_date }} - {{ x.end_date }}</div>
                         </div>
-                        <button class="btn-delete" onclick="document.location.href='/managetrip/deletetrip/{{x.id}}/'">삭제</button>
+                        <button type='button' class="btn-delete" onclick="document.location.href='/managetrip/deletetrip/{{x.id}}'">삭제</button>
                     </li>
                     {% empty %}
                         <li>여행 목록이 없습니다.</li>
