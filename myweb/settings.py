@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'myweb','review','trips','destinations','expense','managetrip','updown','myplace',
     'django.contrib.humanize',
-    # 'django_cleanup.apps.CleanupConfig',
+    'django_cleanup.apps.CleanupConfig',
 ]
 
 MIDDLEWARE = [
