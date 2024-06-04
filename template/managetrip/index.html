@@ -8,7 +8,7 @@
                 <h2>다가오는 여행</h2>
                 <ul>
                     {% for x in trip_list %}
-                    <li class="trip-item my-4">
+                    <li class="trip-item my-4" style="width: 400px;">
                         <a href="{% url 'managetrip:M' x.id %}">
                             <img src="{{ x.region.image.url }}" alt="{{ x.region.name }}">
                         </a>
@@ -16,7 +16,6 @@
                             <div><a href="{% url 'managetrip:M' x.id %}">{{ x.region.name }} 여행</a></div>
                             <div class="trip-dates">{{ x.start_date }} - {{ x.end_date }}</div>
                         </div>
-                        
                         <button type='button' class="btn-delete" onclick="document.location.href='/managetrip/deletetrip/{{x.id}}'">삭제</button>
                     </li>
                     {% empty %}

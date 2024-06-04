@@ -1,6 +1,6 @@
 /* styles.css */
 body {
-    font-family: Arial, sans-serif;
+    font-family: "Noto Sans KR", sans-serif;
     background-color: #3C6DA7;
     margin: 0;
     padding: 0;
@@ -29,6 +29,8 @@ body {
     margin: 0 auto;
     padding: 20px;
     text-align: center;
+    justify-content: center; /* 가로 중앙 정렬 */
+    align-items: center; /* 세로 중앙 정렬 */
 }
 
 h3, h4 {
@@ -52,19 +54,28 @@ h3, h4 {
 }
 
 .city-button {
+    width: 500px; /* 원하는 너비를 px로 입력하세요 */
+    height: 80px; /* 원하는 높이를 px로 입력하세요 */
     padding: 10px 20px;
     background-color: #fff;
-    border: 1px solid #ccc;
+    border: 2px solid #141410;
     cursor: pointer;
     border-radius: 5px;
     transition: background-color 0.3s, color 0.3s;
     text-align: center;
+    align-items: center;
+    font-size: 23px;
 }
 
 .city-button.selected {
     background-color: #007bff !important;
     color: white !important;
-    border: 1px solid #007bff !important;
+    border: 1px solid #3a0202 !important;
+}
+
+.city-button img {
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .calendar-container {
@@ -105,6 +116,7 @@ h3, h4 {
 .day.selected {
     background-color: #007bff;
     color: white;
+    border-radius: 50%;
 }
 
 .day.disabled {
@@ -161,11 +173,12 @@ h3, h4 {
     display: flex;
     align-items: center;
     margin-bottom: 10px;
+    margin-left: 10px;
     padding: 10px;
     background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 5px;
-    max-width: 100%;
+    width: 150px;
     box-sizing: border-box;
 }
 .trip-item a {
@@ -180,6 +193,8 @@ h3, h4 {
     max-height: 60px;
 }
 .trip-item .trip-details {
+    justify-content: center; /* 가로 중앙 정렬 */
+    align-items: center; /* 세로 중앙 정렬 */
     flex-grow: 1;
     min-width: 0;
 }
@@ -190,6 +205,17 @@ h3, h4 {
 .trip-item .trip-cities {
     font-size: 0.9em;
     color: #007bff;
+}
+.trip-detail-item .day {
+  text-align: center;
+  font-weight: bold;
+}
+.trip-detail-item .destination {
+  text-align: left;
+  padding-left: 10px;
+}
+.trip-detail-item .expense {
+  text-align: left;
 }
 .btn-delete {
     color: red;
@@ -809,6 +835,7 @@ progress {
   --bs-gutter-x: 1.5rem;
   --bs-gutter-y: 0;
   width: 100%;
+  justify-content: center;
   padding-right: calc(var(--bs-gutter-x) * 0.5);
   padding-left: calc(var(--bs-gutter-x) * 0.5);
   margin-right: auto;
@@ -4977,6 +5004,7 @@ textarea.form-control-lg {
   gap: 10px; /* 버튼 간격 조정 */
   flex-wrap: nowrap; /* 줄바꿈 방지 */
   overflow-x: auto;
+  align-items: center;
 }
 
 .list-group-numbered {
@@ -4992,6 +5020,7 @@ textarea.form-control-lg {
   width: 100%;
   color: var(--bs-list-group-action-color);
   text-align: inherit;
+  align-items: center;
 }
 .list-group-item-action:hover, .list-group-item-action:focus {
   z-index: 1;
@@ -5013,7 +5042,7 @@ textarea.form-control-lg {
   border: var(--bs-list-group-border-width) solid var(--bs-list-group-border-color);
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
 }
 .list-group-item:first-child {
   border-top-left-radius: inherit;

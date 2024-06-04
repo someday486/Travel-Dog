@@ -39,23 +39,22 @@
 </style>
 <form method="post" enctype="multipart/form-data"> {% csrf_token %}
 <h3>{{ trip_info.region }} - {{ trip_info.start_date }} to {{ trip_info.end_date }}</h3>
-    <div class="container">
-        <div class="trip-section">
-        <ul>
-        {% for x in trip_detail %}
-        <li class="trip-item my-4">
-            <div class="trip-details">
-            <div>DAY.{{ x.day }}</div>
-            <div class="destination">{{ x.destination.name }}</div>
-            <div class="expense">{{ x.expense|floatformat:0 }}원</div>
-
-            <button type='button' class="btn btn-danger custom-button" onclick="document.location.href='/managetrip/deletetripdetail/{{ x.trip.id }}/{{ x.id }}'">삭제</button>
+    <div class="container" style="display: flex;">
+        <div class="trip-section" style="flex-direction: row; align-items: center; ">
+            {% for x in trip_detail %}
+            <div class="trip-item my-4">
+                <div class="trip-details">
+                    <div>DAY.{{ x.day }}</div>
+                    <div class="destination">{{ x.destination.name }}</div>
+                    <div class="expense">{{ x.expense|floatformat:0 }}원</div>
+                    <button type='button' class="btn btn-danger custom-button"
+                    onclick="document.location.href='/managetrip/deletetripdetail/{{ x.trip.id }}/{{ x.id }}'">
+                    삭제</button>
+                </div>
             </div>
-        </li>
-        {% empty %}
-            <li class="trip-item my-4">여행 목록이 없습니다.</li>
-        {% endfor %}
-        </ul>
+            {% empty %}
+                <li class="trip-item my-4">여행 목록이 없습니다.</li>
+            {% endfor %}
         </div>
     </div>
 </form>
