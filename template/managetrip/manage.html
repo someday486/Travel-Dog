@@ -38,7 +38,7 @@
     }
 </style>
 <form method="post" enctype="multipart/form-data"> {% csrf_token %}
-<div>{{ trip_info.region }} - ({{ trip_info.start_date }} to {{ trip_info.end_date }})</div>
+<h3>{{ trip_info.region }} - {{ trip_info.start_date }} to {{ trip_info.end_date }}</h3>
     <div class="container">
         <div class="trip-section">
         <ul>
@@ -48,14 +48,17 @@
             <div>DAY.{{ x.day }}</div>
             <div class="destination">{{ x.destination.name }}</div>
             <div class="expense">{{ x.expense|floatformat:0 }}원</div>
-            <button type='button' class="btn btn-success custom-button" onclick="document.location.href='/trips/next_page/{{x.id}}'">추가</button>
+
             <button type='button' class="btn btn-danger custom-button" onclick="document.location.href='/managetrip/deletetripdetail/{{ x.trip.id }}/{{ x.id }}'">삭제</button>
             </div>
         </li>
+        {% empty %}
+            <li class="trip-item my-4">여행 목록이 없습니다.</li>
         {% endfor %}
         </ul>
         </div>
     </div>
 </form>
+<button type='button' class="btn btn-success btn-lg my-1" style="width:150px;" onclick="document.location.href='/trips/next_page/{{ trip_id }}'">추가</button>
 <button type="button" class="btn btn-danger btn-lg my-1" style="width:150px;" onclick="location.href='/managetrip/'">이전 페이지</button>
 {% endblock %}
