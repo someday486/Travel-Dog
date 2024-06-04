@@ -67,6 +67,7 @@
                     </tr>
                 </table>
             </div>
+
             <div class="col">
                 <table class="table table-bordered border-primary text-center" style='width:100%;'>
                     <tr>
@@ -81,19 +82,23 @@
                     {% if data %}            
                         {% for i in data %}
                             <tr>
-                                <td>                         
-                                <li>
-                                    <button class="btn btn-primary btn-lg mx-2" onclick="loca('{{ i.mapy }}', '{{ i.mapx }}', '{{ i.title }}')">{{ i.title }}</button>
-
-                                    <form method="post" action="/destinations/addmyplace/{{ trip_id }}/{{ i.title }}/{{ i.roadAddress }}/"> {% csrf_token %}   
-                                        <button type='submit' class="btn btn-outline-danger btn-lg mx-2" onclick="location.href='addmyplace/{{ trip_id }}/{{ i.title }}/{{ i.roadAddress }}/'">+내장소♥</button><br>
-                                    </form> 
-                                    
-                                    주소: {{ i.roadAddress }}<br>
-                                    링크: <a href='{{ i.link }}'>{{ i.link }}</a><br>
-                                    분류: {{ i.category }}<br>  
-                                
-                                </li>                      
+                                <td>
+                                    <div class="d-flex justify-content-center align-items-center mb-3">
+                                        <div>
+                                            <button class="btn btn-primary btn-lg mx-2" onclick="loca('{{ i.mapy }}', '{{ i.mapx }}', '{{ i.title }}')">{{ i.title }}</button>
+                                        </div>
+                                        <div>
+                                            <form method="post" action="/destinations/addmyplace/{{ trip_id }}/{{ i.title }}/{{ i.roadAddress }}/"> 
+                                                {% csrf_token %}   
+                                                <button type='submit' class="btn btn-outline-danger btn-lg mx-2" onclick="location.href='addmyplace/{{ trip_id }}/{{ i.title }}/{{ i.roadAddress }}/'">+내장소♥</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="text-left">
+                                        주소: {{ i.address }}<br>
+                                        링크: <a href='{{ i.link }}'>{{ i.link }}</a><br>
+                                        분류: {{ i.category }}<br>
+                                    </div>
                                 </td>
                             </tr>
                         {% endfor %}
