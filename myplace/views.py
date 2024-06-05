@@ -4,9 +4,9 @@ from trips.models import Destination, Trip
 #사진 크롤링 관련 라이브러리
 from bs4 import BeautifulSoup
 import requests
+from django.contrib.auth.decorators import login_required
 
-
-
+@login_required
 def myplace(request):
     if request.user.is_active:
         myplace = Myplace.objects.filter(user=request.user).select_related('destination')
