@@ -33,6 +33,7 @@ urlpatterns = [
     path('destinations/', include('destinations.urls'), name='destinations'),
     path('myplace/', include('myplace.urls')),
     path("account/login/", views.login, name='login'),
+    path("accounts/login/", views.login, name='login'),
     path("account/logout/", views.logout, name='logout'),
     path("account/register/", views.createAccount, name="create"),
     path('account/myinfo/', views.myinfo, name='myinfo'),
