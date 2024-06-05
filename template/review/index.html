@@ -16,10 +16,12 @@
                 <button class="btn btn-primary rounded-pill px-3" type="button" style="width: 200px; color: rgb(204, 255, 255);"
                 onclick="location.href='/review/index/'">Trip 둘러보기</button>
             </div>
+            {% if user.is_active %}
             <div class="col-auto">
                 <button class="btn btn-warning rounded-pill px-3" type="button" style="width: 200px;"
                 onclick="location.href='/review/detail/{{userId}}/'">My Trip</button>
             </div>
+            {% endif %}
         </div>
         <div class="row mb-3 justify-content-center">
             <div class="col-auto">
