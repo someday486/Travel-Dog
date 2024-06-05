@@ -9,7 +9,7 @@
                 <h2>다가오는 여행</h2>
                 <ul>
                     {% for x in trip_list %}
-                    <li class="trip-item my-4">
+                    <li class="trip-item my-4" style="width: 400px;">
                         <a href="{% url 'managetrip:M' x.id %}">
                             <img src="{{ x.region.image.url }}" alt="{{ x.region.name }}">
                         </a>

@@ -32,6 +32,7 @@ def manage(request, trip_id):
             content = {
                 'trip_info' : trip_info,
                 'trip_detail' : trip_detail,
+                'trip_id' : trip_id,
             }
             return render(request, 'managetrip/manage.html', content);
 

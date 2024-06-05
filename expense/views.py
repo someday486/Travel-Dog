@@ -22,7 +22,7 @@ def index(request):
 
 def index2(request, trip_id):
     trip_info = get_object_or_404(Trip, id=trip_id)
-    trip_details = TripDetail.objects.filter(trip=trip_info)
+    trip_details = TripDetail.objects.filter(trip=trip_info).order_by('day')
 
     if request.method == 'POST':
         for idx, trip_detail in enumerate(trip_details):
