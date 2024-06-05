@@ -117,4 +117,4 @@ def custom_500(request):
     return render(request, 'error/500.html', status=500)
 
 def home(request):
-    return render(request,'home.html');
+    return render(request, 'home.html')

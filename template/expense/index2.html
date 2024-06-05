@@ -139,10 +139,10 @@
     {% endfor %}
 </table><br>
 <h3>총 결산 : {{total_expense|floatformat:0}}원</h3><br>
-<div style="display: flex; gap: 10px;">
-    <button type="submit" class="btn btn-success btn-lg">저장</button>
-    <button type="reset" class="btn btn-danger btn-lg">다시시작</button>
-    <button type="button" class="btn btn-danger btn-lg" onclick="location.href='/expense/'">이전 페이지</button>
+<div style="display: flex; gap: 10px; justify-content: center;">
+    <button type="submit" class="btn btn-warning btn-lg">저장</button>
+    <button type="reset" class="btn btn-outline-secondary btn-lg">다시시작</button>
+    <button type="button" class="btn btn-outline-secondary btn-lg" onclick="location.href='/expense/'">이전 페이지</button>
 </div>
 </form>
 

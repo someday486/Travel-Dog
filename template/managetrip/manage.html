@@ -3,9 +3,10 @@
 {% block content %}
 <style>
     .trip-container {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex-grow: 1;
     }
     .trip-detail-item {
         display: grid;
@@ -15,7 +16,6 @@
         background-color: #fff;
         border: 1px solid #ddd;
         border-radius: 5px;
-        max-width: 100%;
         box-sizing: border-box;
     }
     .trip-detail-item .day {
