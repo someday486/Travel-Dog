@@ -2,6 +2,7 @@ from django.core.files.storage import default_storage
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from trips.models import TripDetail, Trip
 from expense.models import ExpenseDetail
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.urls import reverse
 import os
@@ -10,7 +11,7 @@ import json
 from django.http import JsonResponse
 
 # Create your views here.
-
+@login_required
 def index(request):
     username = request.user.username
     trip_list = list(Trip.objects.filter(user=request.user))
@@ -20,9 +21,10 @@ def index(request):
     }
     return render(request, 'expense/index.html', content)
 
+@login_required
 def index2(request, trip_id):
     trip_info = get_object_or_404(Trip, id=trip_id)
-    trip_details = TripDetail.objects.filter(trip=trip_info)
+    trip_details = TripDetail.objects.filter(trip=trip_info).order_by('day')
 
     if request.method == 'POST':
         for idx, trip_detail in enumerate(trip_details):
@@ -77,6 +79,7 @@ def index2(request, trip_id):
         else:
             return HttpResponse("User is not active")
 
+@login_required
 def file_remove(request, trip_detail_id):
     trip_detail = TripDetail.objects.get(id = trip_detail_id)
     expensedetail = get_object_or_404(ExpenseDetail, trip_detail=trip_detail)

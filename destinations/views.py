@@ -50,10 +50,10 @@ def location(request,trip_id):
             return HttpResponse(msg)
 
 
-def addmyplace(request,trip_id,title,roadAddress):
+def addmyplace(request,trip_id,title,address):
     if request.user.is_active: 
         
-        if Destination.objects.filter(address=roadAddress):
+        if Destination.objects.filter(address=address):
             msg = "<script>;"
             msg += "alert('이미 저장되어 있는 장소입니다.');"
             msg += f"location.href='http://localhost:8000/destinations/{ trip_id }';"
@@ -62,8 +62,8 @@ def addmyplace(request,trip_id,title,roadAddress):
         else:
             destination = Destination()
             destination.name = title
-            destination.address = roadAddress
-            destination.save() 
+            destination.address = address
+            destination.save()
             myplace = Myplace()
             myplace.user = request.user
             myplace.destination = destination
