@@ -115,3 +115,6 @@ def page_not_found(request, exception):
 
 def custom_500(request):
     return render(request, 'error/500.html', status=500)
+
+def home(request):
+    return render(request,'home.html');

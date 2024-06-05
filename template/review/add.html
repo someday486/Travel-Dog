@@ -57,13 +57,14 @@
 </main>
 <div class="container my-5">
     <div class="row justify-content-center">
-        {% for url in image_urls %}
+        {% for image in images %}
         <div class="col-md-6 mb-4" id="image-{{ forloop.counter }}">
             <div class="card text-center">
-                <img src="{{ url }}" class="card-img-top mx-auto" style="height: 200px; object-fit: cover;" alt="{{ tripdetail.destination }}">
+                <img src="{{image.image.url}}" class="card-img-top mx-auto" style="height: 200px; 
+                object-fit: cover;" alt="{{ tripdetail.destination }}">
                 <div class="card-body">
                     <button type="button" class="btn btn-danger" 
-                    onclick="window.location.href='/review/delete/{{border.id}}/{{url|urlencode}}/'">삭제</button>
+                    onclick="window.location.href='/review/delete/{{border.id}}/{{image.id}}/'">삭제</button>
                 </div>
             </div>
         </div>

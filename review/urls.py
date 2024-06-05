@@ -9,7 +9,7 @@ urlpatterns = [
     path('tripDetail/<int:tripId>/', views.tripDetail),
     path('upload/', views.upload_file, name='upload_file'),
     path('add/<int:tripdetailId>/', views.add),
-    path('delete/<int:borderId>/<path:image_url>/', views.delete_image),
+    path('delete/<int:borderId>/<int:imageId>/', views.delete_image),
 ] 
 
 if settings.DEBUG:

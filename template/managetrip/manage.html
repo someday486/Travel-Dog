@@ -2,47 +2,62 @@
 {% block title %}여행 일정 관리{% endblock %}
 {% block content %}
 <style>
-    table {
-        border-collapse: collapse;
-        width: 100%;
-    }
-    th, td {
-        border: 1px solid black;
-        padding: 8px; 
-        text-align: left; 
-    }
-    th {
-        background-color: #f2f2f2; 
-    }
-    button {
+    .trip-container {
         display: flex;
-        justify-content: space-between;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .trip-detail-item {
+        display: grid;
+        grid-template-columns: 80px 1fr 100px 60px;
         align-items: center;
+        padding: 10px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+    .trip-detail-item .day {
+        text-align: center;
+        font-weight: bold;
+    }
+    .trip-detail-item .destination {
+        text-align: left;
+        padding-left: 10px;
+    }
+    .trip-detail-item .expense {
+        text-align: left;
+    }
+    .btn-delete {
+        color: red;
+        font-size: 0.9em;
+        cursor: pointer;
+        text-decoration: none;
+        text-align: center;
     }
 </style>
 <form method="post" enctype="multipart/form-data"> {% csrf_token %}
-{{trip_info.region}} - ({{trip_info.start_date}} to {{trip_info.end_date}})
-<table>
-    <tr>
-        <th>일자</th>
-        <th>장소</th>
-        <th>금액</th>
-        <th>제거</th>
-    </tr>
-    {% for x in trip_detail %}
-    <tr>
-        <td>{{ x.day }}</td>
-        <td>{{ x.destination.name }}</td>
-        <td>{{ x.expense|floatformat:0 }}원</td>
-        <td><button type='button' class="btn btn-secondary btn-sm  mx-2"
-            onclick="document.location.href='/managetrip/deletetripdetail/{{x.trip.id}}/{{x.id}}/'">
-            삭제</button></td>
-    </tr>
-    {% endfor %}
-</table>
+<h3>{{ trip_info.region }} - {{ trip_info.start_date }} to {{ trip_info.end_date }}</h3>
+    <div class="container" style="display: flex;">
+        <div class="trip-section" style="flex-direction: row; align-items: center; ">
+            {% for x in trip_detail %}
+            <div class="trip-item my-4">
+                <div class="trip-details">
+                    <div>DAY.{{ x.day }}</div>
+                    <div class="destination">{{ x.destination.name }}</div>
+                    <div class="expense">{{ x.expense|floatformat:0 }}원</div>
+                    <button type='button' class="btn btn-danger custom-button"
+                    onclick="document.location.href='/managetrip/deletetripdetail/{{ x.trip.id }}/{{ x.id }}'">
+                    삭제</button>
+                </div>
+            </div>
+            {% empty %}
+                <li class="trip-item my-4">여행 목록이 없습니다.</li>
+            {% endfor %}
+        </div>
+    </div>
 </form>
-<button type="button" class="btn btn-danger btn-lg my-1" 
-style="width:150px;" 
-onclick="location.href=/managetrip/">
-이전 페이지</button>
+<button type='button' class="btn btn-success btn-lg my-1" style="width:150px;" onclick="document.location.href='/trips/next_page/{{ trip_id }}'">추가</button>
+<button type="button" class="btn btn-danger btn-lg my-1" style="width:150px;" onclick="location.href='/managetrip/'">이전 페이지</button>
 {% endblock %}
