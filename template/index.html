@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}메인페이지{% endblock %}</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  
   {% load static %}
   <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -23,87 +24,78 @@
     .header-buttons {
       padding-right: 20px;
     }
-    .header-logo img {
-      margin: 10px 0;
-    }
-    .header-buttons .btn {
-      margin: 5px 10px;
-    }
+    {% comment %} .header-logo img {
+      margin-left: 200px;
+    } {% endcomment %}
+
     .navbar-light {
     background-color: white; /* 네비게이션 바 배경색 */
     }
     .navbar-light .nav-link {
       color: #3C6DA7; /* 네비게이션 링크 색상 */
     }
-    .bg-cover {
-    background-size: cover; /* 배경 이미지 크기를 화면에 맞추기 */
-    background-position: center; /* 배경 이미지 중앙 정렬 */
-    background-repeat: no-repeat; /* 배경 이미지 반복 금지 */
-  }
+    header {
+      background-color: white; /* 헤더 배경색 */
+    }
   </style>
-  {% block style %} {% endblock %}
+
+  {% block style %}
+  <style>
+      body {
+        font-family: Arial, sans-serif;
+    }
+    </style>
+  {% endblock %}
 </head>
 
-<body>
-  
-<div class="container-fluid" style="width: 100rem; height: auto;">
-    <header class="d-flex flex-wrap align-items-center justify-content-between py-3 mb-4 border-bottom">
-      <div class="col-md-3 mb-2 mb-md-0 header-logo">
-        <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none">
+{% block body %}
+<div class="d-flex justify-content-center" style="width: 100%; height: auto;">
+    <header class="d-flex flex-wrap align-items-center py-4 mb-4 border-bottom"  style="width:100%;">
+      <div class="col mb-2 mb-md-2 d-flex justify-content-center header-logo">
+        <a href="/home/" class="d-inline-flex link-body-emphasis text-decoration-none">
           <img src="/static/강아지-로고_최종.png" alt="로고">
         </a>
       </div>
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
+      <nav class="navbar navbar-expand-lg col d-flex justify-content-center" style="margin:0;">
           <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ms-auto text-uppercase py-4 py-lg-0" style="font-size: 1.5rem;"> 
-              <li class="nav-item"><a class="nav-link active" href="/home/">HoME</a></li>
-              <li class="nav-item"><a class="nav-link" href="/trips/index/">SCHEDULE</a></li>
-              <li class="nav-item"><a class="nav-link" href="/expense/">EXPENSE</a></li>
-              <li class="nav-item"><a class="nav-link" href="/review/index/">REVIEW</a></li>
-              <li class="nav-item"><a class="nav-link" href="/myplace/">MYPLACE</a></li>
+            <ul class="navbar-nav ms-auto text-uppercase py-4 py-lg-0" style="font-size: 1.7rem;"> 
+              <li class="nav-item" style="margin-right: 15px;"><a class="nav-link active" href="/home/">HoME</a></li>
+              <li class="nav-item" style="margin-right: 15px;"><a class="nav-link" href="/trips/index/">SCHEDULE</a></li>
+              <li class="nav-item" style="margin-right: 15px;"><a class="nav-link" href="/expense/">EXPENSE</a></li>
+              <li class="nav-item" style="margin-right: 15px;"><a class="nav-link" href="/review/index/">REVIEW</a></li>
+              <li class="nav-item" style="margin-right: 15px;"><a class="nav-link" href="/myplace/">MYPLACE</a></li>
             </ul>
-          </div>
         </div>
       </nav>
-      <!-- <ul class="nav nav-tabs">
-        <li class="nav-item">
-          <a href="/home/" class="nav-link active" aria-current="page">Home</a>
-        </li>
-        <li class="nav-item">
-          <a href="/trips/index/" class="nav-link">일정만들기</a>
-        </li>
-        <li class="nav-item">
-          <a href="/expense/" class="nav-link">가계부</a>
-        </li>
-        <li class="nav-item">
-          <a href="/review/index/" class="nav-link">리뷰</a>
-        </li>
-        <li class="nav-item">
-          <a href="/myplace/" class="nav-link">내장소</a>
-        </li>
-      </ul> -->
-      <div class="col-md-3 text-end header-buttons">
-        {% if not user.is_active %}
-        <button type="button" class="btn btn-outline-primary me-2" onclick="document.location.href='/account/login/'" id="login">로그인</button>
-        <button type="button" class="btn btn-primary" onclick="document.location.href='/account/register/'" id="join">회원가입</button>
+      <div class="col text-end  d-flex justify-content-center">
+        {% if user.is_active %}
+          <div class="d-flex align-items-center">
+            <div class="d-flex flex-column align-items-left mx-0">
+              <img src="/static/로그인로고.gif" alt="로그인 로고" onclick="document.location.href='/account/logout/'" style="height: 70px; margin-right: 5px;" onclick="" id="login">
+            </div>
+            <div class="d-flex flex-column align-items-left">
+              <p style="font-size: 1.2rem; margin-bottom: -10px;">{{ user }}님</p>
+              <button type="button" class="btn" onclick="document.location.href='/account/myinfo/'" id="myinfo" style="font-size: 1.2rem; margin-top: -2px; margin-bottom: -10px;">INFO</button>
+              <button type="button" class="btn" onclick="document.location.href='/managetrip'" id="myinfo" style="font-size: 1.2rem; margin-top: -4px; margin-right: -30px;">MANAGE</button>
+            </div>
+          </div>
         {% else %}
-        <span class="text-capitalize fs-5 align-middle">
-          {{ user }}님
-        </span>
-        <button type="button" class="btn btn-outline-primary me-2" onclick="document.location.href='/account/logout/'" id="logout">로그아웃</button>
-        <button type="button" class="btn btn-primary" onclick="document.location.href='/account/myinfo/'" id="myinfo">내정보</button>
-        <button type="button" class="btn btn-primary" onclick="document.location.href='/managetrip'" id="myinfo">일정관리</button>
+          <div class="d-flex align-items-center">
+          <div class="d-flex flex-column align-items-left mx-0">
+            <img src="/static/게스트로고.PNG" alt="게스트 로고" style="height: 70px; margin-right: 5px;" onclick="document.location.href='/account/login/'" id="login">
+          </div>
         {% endif %}
       </div>
     </header>
-  </div>
+</div>
+{% endblock %}
+
+
   <div class="container">
     {% block content %}{% endblock %}
   </div>
+
+  {% block home %}{% endblock %}
   {% block menu_active %}
   {% endblock %}
   <script src="js/scripts.js"></script>

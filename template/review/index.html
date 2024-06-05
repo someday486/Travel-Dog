@@ -1,7 +1,14 @@
 {% extends 'index.html' %}
-{% load humanize %}
 {% block title %}여행 일정 만들기{% endblock %}
+
 {% block content %}
+{% load humanize %}
+<style>
+    body {
+    font-family: Arial, sans-serif;
+}
+</style>
+
 <div>
     <form method="get">
         <div class="row mb-3 justify-content-center">
@@ -17,7 +24,7 @@
         <div class="row mb-3 justify-content-center">
             <div class="col-auto">
                 <div class="input-group">
-                    <input type="text" name="topic" class="form-control search-input" placeholder="Search...">
+                    <input type="text" name="topic" class="form-control search-input" placeholder="Search..." style="width: 300px;">
                     <div class="input-group-append">
                         <button type="submit" class="btn btn-secondary" style="width: 100px;">검색</button>
                     </div>
@@ -102,3 +109,4 @@
     {% endif %}
 </div>
 {% endblock %}
+
