@@ -8,9 +8,10 @@ from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.files.storage import default_storage
 import urllib.parse
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
-
+@login_required
 def delete_image(request, borderId, imageId):
     # 이미지 URL을 디코딩합니다.
     # decoded_url = urllib.parse.unquote(imageId)
@@ -43,7 +44,7 @@ def delete_image(request, borderId, imageId):
         return JsonResponse({'success': False, 'error': str(e)})
 
 
-    
+@login_required    
 def extract_hashtags(text):
     if text:
     # tripdetail 객체에서 해시태그 내용만 골라낸다
@@ -96,6 +97,7 @@ def index(request):
         }
         return render(request, 'review/index.html', content)
 
+@login_required
 def detail(request, userId):  # tripdetailId를 넘겨줘야 한다.
     userName=request.user.username
     trips = Trip.objects.filter(user_id=userId)
@@ -122,6 +124,7 @@ def detail(request, userId):  # tripdetailId를 넘겨줘야 한다.
     }
     return render(request, 'review/detail.html', content)
 
+@login_required
 def findTripDetails(trips):
     detailList={}
     for t in trips:
@@ -129,7 +132,7 @@ def findTripDetails(trips):
         detailList[t]=tripdetails   # trip에 대한 detail 객체들 저장
     return detailList;  # {trip1:tripdetail1 tripdetail2, trip2:....}
 
-
+@login_required
 # 각 디테일과 일치하는 border 객체 반환
 def findBorder(tripdetails, borders):
     borderList = []
@@ -141,7 +144,7 @@ def findBorder(tripdetails, borders):
             continue
     return borderList;
 
-
+@login_required
 # 각 TripDetail에 해당하는 BorderImage URL 정보를 딕셔너리 형태로 반환
 def findImage(tripdetails, borderList):
     images = {}
@@ -154,6 +157,7 @@ def findImage(tripdetails, borderList):
 
     return images;
 
+@login_required
 def add(request, tripdetailId):
     tripdetail = get_object_or_404(TripDetail, id=tripdetailId)
     now = datetime.now()
@@ -240,7 +244,7 @@ def add(request, tripdetailId):
         }
         return render(request, 'review/add.html', content)
 
-
+@login_required
 def tripDetail(request,tripId):  # day 순서로 정렬 필요
     userId=request.user.id
     trip=get_object_or_404(Trip,id=tripId) #tripId 가 동일한 글 불러오기
@@ -282,7 +286,6 @@ def tripDetail(request,tripId):  # day 순서로 정렬 필요
             # 'defaultImg_path': settings.DEFAULT_IMAGE_URL,  # 기본 이미지 경로 전달
         }
         return render(request, 'review/tripDetail.html', content)
-
 
 @csrf_exempt
 def upload_file(request):
