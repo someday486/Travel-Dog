@@ -138,10 +138,29 @@
     <button type="button" class="btn btn-danger btn-lg" onclick="location.href='/expense/'">이전 페이지</button>
 </div><br>
 
-<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" 
-rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
-<canvas id="myChart" style="width: 100%; height: 400px;"></canvas><br>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>도넛 그래프 크기 조정</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <style>
+        #myChart {
+            max-width: 600px;
+            max-height: 600px;
+            margin: 0 auto; /* Center align horizontally */
+            display: block; /* Ensure the canvas is treated as a block element */
+        }
+    </style>
+</head>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-auto">
+            <canvas id="myChart" width="600" height="600"></canvas>
+        </div>
+    </div>
+</div>
 
 <h3>총 결산 : {{total_expense|floatformat:0}}원</h3><br>
 
@@ -277,9 +296,12 @@ var ctx = document.getElementById('myChart').getContext('2d');
                         var textY = height / 2;
                         ctx.fillText(text, textX, textY);
                     }
+                    
                 }
             }
         });
+
+
 
 </script>
 
