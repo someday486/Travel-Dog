@@ -267,7 +267,10 @@ var ctx = document.getElementById('myChart').getContext('2d');
                     },
                     title: {
                         display: true,
-                        text: '날짜 별 장소에서 쓴 금액 비교'
+                        text: '날짜 별 장소에서 쓴 금액 비교',
+                        font: {
+                            size: 24
+                        }
                     },
 
                     afterDraw: function(chart) {
