@@ -90,10 +90,12 @@ def index(request):
         return render(request, 'review/index.html', content)
         
     else:
+        trips_len =  range(4-len(trips) % 4)
         content = {
             'trips': trips,
             'userId': userId,
             'imageList': imageList,
+            'trips_len':trips_len,
         }
         return render(request, 'review/index.html', content)
 

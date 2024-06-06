@@ -12,8 +12,6 @@
     .white-section {
     background-color: #fff;
     display: flex; /* Make it a flex container */
-    justify-content: center; /* Align horizontally */
-    align-items: center; /* Align vertically */
     position: absolute; /* Position the section absolutely */
     top: 120vh; /* Initially hidden below the viewport */
     width: 100%;
@@ -24,7 +22,7 @@
     .section2 {
     background-color: #FFC800;
     position: absolute; /* Position the section absolutely */
-    top: 230vh; /* Initially hidden below the viewport */
+    top: 240vh; /* Initially hidden below the viewport */
     width: 100%;
     height: 100vh; /* Cover the entire viewport */
     transition: background-color 0.5s ease; /* Smooth transition for background color */
@@ -33,7 +31,7 @@
 
     }
     .section3 {
-    background-color: #fff;
+    background-color: #F0F0F0;
     position: absolute; /* Position the section absolutely */
     top: 340vh; /* Initially hidden below the viewport */
     width: 100%;
@@ -47,43 +45,108 @@
 {% endblock %}
 
 {% block home %}
+
 <div class="white-section" style="margin-top:100px">
-    <div class="card" style="width:100%;">
-    <div class="card-body d-flex justify-content">
-        <h5 class="card-title" style="margin-top:30px; margin-bottom:20px;">SCHEDULE</h5>
-        <p class="card-text" style="margin-bottom:100px;">나만의 여행스케줄을 작성할 수 있어요</p>
-        <div>
-        <img src="/static/스케줄.png" class="card-img-top" alt="스케줄" style="width:400px; height:300px; margin-bottom:100px">
-        <img src="/static/스케줄2.png" class="card-img-top" alt="스케줄" style="width:800px; height:300px; margin-bottom:100px">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card d-flex flex-column justify-content-center align-items-center p-4">
+                    <div class="card-title mb-2"><h3>SCHEDULE</h3></div>
+                    <img src="/static/스케줄.png" class="card-img-top mb-5" alt="스케줄" style="width: 80%;">
+                    <div class="card-body d-flex flex-column justify-content-between">  
+                        <h5 class="card-text">나만의 여행스케줄을 만들 수 있어요</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card d-flex flex-column justify-content-center align-items-center p-4">
+                    <div class="card-title mb-2"><h3>SCHEDULE</h3></div>
+                    <img src="/static/스케줄2.png" class="card-img-top mb-5" alt="스케줄" style="width: 100%;">
+                    <div class="card-body d-flex flex-column justify-content-between">  
+                        <h5 class="card-text">나만의 여행스케줄을 만들 수 있어요</h5>
+                    </div>
+                </div>
+            </div>
         </div>
-        <a href="http://localhost:8000/trips/index/" class="btn btn-primary btn-lg" style="margin-bottom:30px;">GO SCHEDULE</a>
-    </div>
+        <div class="row justify-content-center" style="margin-top:100px;">
+            <div class="col-md-6">
+                <h1>여행에 필요한 모든것</h1><br>
+                <h3>숙소, 맛집 검색 일정관리까지 한번에!</h3>        
+                <button class="btn btn-primary" onclick="location.href='http://localhost:8000/trips/index/'" 
+                style="width:100%; height:100px; font-size: 24px; margin-top:30px;">GO SCHEDULE</button>
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="section2 d-flex justify-items-center" style="margin-top:100px">
 
-        <h5 class="card-title" style="margin-top:100px; margin-bottom:20px;">EXPENSE</h5>
-        <p class="card-text" style="margin-bottom:100px;">여행스케줄과 연동되는 가계부 작성을 통해 효율적인 소비습관을 기를 수 있어요</p>
-        <div>
-        <img src="/static/스케줄.png" class="card-img-top" alt="스케줄" style="width:400px; height:300px; margin-bottom:100px">
-        <img src="/static/스케줄2.png" class="card-img-top" alt="스케줄" style="width:800px; height:300px; margin-bottom:100px">
+
+<div class="section2 d-flex justify-items-center" style="margin-top:100px !important;">
+    <div class="container mt-10">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card d-flex flex-column justify-content-center align-items-center p-4">
+                    <div class="card-title mb-2"><h3>EXPENSE</h3></div>
+                    <img src="/static/가계부1.png" class="card-img-top mb-5" alt="가계부1" style="width: 80%; height: 332px">
+                    <div class="card-body d-flex flex-column justify-content-between">  
+                        <h5 class="card-text">혼자서, 둘이서 함께</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card d-flex flex-column justify-content-center align-items-center p-4">
+                    <div class="card-title mb-2"><h3>EXPENSE</h3></div>
+                    <img src="/static/가계부2.png" class="card-img-top mb-5" alt="가계부2" style="width: 80%;">
+                    <div class="card-body d-flex flex-column justify-content-between">  
+                        <h5 class="card-text">혼자서, 둘이서 함께</h5>
+                    </div>
+                </div>
+            </div>
         </div>
-        <a href="http://localhost:8000/expense/" class="btn btn-secondary btn-lg" style="margin-bottom:30px;">GO EXPENSE</a>
+        <div class="row justify-content-center" style="margin-top:100px;">
+            <div class="col-md-6">
+                <h1>어려운 여행경비 정산</h1><br>
+                <h3>여행스케줄과 연동되는 가계부 작성을 통해 효율적인 소비습관을 기를 수 있어요</h3>        
+                <button class="btn btn-light" onclick="location.href='http://localhost:8000/expense/'" 
+                style="width:100%; height:100px; font-size: 24px; margin-top:30px;">GO EXPENSE</button>
+            </div>
+        </div>
+    </div>
 
 </div>
 
-<div class="section3" style="margin-top:100px">
-    <div class="card">
-    <div class="card-body">
-        <h5 class="card-title" style="margin-bottom:20px;">REVIEW</h5>
-        <p class="card-text" style="margin-bottom:100px;">여행 후 나의 소중한 순간을 기록하고, 공유할 수 있어요!</p>
-        <div>
-        <img src="/static/스케줄.png" class="card-img-top" alt="스케줄" style="width:400px; height:300px; margin-bottom:100px">
-        <img src="/static/스케줄2.png" class="card-img-top" alt="스케줄" style="width:800px; height:300px; margin-bottom:100px">
+<div class="section3">
+    <div class="container">
+        <div class="row justify-content-center" style="margin-top:100px">
+            <div class="col-md-6">
+                <div class="card d-flex flex-column justify-content-center align-items-center p-4">
+                    <div class="card-title mb-2"><h3>REVIEW</h3></div>
+                    <img src="/static/리뷰1.png" class="card-img-top mb-5" alt="리뷰1" style="width: 80%; height:293px">
+                    <div class="card-body d-flex flex-column justify-content-between">  
+                        <h5 class="card-text">일정별로 리뷰를 남길 수 있어요요</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card d-flex flex-column justify-content-center align-items-center p-4">
+                    <div class="card-title mb-2"><h3>REVIEW</h3></div>
+                    <img src="/static/리뷰2.png" class="card-img-top mb-5" alt="리뷰2" style="width: 80%;">
+                    <div class="card-body d-flex flex-column justify-content-between">  
+                        <h5 class="card-text">포토카드와 비용정산까지 바로</h5>
+                    </div>
+                </div>
+            </div>
+
         </div>
-        <a href="http://localhost:8000/expense/" class="btn btn-warning btn-lg" style="margin-bottom:30px;">GO REVIEW</a>
-    </div>
+        <div class="row justify-content-center" style="margin-top:100px;">
+            <div class="col-md-6">
+                <h1>포토 카드와 함께 생생한 리뷰</h1><br>
+                <h3>먼저 다녀온 여행자의 리얼한 여행기와 리뷰에서</h3> 
+                <h3>숨은 정보와 꿀팁을 확인하세요.</h3>        
+                <button class="btn btn-warning" onclick="location.href='http://localhost:8000/review/index/'" 
+                style="width:100%; height:100px; font-size: 24px; margin-top:30px;">GO REVIEW</button>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

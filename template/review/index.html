@@ -39,7 +39,7 @@
     <!-- 검색한 경우 -->
     <div class="album py-5 bg-light">
         <div class="container">
-            <div class="row">
+            <div class="row justify-content-center">
                 {% for tId, details in detailList.items %}
                 {% for detail in details %}
                 <div class="col-md-4">
@@ -73,10 +73,10 @@
     </div>
     {% elif trips %}
     <div class="album py-5 bg-light">
-        <div class="container">
-            <div class="row">
+        <div class="container d-flex justify-content-center">
+            <div class="row d-flex justify-item-center">
                 {% for trip in trips %}
-                <div class="col-md-4">
+                <div class="col  d-flex justify-content-center">
                     <div class="card mb-4 shadow-sm" style="width: 15rem; height: auto;">
                         {% if trip.id in imageList %}
                         {% for tripId, image in imageList.items %}
@@ -99,6 +99,14 @@
                                 </div>
                                 <small class="text-muted">{{ trip.duration }} days</small>
                             </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% for x in trips_len %}
+                <div class="col">
+                    <div style="width: 15rem; height: auto;">
+                        <div class="card-body" style="padding: 10px;">
                         </div>
                     </div>
                 </div>

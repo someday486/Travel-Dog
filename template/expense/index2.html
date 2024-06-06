@@ -85,7 +85,8 @@
     }
 </style>
 
-<h5>{{trip_info.region}} - ({{trip_info.start_date}} to {{trip_info.end_date}})</h5>
+<h3 class="card-text font-weight-bold" style="margin-bottom:60px; margin-top:60px;">{{trip_info.region}} - ({{trip_info.start_date}} to {{trip_info.end_date}})</h3>
+
 <form method="post" enctype="multipart/form-data"> {% csrf_token %}
 <table>
     <colgroup>
@@ -132,10 +133,10 @@
     {% endfor %}
 </table><br>
 
-<div style="display: flex; justify-content: flex-end; gap: 10px;">
-    <button type="submit" class="btn btn-success btn-lg">저장</button>
-    <button type="reset" class="btn btn-danger btn-lg">다시시작</button>
-    <button type="button" class="btn btn-danger btn-lg" onclick="location.href='/expense/'">이전 페이지</button>
+<div style="display: flex; justify-content: flex-end; gap: 10px; margin-bottom:100px;">
+    <button type="submit" class="btn btn-warning btn-lg">저장</button>
+    <button type="reset" class="btn btn-secondary btn-lg">다시시작</button>
+    <button type="button" class="btn btn-outline-secondary" onclick="location.href='/expense/'">이전 페이지</button>
 </div><br>
 
 <head>
@@ -162,7 +163,7 @@
     </div>
 </div>
 
-<h3>총 결산 : {{total_expense|floatformat:0}}원</h3><br>
+<h3 class="card-text font-weight-bold" style="margin-bottom:200px">총 결산 : {{total_expense|floatformat:0}}원</h3>
 
 </form>
 
@@ -280,7 +281,7 @@ var ctx = document.getElementById('myChart').getContext('2d');
                         display: true,
                         text: '날짜 별 장소에서 쓴 금액 비교',
                         font: {
-                            size: 24
+                            size: 35
                         }
                     },
                     
