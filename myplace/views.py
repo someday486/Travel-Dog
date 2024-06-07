@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def myplace(request):
     if request.user.is_active:
+        print('myplace')
         myplace = Myplace.objects.filter(user=request.user).select_related('destination')
         # trip_id = Trip.objects.filter
         
@@ -16,14 +17,15 @@ def myplace(request):
         for i in myplace:
             destination_address = i.destination.address
             v = imgdown(destination_address)
-            destinationSrc.append((i, v))
+            id = i.id               
+            destinationSrc.append((i, v, id))
 
         content = {
             'destinationSrc': destinationSrc,
         }
         
         return render(request, 'destinations/myplace.html', content)
-    
+                       
     else:
         msg = "<script>;"
         msg += "alert('로그인이 되어 있지 않습니다. 로그인 페이지로 넘어갑니다.');"
@@ -52,3 +54,17 @@ def imgdown(address):
         src_list.append(src)
         
     return src_list
+
+def delete(request):
+    if request.method == 'POST':           
+        destination_id = request.POST.get('destination_id') 
+        myplace = Myplace.objects.filter(id=destination_id)
+        myplace.delete()
+        
+        msg = "<script>;"
+        msg += "alert('삭제되었습니다');"
+        msg += "location.href='http://localhost:8000/myplace';"
+        msg += "</script>;"
+        return HttpResponse(msg)
+    else:
+        return render(request, 'destinations/myplace.html')

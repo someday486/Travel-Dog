@@ -36,16 +36,20 @@
     <div class="album py-5 bg-light">
         <div class="container">
             <div class="row">
-                {% for d, src in destinationSrc %}
+                
+                {% for d, src, id in destinationSrc %}
                 <div class="col-md-4 mb-4">
                     <div class="portfolio-caption">
-                        <div class="portfolio-caption-heading" style="padding: 15px; border-radius: 0px;">
-                            <h1 style="font-size: 1.2rem;" >{{ d.destination.name }}</h1>
+                        <div class="portfolio-caption-heading d-flex justify-content-center" style="padding: 15px; border-radius: 0px;">
+                            <h1 style="font-size: 1.2rem; margin-right: 8px;" >{{ d.destination.name }}</h1>
+                            <form method="post" action="/myplace/delete">{% csrf_token %}
+                                <input type="hidden" name="destination_id" value="{{ id }}">
+                                <button type='submit' class="btn btn-outline-secondary btn-sm">삭제</button>
+                            </form>
                         </div>
                         <div class="portfolio-hover">
                             <a href="https://map.naver.com/p/search/{{ d.destination.address }}">
                                 <img src="{{ src.0 }}" alt="{{ d.destination.name }}" width="300px" class="img-fluid">
-                                
                             </a>
                         </div>
                     </div>
