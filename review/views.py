@@ -262,15 +262,14 @@ def tripDetail(request, tripId):  # day 순서로 정렬 필요
     
     trip = get_object_or_404(Trip, id=tripId)  # tripId가 동일한 글 불러오기
     tripdetails = TripDetail.objects.filter(trip=trip).order_by('day')  # 현재 trip과 같은 객체를 가진 tripdetail들을 가져옴
-    # day: tripdetail 객체 딕셔너리
-    detailDict = {detail.day: detail for detail in tripdetails}
+    detailDict = {detail.day: detail for detail in tripdetails}  # day: tripdetail 객체 딕셔너리
     print('정렬된 데이터:', detailDict)
     borderList = []
     try:
         for detail in tripdetails:
-            border = Border.objects.get(trip_detail=detail)
-            print('border:', border)
-            borderList.append(border)  # border 객체 리스트 반환
+            borders = Border.objects.filter(trip_detail=detail)
+            print('borders:', borders)
+            borderList.extend(borders)  # border 객체 리스트 반환
     except Exception as e:
         print(f"Error in border list creation: {e}")
         borderList = []    
