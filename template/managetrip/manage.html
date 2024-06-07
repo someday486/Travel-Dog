@@ -47,7 +47,7 @@
                     <div>DAY.{{ x.day }}</div>
                     <div class="destination">{{ x.destination.name }}</div>
                     <div class="expense">{{ x.expense|floatformat:0 }}원</div>
-                    <button type='button' class="btn btn-danger custom-button"
+                    <button type='button' class="btn btn-outline-secondary"
                     onclick="document.location.href='/managetrip/deletetripdetail/{{ x.trip.id }}/{{ x.id }}'">
                     삭제</button>
                 </div>
@@ -58,6 +58,6 @@
         </div>
     </div>
 </form>
-<button type='button' class="btn btn-success btn-lg my-1" style="width:150px;" onclick="document.location.href='/trips/next_page/{{ trip_id }}'">추가</button>
-<button type="button" class="btn btn-danger btn-lg my-1" style="width:150px;" onclick="location.href='/managetrip/'">이전 페이지</button>
+<button type='button' class="btn btn-warning btn-lg my-1" style="width:150px;" onclick="document.location.href='/trips/next_page/{{ trip_id }}'">추가</button>
+<button type="button" class="btn btn-outline-secondary btn-lg my-1" style="width:150px;" onclick="location.href='/managetrip/'">이전 페이지</button>
 {% endblock %}

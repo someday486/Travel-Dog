@@ -6,10 +6,10 @@
     <main>
         <div class="container">
             <div class="trip-section">
-                <h2>다가오는 여행</h2>
+                <h3>다가오는 여행</h3>
                 <ul>
                     {% for x in trip_list %}
-                    <li class="trip-item my-4" style="width: 400px;">
+                    <li class="trip-item mt-5" style="width: 500px;">
                         <a href="{% url 'managetrip:M' x.id %}">
                             <img src="{{ x.region.image.url }}" alt="{{ x.region.name }}">
                         </a>
@@ -17,7 +17,7 @@
                             <div><a href="{% url 'managetrip:M' x.id %}">{{ x.region.name }} 여행</a></div>
                             <div class="trip-dates">{{ x.start_date }} - {{ x.end_date }}</div>
                         </div>
-                        <button type='button' class="btn-delete" onclick="document.location.href='/managetrip/deletetrip/{{x.id}}'">삭제</button>
+                        <button type='button' class="btn btn-outline-secondary btn-md mx-2" onclick="document.location.href='/managetrip/deletetrip/{{x.id}}'">삭제</button>
                     </li>
                     {% empty %}
                         <li>여행 목록이 없습니다.</li>
