@@ -61,17 +61,19 @@ def index(request):
     # 각 trip에 맞는 이미지 리스트 생성
     for trip in trips:
         tripDetails = TripDetail.objects.filter(trip_id=trip.id)
+        imgs = []
         for detail in tripDetails:
-            try:
-                imgs = []
+            print('detail:',detail)  
+            try:   
                 border = Border.objects.get(trip_detail=detail)
                 images = BorderImage.objects.filter(border_id=border.id)
-                for img in images:
-                    imgs.append(img.image.url)
-                imageList[trip.id] = imgs
+                print('images:',images)
+                for image in images:
+                    imgs.append(image.image.url) 
             except:
-                imageList[trip.id] = []
-    
+                pass
+        imageList[trip.id] = imgs   # tripId: [img1,img2,....]
+    print('imageList:',imageList)
     if query:
         tripdetails = TripDetail.objects.filter(context__icontains=f'#{query}')
         detailList = {}  # {tripId: [details]}
@@ -98,6 +100,8 @@ def index(request):
             'trips_len':trips_len,
         }
         return render(request, 'review/index.html', content)
+
+
 
 @login_required
 def detail(request, userId):  # tripdetailId를 넘겨줘야 한다.
