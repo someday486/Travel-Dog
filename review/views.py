@@ -146,18 +146,23 @@ def findBorder(tripdetails, borders):
             continue
     return borderList;
 
-@login_required
-# 각 TripDetail에 해당하는 BorderImage URL 정보를 딕셔너리 형태로 반환
+# @login_required
 def findImage(tripdetails, borderList):
     images = {}
     for b in borderList:
-        tripdetail = tripdetails.get(id=b.trip_detail.id) 
-        imgs = BorderImage.objects.filter(border=b)  # border에 해당되는 borderImage 객체들만 필터링
-        image_urls = [i.image.url for i in imgs]  # 이미지 객체의 URL 리스트 생성
-        images[tripdetail.id] = image_urls  # tripdetail ID를 키로 사용하여 딕셔너리에 저장
+        try:
+            tripdetail = TripDetail.objects.get(id=b.trip_detail.id) 
+            print(f"TripDetail: {tripdetail}")
+            imgs = BorderImage.objects.filter(border=b)  # border에 해당되는 borderImage 객체들만 필터링
+            print(f"Border Images: {imgs}")
+            image_urls = [i.image.url for i in imgs]  # 이미지 객체의 URL 리스트 생성
+            images[tripdetail.id] = image_urls  # tripdetail ID를 키로 사용하여 딕셔너리에 저장
+            print(f"Images: {images}")
+        except Exception as e:
+            print(f"Error in findImage: {e}")
+            continue
+    return images
 
-
-    return images;
 
 @login_required
 def add(request, tripdetailId):
@@ -247,47 +252,54 @@ def add(request, tripdetailId):
         return render(request, 'review/add.html', content)
 
 @login_required
-def tripDetail(request,tripId):  # day 순서로 정렬 필요
-    userId=request.user.id
-    trip=get_object_or_404(Trip,id=tripId) #tripId 가 동일한 글 불러오기
-    tripdetails=TripDetail.objects.filter(trip=trip).order_by('day') # 현재 trip과 같은 객체를 가진 tripdetail들을 가져옴
+def tripDetail(request, tripId):  # day 순서로 정렬 필요
+    try:
+        userId = request.user.id
+        print(f"User ID: {userId}")
+    except AttributeError as e:
+        print(f"Error: {e}")
+        raise e
     
+    trip = get_object_or_404(Trip, id=tripId)  # tripId가 동일한 글 불러오기
+    tripdetails = TripDetail.objects.filter(trip=trip).order_by('day')  # 현재 trip과 같은 객체를 가진 tripdetail들을 가져옴
     # day: tripdetail 객체 딕셔너리
     detailDict = {detail.day: detail for detail in tripdetails}
     print('정렬된 데이터:', detailDict)
-    # detailDict={}
-    # for detail in tripdetails:
-    #     detailDict[detail]=detail.day
-    # print('원본:',detailDict)
-
-    # detailDict_2= sorted(detailDict.items(), key=lambda x: x[1])
-    # print('전송할 데이터:',detailDict_2)
-    # detailDict_3={}
-    # for d,k in detailDict_2:
-    #     detailDict_3[k]=d
-    # print('detailDict_3:',detailDict_3)
-
-    borders = Border.objects.filter(trip_detail__in=tripdetails) 
-    borderList=findBorder(tripdetails, borders);  # 각 디테일과 일치하는 border 객체반환
+    borderList = []
     try:
-        imageUrls= findImage(tripdetails, borderList);
+        for detail in tripdetails:
+            border = Border.objects.get(trip_detail=detail)
+            print('border:', border)
+            borderList.append(border)  # border 객체 리스트 반환
+    except Exception as e:
+        print(f"Error in border list creation: {e}")
+        borderList = []    
+
+    print('borderList:', borderList)
+    print("Before calling findImage function")
+    try:
+        imageUrls = findImage(tripdetails, borderList)  # tripdetail.id: [url1,url2,...]
+        print("After calling findImage function")
         content = {
             'trip': trip,
-            # 'tripdetails': tripdetails,
-            'detailDict':detailDict,
+            'detailDict': detailDict,
             'imageUrls': imageUrls,
             'borderList': borderList,
-            # 'defaultImg_path': settings.DEFAULT_IMAGE_URL,  # 기본 이미지 경로 전달
         }
-        return render(request,'review/tripDetail.html',content);
+        print('imageUrls:', imageUrls)
+        print('borderList:', borderList)
+        print('detailDict:', detailDict)
+        return render(request, 'review/tripDetail.html', content)
     except Exception as e:
+        print(f"Error in imageUrls or rendering: {e}")
         content = {
             'trip': trip,
             'detailDict': detailDict,
             'borderList': borderList,
-            # 'defaultImg_path': settings.DEFAULT_IMAGE_URL,  # 기본 이미지 경로 전달
         }
         return render(request, 'review/tripDetail.html', content)
+
+
 
 @csrf_exempt
 def upload_file(request):

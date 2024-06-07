@@ -1,12 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Triplus</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'review/css/style.css' %}">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+{% extends 'index.html' %}
+{% block title %}내 여행 보기{% endblock %}
+
+{% block content %}
+{% load humanize %}
     <style>
         .card-img-top {
             height: 180px;
@@ -25,6 +21,8 @@
 <body>
 <div class="container mt-5">
     <h3 class="text-center mb-4">{{ userName }}님의 Triplus</h3>
+    <button type="button" style="margin-top: 10px;"
+    onclick="window.location.href='/review/index/'" class="btn btn-primary custom-button">이전으로</button>
     {% if trips %}
     <div class="album py-5 bg-light">
         <div class="container">
@@ -66,10 +64,6 @@
     <p class="text-center">게시물이 없습니다.</p>
     {% endif %}
 </div>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-</html>
+{% endblock %}
 
 
