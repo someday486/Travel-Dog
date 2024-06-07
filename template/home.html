@@ -35,7 +35,7 @@
     position: absolute; /* Position the section absolutely */
     top: 340vh; /* Initially hidden below the viewport */
     width: 100%;
-    height: 100vh; /* Cover the entire viewport */
+    height: 150vh; /* Cover the entire viewport */
     transition: background-color 0.5s ease; /* Smooth transition for background color */
     background-size : cover;
     margin-left: auto; /* or remove margin-left entirely */
@@ -46,7 +46,7 @@
 
 {% block home %}
 
-<div class="white-section" style="margin-top:100px">
+<div class="white-section" style="margin-top:170px">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-6">
@@ -61,14 +61,14 @@
             <div class="col-md-6">
                 <div class="card d-flex flex-column justify-content-center align-items-center p-4">
                     <div class="card-title mb-2"><h3>SCHEDULE</h3></div>
-                    <img src="/static/스케줄2.png" class="card-img-top mb-5" alt="스케줄" style="width: 100%;">
+                    <img src="/static/스케줄2.png" class="card-img-top mb-5" alt="스케줄" style="width: 100%; height:330px">
                     <div class="card-body d-flex flex-column justify-content-between">  
                         <h5 class="card-text">나만의 여행스케줄을 만들 수 있어요</h5>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row justify-content-center" style="margin-top:100px;">
+        <div class="row justify-content-center" style="margin-top:100px; margin-bottom:20px">
             <div class="col-md-6">
                 <h1>여행에 필요한 모든것</h1><br>
                 <h3>숙소, 맛집 검색 일정관리까지 한번에!</h3>        
@@ -84,21 +84,21 @@
 <div class="section2 d-flex justify-items-center">
     <div class="container mt-10">
         <div class="row justify-content-center">
-            <div class="col-md-6">
+            <div class="col-md-6" style="padding-top:20px">
                 <div class="card d-flex flex-column justify-content-center align-items-center p-4">
                     <div class="card-title mb-2"><h3>EXPENSE</h3></div>
-                    <img src="/static/가계부1.png" class="card-img-top mb-5" alt="가계부1" style="width: 80%; height: 332px">
+                    <img src="/static/가계부1.png" class="card-img-top mb-5" alt="가계부1" style="width: 70%; height: 290px">
                     <div class="card-body d-flex flex-column justify-content-between">  
-                        <h5 class="card-text">혼자서, 둘이서 함께</h5>
+                        <h5 class="card-text">그때 그때 금액과 영수증을 업로드할 수 있어요</h5>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6" style="padding-top:20px">
                 <div class="card d-flex flex-column justify-content-center align-items-center p-4">
-                    <div class="card-title mb-2"><h3>EXPENSE</h3></div>
-                    <img src="/static/가계부2.png" class="card-img-top mb-5" alt="가계부2" style="width: 80%;">
+                    <div class="card-title mb-2"><h3>EXPENSE</h3></div> 
+                    <img src="/static/가계부2.png" class="card-img-top mb-5" alt="가계부2" style="width: 70%;">
                     <div class="card-body d-flex flex-column justify-content-between">  
-                        <h5 class="card-text">혼자서, 둘이서 함께</h5>
+                        <h5 class="card-text">날짜별 지출액을 그래프로 확인해요</h5>
                     </div>
                 </div>
             </div>
@@ -123,7 +123,7 @@
                     <div class="card-title mb-2"><h3>REVIEW</h3></div>
                     <img src="/static/리뷰1.png" class="card-img-top mb-5" alt="리뷰1" style="width: 80%; height:293px">
                     <div class="card-body d-flex flex-column justify-content-between">  
-                        <h5 class="card-text">일정별로 리뷰를 남길 수 있어요요</h5>
+                        <h5 class="card-text">일정별로 리뷰를 남길 수 있어요</h5>
                     </div>
                 </div>
             </div>
@@ -132,7 +132,7 @@
                     <div class="card-title mb-2"><h3>REVIEW</h3></div>
                     <img src="/static/리뷰2.png" class="card-img-top mb-5" alt="리뷰2" style="width: 80%;">
                     <div class="card-body d-flex flex-column justify-content-between">  
-                        <h5 class="card-text">포토카드와 비용정산까지 바로</h5>
+                        <h5 class="card-text">포토카드로 보는 그날의 기억</h5>
                     </div>
                 </div>
             </div>

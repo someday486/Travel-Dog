@@ -39,9 +39,8 @@
 {% endblock %}
 
 {% block content %}
-    <h3 class="text-center">로그인 페이지</h3>
     <form method="post" class="table-container">{% csrf_token %}
-        <table class="table-secondary" style='width:50%' align="center">
+        <table class="table-secondary" style='width:40%; height:200px; margin-top:30px' align="center">
             <tr>
                 <th>로그인 아이디</th>
                 <td><input type="text" name="username"></td>
@@ -50,7 +49,7 @@
                 <th>로그인 암호</th>
                 <td><input type="password" name="password"></td>
             </tr>
-            <tr>
+            <tr style='height:100px;'>
                 <td colspan="2">
                     <input type="submit" class="btn btn-warning" 
                         style="width:120px" value="로그인">

@@ -31,7 +31,7 @@ class TripDetail(models.Model):
     trip = models.ForeignKey(Trip, on_delete=models.CASCADE)
     day = models.IntegerField()
     destination = models.ForeignKey(Destination, on_delete=models.CASCADE)
-    expense = models.DecimalField(max_digits=10, decimal_places=2,null=False)
+    expense = models.DecimalField(max_digits=10, decimal_places=2,null=False, default=0)
     context = models.TextField(null=True)
 
     def __str__(self):

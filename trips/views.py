@@ -1,8 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from .models import Region, Trip, TripDetail, Destination
 import datetime
-
+import requests
+import re
 
 @login_required
 def index(request):
@@ -56,7 +57,7 @@ def next_page(request,trip_id):
         tripdetail.trip = Trip.objects.get(id=trip_id)
         tripdetail.day = request.POST['day']
         tripdetail.destination = Destination.objects.get(id=request.POST.get('d_id'))
-        tripdetail.expense = request.POST['expense']
+        tripdetail.expense = request.POST['expense']        
         tripdetail.context = request.POST['context']
         tripdetail.save()
         return redirect('trips:next_page', trip_id)

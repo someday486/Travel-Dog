@@ -1,9 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+{% extends 'index.html' %}
+{% block title %}INFO{% endblock %}
+{% block style %}
     <script>
         if ('{{ msg }}'.length > 0) {
             alert('{{ msg }}');
@@ -31,11 +28,11 @@
             frm1.submit();
         }
     </script>
-</head>
-<body>
-    회원가입 페이지.<br>
-    <form name="frm1" method="post">{% csrf_token %}
-        <table>
+{% endblock %}
+{% block content %}
+
+    <form name="frm1" method="post" class="container">{% csrf_token %}
+        <table class="table text-center" style="width:50%;" align="center">
             <tr>
                 <th>사용자 아이디</th>
                 <td><input type="text" name="username"></td>
@@ -60,9 +57,11 @@
                 <th>이메일</th>
                 <td><input type="email" name="email"></td>
             </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="button" onclick="pageSubmit()" value="회원가입" class="btn btn-warning btn-md mx-2 w-25">
+                </td>
+            </tr>
         </table>
-        <hr>
-        <input type="button" onclick="pageSubmit()" value="회원가입">
     </form>
-</body>
-</html>
+{% endblock %}

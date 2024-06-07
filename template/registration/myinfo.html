@@ -20,15 +20,6 @@
     height: 10px;
   }
 
-  table {
-    width: 65%; /* Adjust width as needed */
-    border-collapse: collapse; /* Remove default table border spacing */
-  }
-
-  th, td {
-    padding: 10px; /* Add padding to cells */
-    border: 1px solid #ddd; /* Add borders to cells */
-  }
 
 </style>
 {% endblock %}
@@ -53,15 +44,15 @@
       th = document.createElement("th");
       th.innerText = "변경할 암호";
       td = document.createElement("td");
-      td.innerHTML = "<input type='password' name='password'>";
+      td.innerHTML = "<input style='width:250px;' type='password' name='password'>";
 
       changePwd.append(th);
       changePwd.append(td);
     }
   </script>
 
-  <form method="post" class="table-container">{% csrf_token %}
-    <table class="table-secondary">
+  <form method="post" class="container" style="margin-top:50px">{% csrf_token %}
+    <table class="table text-center" style="width:60%;" align="center">
       <tr>
         <th>사용자 아이디</th>
         <td><input type="text" name="username" value="{{ userInfo.username }}" disabled style="width:250px;"></td>
